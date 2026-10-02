@@ -145,6 +145,8 @@ test('every local script and stylesheet carries the same cache-busting version',
   const v = html.match(/js\/app\.js\?v=([0-9a-f]+)/)?.[1];
   assert.ok(v, 'index.html stamps app.js (run node scripts/stamp-version.mjs)');
   assert.ok(html.includes(`css/app.css?v=${v}`));
+  assert.ok(html.includes(`<meta name="build" content="${v}">`), 'index.html build meta matches');
+  assert.equal(JSON.parse(readFileSync(new URL('../version.json', import.meta.url), 'utf8')).v, v, 'version.json matches');
   for (const f of readdirSync(new URL('../js/', import.meta.url))) {
     const src = readFileSync(new URL(`../js/${f}`, import.meta.url), 'utf8');
     for (const m of src.matchAll(/from\s+'\.\/[\w-]+\.js(\?v=([0-9a-f]+))?'/g)) assert.equal(m[2], v, `${f}: ${m[0]} (run node scripts/stamp-version.mjs)`);
