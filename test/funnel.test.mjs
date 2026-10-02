@@ -115,3 +115,19 @@ test('editor-only markup never leaks into exports', () => {
     });
   }
 });
+
+test('setup guide has a tick box per task and copy buttons for SMS copy', async () => {
+  const { setupGuidePage, guideScript } = await import('../js/setup-guide.js');
+  for (const t of TEMPLATES) {
+    const f = buildTemplate(t.id);
+    const page = setupGuidePage(f);
+    assert.match(page, /^<!doctype html>/);
+    assert.ok(!page.includes('undefined'), t.id);
+    const tasks = (page.match(/class="task"/g) || []).length;
+    const sms = f.blueprint.workflows.flatMap((w) => w.actions).filter((a) => /sms/i.test(a.type)).length;
+    assert.ok(tasks >= f.steps.length + f.blueprint.tags.length, `${t.id}: ${tasks} tasks`);
+    assert.equal((page.match(/>Copy message</g) || []).length, sms, t.id);
+    assert.ok(page.includes('Save it as a Snapshot'));
+  }
+  assert.doesNotThrow(() => new Function(guideScript('x')));
+});

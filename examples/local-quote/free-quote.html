@@ -113,7 +113,13 @@ p{margin:0 0 1em}
 
 </head>
 <body>
-<div style="position:sticky;top:0;z-index:99;display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;align-items:center;padding:7px 16px;background:#111;color:#ddd;font:600 12px/1.4 system-ui,sans-serif;text-align:center">Concept demo by Sam Nasim for BAD Marketing. Not a live BAD Marketing page; the forms send nothing.<a href="../index.html" style="color:#ffd400">All example funnels</a></div>
+<nav class="ff-nav" style="position:relative;z-index:99;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 16px;background:#111;color:#ddd;font:600 13px/1.4 system-ui,sans-serif">
+  <button type="button" data-ff-back="../index.html" style="all:unset;cursor:pointer;background:#ffd400;color:#111;border-radius:7px;padding:5px 12px;font-weight:800">← Back</button>
+  <a href="../index.html" style="color:#fff">All examples</a><span style="opacity:.4">·</span><a href="../../index.html" style="color:#fff">Home</a>
+  <span style="flex:1;min-width:200px;text-align:right;opacity:.7;font-weight:500">Concept demo by Sam Nasim for BAD Marketing. Not a live BAD Marketing page; the forms send nothing.</span>
+</nav>
+<button type="button" data-ff-back="../index.html" aria-label="Back" style="all:unset;cursor:pointer;position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:100;background:#111;color:#fff;border-radius:999px;padding:10px 16px;font:700 14px/1 system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)">← Back</button>
+<script>document.querySelectorAll('[data-ff-back]').forEach(function(b){b.addEventListener('click',function(){var fb=b.getAttribute('data-ff-back');if(history.length>1){var here=location.href;history.back();setTimeout(function(){if(location.href===here)location.href=fb;},400);}else location.href=fb;});});</script>
 <header class="fb-s fb-header"><div class="fb-wrap fb-row"><div class="fb-logo">[CLIENT BRAND]</div><a class="fb-btn fb-btn-sm" href="tel:5555555555">Call (555) 555-5555</a></div></header>
 <section class="fb-s fb-hero fb-bg-dark"><div class="fb-wrap"><div class="fb-center"><div class="fb-eyebrow">Serving [City] &amp; surrounding areas</div>
         <h1>Get Your <span class="fb-hl">Free</span> [Service] Quote In 60 Seconds</h1>

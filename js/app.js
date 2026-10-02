@@ -3,6 +3,7 @@ import { renderStepPage, renderGhlSnippet, FONTS, DEFAULT_THEME } from './render
 import { TEMPLATES, buildTemplate } from './templates.js';
 import { auditFunnel, auditStep } from './audit.js';
 import { blueprintMarkdown, systemMap } from './blueprint.js';
+import { setupGuidePage } from './setup-guide.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -566,6 +567,8 @@ function setView(v) {
   $('#guide').hidden = v !== 'pages';
   $('#blueprintView').hidden = v !== 'blueprint';
   $('#auditView').hidden = v !== 'audit';
+  $('#guideView').hidden = v !== 'guide';
+  if (v === 'guide') renderGuide();
   if (v === 'blueprint') renderBlueprint();
   if (v === 'audit') renderAudit();
 }
@@ -592,7 +595,7 @@ function renderBlueprint() {
     <p class="lead">After someone fills in your form, GoHighLevel does these things for you. Nobody has to remember to follow up.</p>
     ${wfs.length ? `<div class="story">${wfs.map((w) => { const s = storyFor(w); return `<div class="card"><span class="em">${s.em}</span><div><b>${esc(s.title)}</b><p>${esc(s.text)}</p></div></div>`; }).join('')}</div>` : '<p class="muted">No automations yet.</p>'}
     ${b.pipeline ? `<h2>Where your leads move</h2><p class="lead" style="margin-bottom:12px">GoHighLevel shows every lead on a board. They move along as they book, show up and buy.</p><div class="pipeline">${b.pipeline.stages.map((s, i) => `${i ? '<span class="arr">→</span>' : ''}<div class="stage">${esc(s)}</div>`).join('')}</div>` : ''}
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px"><button class="btn" data-bp="dl">Download the setup guide</button><button class="btn sec" data-bp="copy">Copy the setup guide</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px"><button class="btn" data-bp="guide">Open the setup guide →</button><button class="btn sec" data-bp="copy">Copy it as text (for Notion or Google Docs)</button></div>
     <details class="tech">
       <summary>Technical details for your GoHighLevel setup</summary>
       <p class="muted">The exact tags, fields, calendars and workflow steps to create. The setup guide above has all of this as a checklist.</p>
@@ -614,7 +617,7 @@ function renderBlueprint() {
 $('#blueprintView').addEventListener('click', (e) => {
   const a = e.target.dataset.bp;
   if (!a) return;
-  if (a === 'dl') return download(`${slug(state.funnel.name)}-setup-guide.md`, blueprintMarkdown(state.funnel), 'text/markdown');
+  if (a === 'guide') return setView('guide');
   if (a === 'copy') return copy(blueprintMarkdown(state.funnel), 'Setup guide copied');
   if (a === 'apply') {
     try {
@@ -627,6 +630,11 @@ $('#blueprintView').addEventListener('click', (e) => {
     }
   }
 });
+
+// ---------- setup guide ----------
+function renderGuide() {
+  $('#guideFrame').srcdoc = setupGuidePage(state.funnel);
+}
 
 // ---------- checklist ----------
 const scoreColor = (n) => (n >= 85 ? 'var(--ok)' : n >= 60 ? 'var(--warn)' : 'var(--bad)');
@@ -700,8 +708,9 @@ function renderPublish() {
         <div class="page-rows">${f.steps.map((s, i) => `<div><span class="step-n">${i + 1}</span><b>${esc(s.name)}</b><code>${esc(s.path || '')}</code><button class="btn sm" data-copy="${i}">Copy code</button></div>`).join('')}</div></div></li>
       ${forms.length ? `<li><div><h3>Connect your form ${formOk ? '<span class="status ok">Done</span>' : '<span class="status bad">To do</span>'}</h3><p>So form answers go into GoHighLevel: <b>Automation</b> → <b>Workflows</b> → <b>Create Workflow</b> → trigger <b>Inbound Webhook</b>. Copy the link it gives you. Back here, click the form on your page and paste the link into "Where answers go".</p></div></li>` : ''}
       ${cals.length ? `<li><div><h3>Connect your calendar ${calOk ? '<span class="status ok">Done</span>' : '<span class="status bad">To do</span>'}</h3><p>In GoHighLevel: <b>Calendars</b> → your calendar → <b>Share</b> → copy the booking link. Back here, click the calendar on your page and paste it.</p></div></li>` : ''}
-      <li><div><h3>Turn on the automatic follow-ups</h3><p>The setup guide lists every text, email and reminder to create, step by step.</p><button class="btn sec sm" data-pub="guide">Download the setup guide</button> <button class="btn sec sm" data-pub="auto">See them in plain English</button></div></li>
+      <li><div><h3>Turn on the automatic follow-ups</h3><p>The setup guide is a checklist of every field, tag, text, email and reminder to create, with a copy button on each one.</p><button class="btn sm" data-pub="guide">Open the setup guide →</button> <button class="btn sec sm" data-pub="auto">See them in plain English</button></div></li>
       <li><div><h3>Test it yourself</h3><p>Open your live page on your phone, fill in the form with your own details, and check that the text message arrives and you show up in GoHighLevel.</p></div></li>
+      <li><div><h3>Save it as a Snapshot (reuse it for every client)</h3><p>In GoHighLevel's agency view: <b>Account Snapshots</b> → <b>Create New Snapshot</b>. A Snapshot packages the pages, fields, tags, pipeline, calendars and automations, so the next client's account is set up in one click.</p></div></li>
     </ol>
     <details class="panel" style="margin-top:16px"><summary>Other files</summary>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -722,7 +731,7 @@ $('#publishDialog').addEventListener('click', (e) => {
   const c = e.target.dataset.copy;
   if (c !== undefined) return copy(renderGhlSnippet(f, +c), `Code for "${f.steps[+c].name}" copied. Paste it into a Custom Code element.`);
   const a = e.target.dataset.pub;
-  if (a === 'guide') download(`${slug(f.name)}-setup-guide.md`, blueprintMarkdown(f), 'text/markdown');
+  if (a === 'guide') $('#publishDialog').close(), setView('guide');
   if (a === 'auto') $('#publishDialog').close(), setView('blueprint');
   if (a === 'html') download(`${slug(curStep().path || curStep().name)}.html`, renderStepPage(f, state.step));
   if (a === 'allhtml') f.steps.forEach((st, i) => setTimeout(() => download(`${i + 1}-${slug(st.path || st.name)}.html`, renderStepPage(f, i)), i * 400));
@@ -816,8 +825,12 @@ function renderAll() {
   updateScore();
   if (state.view === 'blueprint') renderBlueprint();
   if (state.view === 'audit') renderAudit();
+  if (state.view === 'guide') renderGuide();
   save();
 }
+
+// On the shared deploy the builder lives at app.html next to the cover page.
+if (/app\.html$/.test(location.pathname)) $('#homeLink').hidden = false;
 
 const saved = loadSaved();
 if (saved) {

@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BAD | Amazon Growth System setup guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#14161c;--muted:#5f6675;--line:#e3e6ec;--brand:#5b4be8;--brand-soft:#efedff;--ok:#0f9d63;--ok-soft:#e8f8f0;--code:#f1f2f5}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111317;--card:#1a1d23;--ink:#eceef2;--muted:#9aa1ad;--line:#2b2f37;--brand:#8b7dff;--brand-soft:#26224a;--ok:#3ccf8e;--ok-soft:#173326;--code:#24272e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--card:#1a1d23;--ink:#eceef2;--muted:#9aa1ad;--line:#2b2f37;--brand:#8b7dff;--brand-soft:#26224a;--ok:#3ccf8e;--ok-soft:#173326;--code:#24272e;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,sans-serif;padding-inline:16px}
+.guide-wrap{max-width:860px;margin:0 auto;padding-block:32px 64px;display:flex;flex-direction:column;gap:16px}
+.hero{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
+h1{margin:0;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.15;text-wrap:balance}
+.hero p{margin:0;color:var(--muted);max-width:65ch}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+.fill{height:100%;width:0;background:var(--ok);border-radius:99px;transition:width .3s}
+.bar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-weight:600;font-variant-numeric:tabular-nums}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.toc{display:flex;gap:6px;flex-wrap:wrap}
+.toc a{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700;font-size:13px}
+.toc a.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.step>header{display:flex;gap:14px;align-items:flex-start;padding:18px;border-bottom:1px solid var(--line)}
+.step>header>div{flex:1;min-width:0}
+.num{flex:none;width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}
+.step.complete .num{background:var(--ok)}
+.step h2{margin:2px 0 4px;font-size:18px}
+.step header p{margin:0;color:var(--muted);font-size:14px;max-width:65ch}
+.where{margin-top:8px;font-size:13px;color:var(--muted)}
+.where b{color:var(--ink);background:var(--code);padding:1px 7px;border-radius:6px;font-weight:600}
+.count{flex:none;font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tasks{padding:6px 18px 12px}
+.task{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.task:last-child{border-bottom:0}
+.task input{flex:none;width:20px;height:20px;margin-top:3px;accent-color:var(--ok);cursor:pointer}
+.task-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.task.done .task-body{opacity:.5}
+.task.done .task-body .row>span,.task.done .task-body>span{text-decoration:line-through}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.row>span{flex:1;min-width:140px}
+.row small{color:var(--muted)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--code);padding:2px 7px;border-radius:6px;overflow-wrap:anywhere}
+.cp{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;font:600 12px/1.2 inherit;cursor:pointer;white-space:nowrap}
+.cp:hover{border-color:var(--brand);color:var(--brand)}
+.cp.copied{background:var(--ok);border-color:var(--ok);color:#fff}
+.cp.ghost{color:var(--muted)}
+.cp:focus-visible,.task input:focus-visible,.toc a:focus-visible{outline:3px solid var(--brand-soft);outline-offset:2px}
+.note{margin:0;color:var(--muted);font-size:14px}
+.msg{display:flex;gap:10px;align-items:flex-start;background:var(--brand-soft);border-radius:10px;padding:10px 12px}
+.msg p{margin:0;flex:1;min-width:0;font-size:14px}
+.stages{margin:0;padding-left:22px;color:var(--muted)}
+.wf{border:1px solid var(--line);border-radius:12px;margin:10px 0;padding:0 14px}
+.wf-head{border-bottom:1px solid var(--line)}
+.wf-head .task{border:0}
+.trig{font-size:13px;color:var(--muted)}
+.goal{font-size:13px;color:var(--ok);font-weight:600}
+.row>.when,.row>.what{flex:none;min-width:0}
+.when{min-width:84px!important;font-weight:700;color:var(--brand);font-variant-numeric:tabular-nums}
+.what{font-weight:600}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+<nav class="ff-nav" style="position:relative;z-index:99;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 16px;background:#111;color:#ddd;font:600 13px/1.4 system-ui,sans-serif">
+  <button type="button" data-ff-back="../index.html" style="all:unset;cursor:pointer;background:#ffd400;color:#111;border-radius:7px;padding:5px 12px;font-weight:800">← Back</button>
+  <a href="../index.html" style="color:#fff">All examples</a><span style="opacity:.4">·</span><a href="../../index.html" style="color:#fff">Home</a>
+  
+</nav>
+<button type="button" data-ff-back="../index.html" aria-label="Back" style="all:unset;cursor:pointer;position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:100;background:#111;color:#fff;border-radius:999px;padding:10px 16px;font:700 14px/1 system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)">← Back</button>
+<script>document.querySelectorAll('[data-ff-back]').forEach(function(b){b.addEventListener('click',function(){var fb=b.getAttribute('data-ff-back');if(history.length>1){var here=location.href;history.back();setTimeout(function(){if(location.href===here)location.href=fb;},400);}else location.href=fb;});});</script>
+<div class="guide-wrap">
+    <header class="hero">
+      <div class="kicker">GoHighLevel setup guide</div>
+      <h1>BAD | Amazon Growth System</h1>
+      <p>Work top to bottom. Tick each box as you go; your progress is saved in this browser. This funnel uses 6 GoHighLevel tools: funnel pages, contacts (crm), booking calendar, pipeline, texts and emails, automations.</p>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="bar-row"><span id="progress">0 done</span><span class="actions"><button class="cp" type="button" data-copy="# BAD | Amazon Growth System: GoHighLevel Build Sheet
+
+Domain: `go.badmarketing.com`
+
+## 0. GoHighLevel tools this funnel uses
+
+| Tool | Where in GHL | Used | Replaces |
+|---|---|---|---|
+| Funnel pages | Sites → Funnels | Yes | ClickFunnels, Leadpages |
+| Contacts (CRM) | Contacts | Yes | HubSpot, spreadsheets |
+| Booking calendar | Calendars | Yes | Calendly, Acuity |
+| Pipeline | Opportunities | Yes | Pipedrive, Trello |
+| Texts and emails | Conversations | Yes | Mailchimp, Twilio |
+| Automations | Automation → Workflows | Yes | Zapier, ActiveCampaign |
+| Payments | Payments | Not yet | ThriveCart, SamCart |
+| Courses and memberships | Memberships | Not yet | Kajabi, Teachable |
+| Reviews | Reputation | Not yet | Birdeye, Podium |
+
+## 1. Funnel steps (Sites → Funnels → New Funnel)
+
+| # | Step | Path | Sections |
+|---|---|---|---|
+| 1 | Landing | `/amazon` | header → hero → steps → offer → form → footer |
+| 2 | Book | `/amazon-book` | calendar → footer |
+| 3 | Confirmed | `/amazon-confirmed` | thankyou → footer |
+
+For each step: add a full-width section → Custom Code element → paste the step&#39;s &quot;GHL snippet&quot; export. Set SEO title + favicon under step settings.
+
+## 2. Pipeline (Opportunities → Pipelines): **Amazon | Inbound**
+
+1. New Lead
+2. Application Submitted
+3. Call Booked
+4. Showed
+5. No Show
+6. Proposal Sent
+7. Closed Won
+8. Closed Lost
+9. Nurture
+
+## 3. Custom fields (Settings → Custom Fields)
+
+| Name | Key | Type |
+|---|---|---|
+| Website | `contact.website` | Text |
+| Monthly Revenue | `contact.monthly_revenue` | Dropdown (single) |
+| UTM Source | `contact.utm_source` | Text |
+| UTM Campaign | `contact.utm_campaign` | Text |
+| UTM Content (ad) | `contact.utm_content` | Text |
+| Funnel Step | `contact.funnel_step` | Text |
+
+## 4. Custom values (Settings → Custom Values)
+
+| Name | Key | Value |
+|---|---|---|
+| Booking Link | `{{custom_values.booking_link}}` | https://go.badmarketing.com/amazon-book |
+
+## 5. Tags
+
+`lead-amazon` · `offer-free-compliance` · `qualified` · `amazon-unqualified`
+
+## 6. Calendars
+
+| Name | Type | Duration | Notes |
+|---|---|---|---|
+| Amazon Audit Call | Round Robin | 30 min |  |
+
+## 7. Workflows (Automation → Workflows)
+
+### 01 | Amazon Audit → Speed To Lead
+
+**Trigger:** Inbound Webhook (funnel form) OR Form Submitted: &quot;Amazon Audit&quot;  
+**Goal:** First touch in under 60 seconds; a booked call before the lead goes cold.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Create/Update Contact | Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact &amp; custom fields. |
+| 0m | Add Tag | lead-amazon |
+| 0m | Create/Update Opportunity | Amazon \| Inbound → &quot;New Lead&quot; (source = utm_source) |
+| 0m | Assign To User | Round robin: Sales team |
+| 0m | Send SMS | Hey {{contact.first_name}}, it&#39;s {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}} |
+| 0m | Internal Notification | SMS + Slack to assigned rep: &quot;🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}&quot; |
+| 2m | If/Else | If appointment booked → end. Else → Call contact (rep whisper: &quot;New funnel lead, press 1 to connect&quot;). |
+
+### 02 | Amazon Audit Call → Show-Up Machine
+
+**Trigger:** Customer Booked Appointment (Calendar: &quot;Amazon Audit Call&quot;)  
+**Goal:** Show rate 75%+. Every reminder gives them a reason to show, not just a time.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Update Opportunity | Amazon \| Inbound → &quot;Call Booked&quot; |
+| 0m | Remove From Workflow | Abandoned Application + Speed To Lead |
+| 0m | Send Email | Subject: &quot;You&#39;re confirmed, {{contact.first_name}} (read before our call)&quot;. Include 3-min prep video + what to have ready. |
+| 0m | Send SMS | You&#39;re locked in for {{appointment.start_time}}. Reply YES to confirm so we keep your spot 👊 |
+| 24h before | Send SMS + Email | Tomorrow at {{appointment.only_start_time}}: here&#39;s the agenda + one quick question so we can prep your audit. |
+| 2h before | Send SMS | Heads up, we&#39;re on in 2 hours. Meeting link: {{appointment.meeting_location}} |
+| 10m before | Send SMS | Hopping on in 10 minutes! {{appointment.meeting_location}} |
+
+### 03 | Amazon Audit Call → No-Show Recovery
+
+**Trigger:** Appointment Status changed to &quot;No Show&quot;  
+**Goal:** Rebook 30-40% of no-shows within 72 hours.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Update Opportunity | Amazon \| Inbound → &quot;No Show&quot; |
+| 5m | Send SMS | Hey {{contact.first_name}}, looks like we missed each other. All good, life happens. Want to grab another time? {{custom_values.booking_link}} |
+| 1d | Send Email | Subject: &quot;Still want that audit?&quot; with a case study + reschedule button. |
+| 3d | Send SMS | Last nudge from me. Should I close out your file or keep your audit open? |
+| 3d | If/Else | No reply → Opportunity &quot;Lost: No Show&quot;, add tag nurture-long-term. |
+
+## 8. KPIs to report weekly
+
+| Metric | Target |
+|---|---|
+| Landing → booked | 8%+ |
+| Show rate | 75%+ |
+
+## 9. Launch QA
+
+- [ ] Submit a test lead on mobile: contact, tags, opportunity and UTMs all land in GHL
+- [ ] Speed-to-lead SMS arrives in &lt; 60s; internal notification fires
+- [ ] Book a test call: confirmation + reminder workflow enrolls, abandoned flow exits
+- [ ] Mark test appointment No-Show → recovery SMS fires
+- [ ] Pixel Helper shows PageView + Lead; Meta CAPI / GHL conversion sync on
+- [ ] A2P 10DLC brand + campaign approved for the sending number
+- [ ] Page speed: LCP &lt; 2.5s on 4G (PageSpeed Insights)
+">Copy whole guide as text</button><button class="cp ghost" type="button" id="reset">Clear ticks</button></span></div>
+      <nav class="toc"><a href="#s1">1</a><a href="#s2">2</a><a href="#s3">3</a><a href="#s4">4</a><a href="#s5">5</a><a href="#s6">6</a><a href="#s7">7</a><a href="#s8">8</a><a href="#s9">9</a></nav>
+    </header>
+    <section class="step" id="s1"><header><span class="num">1</span><div><h2>Create the funnel and its pages</h2><p>One step per page, with the same web address. On each step add a full-width section, drag in a <b>Custom Code</b> element, and paste that page's code from the builder (Put in GoHighLevel → Copy code).</p><div class="where">In GoHighLevel: <b>Sites</b> → <b>Funnels</b> → <b>New Funnel</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="funnel"><input type="checkbox" id="t-funnel" aria-label="Done"><div class="task-body"><div class="row"><span>Name the funnel</span><code>BAD | Amazon Growth System</code><button class="cp" type="button" data-copy="BAD | Amazon Growth System">Copy</button></div></div></div><div class="task" data-task="page-0"><input type="checkbox" id="t-page-0" aria-label="Done"><div class="task-body"><div class="row"><span>Step 1: <b>Landing</b></span><code>/amazon</code><button class="cp" type="button" data-copy="/amazon">Copy address</button></div></div></div><div class="task" data-task="page-1"><input type="checkbox" id="t-page-1" aria-label="Done"><div class="task-body"><div class="row"><span>Step 2: <b>Book</b></span><code>/amazon-book</code><button class="cp" type="button" data-copy="/amazon-book">Copy address</button></div></div></div><div class="task" data-task="page-2"><input type="checkbox" id="t-page-2" aria-label="Done"><div class="task-body"><div class="row"><span>Step 3: <b>Confirmed</b></span><code>/amazon-confirmed</code><button class="cp" type="button" data-copy="/amazon-confirmed">Copy address</button></div></div></div></div></section><section class="step" id="s2"><header><span class="num">2</span><div><h2>Add the contact fields</h2><p>Extra boxes on each contact, so you can see their answers (like revenue) in GoHighLevel. Copy the name exactly so the form answers land in the right place.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Custom Fields</b> → <b>Add Field</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="field-website"><input type="checkbox" id="t-field-website" aria-label="Done"><div class="task-body"><div class="row"><span><b>Website</b> <small>Text</small></span><code>{{contact.website}}</code><button class="cp" type="button" data-copy="Website">Copy name</button></div></div></div><div class="task" data-task="field-monthly_revenue"><input type="checkbox" id="t-field-monthly_revenue" aria-label="Done"><div class="task-body"><div class="row"><span><b>Monthly Revenue</b> <small>Dropdown (single)</small></span><code>{{contact.monthly_revenue}}</code><button class="cp" type="button" data-copy="Monthly Revenue">Copy name</button></div></div></div><div class="task" data-task="field-utm_source"><input type="checkbox" id="t-field-utm_source" aria-label="Done"><div class="task-body"><div class="row"><span><b>UTM Source</b> <small>Text</small></span><code>{{contact.utm_source}}</code><button class="cp" type="button" data-copy="UTM Source">Copy name</button></div></div></div><div class="task" data-task="field-utm_campaign"><input type="checkbox" id="t-field-utm_campaign" aria-label="Done"><div class="task-body"><div class="row"><span><b>UTM Campaign</b> <small>Text</small></span><code>{{contact.utm_campaign}}</code><button class="cp" type="button" data-copy="UTM Campaign">Copy name</button></div></div></div><div class="task" data-task="field-utm_content"><input type="checkbox" id="t-field-utm_content" aria-label="Done"><div class="task-body"><div class="row"><span><b>UTM Content (ad)</b> <small>Text</small></span><code>{{contact.utm_content}}</code><button class="cp" type="button" data-copy="UTM Content (ad)">Copy name</button></div></div></div><div class="task" data-task="field-funnel_step"><input type="checkbox" id="t-field-funnel_step" aria-label="Done"><div class="task-body"><div class="row"><span><b>Funnel Step</b> <small>Text</small></span><code>{{contact.funnel_step}}</code><button class="cp" type="button" data-copy="Funnel Step">Copy name</button></div></div></div></div></section><section class="step" id="s3"><header><span class="num">3</span><div><h2>Add the saved values</h2><p>Text you reuse in many messages, like your booking link. Change it once here and every message updates.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Custom Values</b> → <b>Add</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="value-booking_link"><input type="checkbox" id="t-value-booking_link" aria-label="Done"><div class="task-body"><div class="row"><span><b>Booking Link</b></span><button class="cp" type="button" data-copy="Booking Link">Copy name</button></div><div class="row sub"><code>https://go.badmarketing.com/amazon-book</code><button class="cp" type="button" data-copy="https://go.badmarketing.com/amazon-book">Copy value</button></div></div></div></div></section><section class="step" id="s4"><header><span class="num">4</span><div><h2>Create the tags</h2><p>Labels that workflows put on leads, so you can sort and filter them.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Tags</b> → <b>Add Tag</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="tag-lead-amazon"><input type="checkbox" id="t-tag-lead-amazon" aria-label="Done"><div class="task-body"><div class="row"><code>lead-amazon</code><button class="cp" type="button" data-copy="lead-amazon">Copy</button></div></div></div><div class="task" data-task="tag-offer-free-compliance"><input type="checkbox" id="t-tag-offer-free-compliance" aria-label="Done"><div class="task-body"><div class="row"><code>offer-free-compliance</code><button class="cp" type="button" data-copy="offer-free-compliance">Copy</button></div></div></div><div class="task" data-task="tag-qualified"><input type="checkbox" id="t-tag-qualified" aria-label="Done"><div class="task-body"><div class="row"><code>qualified</code><button class="cp" type="button" data-copy="qualified">Copy</button></div></div></div><div class="task" data-task="tag-amazon-unqualified"><input type="checkbox" id="t-tag-amazon-unqualified" aria-label="Done"><div class="task-body"><div class="row"><code>amazon-unqualified</code><button class="cp" type="button" data-copy="amazon-unqualified">Copy</button></div></div></div></div></section><section class="step" id="s5"><header><span class="num">5</span><div><h2>Build the pipeline</h2><p>The board that shows where every lead is. Add the stages in this order.</p><div class="where">In GoHighLevel: <b>Opportunities</b> → <b>Pipelines</b> → <b>Create New Pipeline</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="pipeline"><input type="checkbox" id="t-pipeline" aria-label="Done"><div class="task-body"><div class="row"><span>Pipeline name</span><code>Amazon | Inbound</code><button class="cp" type="button" data-copy="Amazon | Inbound">Copy</button></div></div></div><div class="task" data-task="stages"><input type="checkbox" id="t-stages" aria-label="Done"><div class="task-body"><div class="row"><span>Stages</span><button class="cp" type="button" data-copy="New Lead
+Application Submitted
+Call Booked
+Showed
+No Show
+Proposal Sent
+Closed Won
+Closed Lost
+Nurture">Copy all</button></div><ol class="stages"><li>New Lead</li><li>Application Submitted</li><li>Call Booked</li><li>Showed</li><li>No Show</li><li>Proposal Sent</li><li>Closed Won</li><li>Closed Lost</li><li>Nurture</li></ol></div></div></div></section><section class="step" id="s6"><header><span class="num">6</span><div><h2>Set up the calendar</h2><p>Then copy its booking link into the calendar section of your page in the builder.</p><div class="where">In GoHighLevel: <b>Calendars</b> → <b>Calendar Settings</b> → <b>Create Calendar</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="cal-0"><input type="checkbox" id="t-cal-0" aria-label="Done"><div class="task-body"><div class="row"><span><b>Amazon Audit Call</b> <small>Round Robin · 30 min</small></span><button class="cp" type="button" data-copy="Amazon Audit Call">Copy name</button></div></div></div></div></section><section class="step" id="s7"><header><span class="num">7</span><div><h2>Build the automations</h2><p>One workflow per card. Add the trigger, then each action in order. Message wording is ready to copy.</p><div class="where">In GoHighLevel: <b>Automation</b> → <b>Workflows</b> → <b>Create Workflow</b> → <b>Start from scratch</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="wf"><div class="wf-head"><div class="task" data-task="wf-0"><input type="checkbox" id="t-wf-0" aria-label="Done"><div class="task-body"><div class="row"><b>01 | Amazon Audit → Speed To Lead</b><button class="cp" type="button" data-copy="01 | Amazon Audit → Speed To Lead">Copy name</button></div><div class="trig">Starts when: Inbound Webhook (funnel form) OR Form Submitted: &quot;Amazon Audit&quot;</div><div class="goal">Goal: First touch in under 60 seconds; a booked call before the lead goes cold.</div></div></div></div>
+            <div class="task" data-task="wf-0-0"><input type="checkbox" id="t-wf-0-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Create/Update Contact</span></div><p class="note">Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact &amp; custom fields.</p></div></div><div class="task" data-task="wf-0-1"><input type="checkbox" id="t-wf-0-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Add Tag</span></div><p class="note">lead-amazon</p></div></div><div class="task" data-task="wf-0-2"><input type="checkbox" id="t-wf-0-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Create/Update Opportunity</span></div><p class="note">Amazon | Inbound → &quot;New Lead&quot; (source = utm_source)</p></div></div><div class="task" data-task="wf-0-3"><input type="checkbox" id="t-wf-0-3" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Assign To User</span></div><p class="note">Round robin: Sales team</p></div></div><div class="task" data-task="wf-0-4"><input type="checkbox" id="t-wf-0-4" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send SMS</span></div><div class="msg"><p>Hey {{contact.first_name}}, it&#39;s {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}</p><button class="cp" type="button" data-copy="Hey {{contact.first_name}}, it&#39;s {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}">Copy message</button></div></div></div><div class="task" data-task="wf-0-5"><input type="checkbox" id="t-wf-0-5" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Internal Notification</span></div><div class="msg"><p>SMS + Slack to assigned rep: &quot;🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}&quot;</p><button class="cp" type="button" data-copy="SMS + Slack to assigned rep: &quot;🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}&quot;">Copy</button></div></div></div><div class="task" data-task="wf-0-6"><input type="checkbox" id="t-wf-0-6" aria-label="Done"><div class="task-body"><div class="row"><span class="when">2m</span><span class="what">If/Else</span></div><p class="note">If appointment booked → end. Else → Call contact (rep whisper: &quot;New funnel lead, press 1 to connect&quot;).</p></div></div></div><div class="wf"><div class="wf-head"><div class="task" data-task="wf-1"><input type="checkbox" id="t-wf-1" aria-label="Done"><div class="task-body"><div class="row"><b>02 | Amazon Audit Call → Show-Up Machine</b><button class="cp" type="button" data-copy="02 | Amazon Audit Call → Show-Up Machine">Copy name</button></div><div class="trig">Starts when: Customer Booked Appointment (Calendar: &quot;Amazon Audit Call&quot;)</div><div class="goal">Goal: Show rate 75%+. Every reminder gives them a reason to show, not just a time.</div></div></div></div>
+            <div class="task" data-task="wf-1-0"><input type="checkbox" id="t-wf-1-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Update Opportunity</span></div><p class="note">Amazon | Inbound → &quot;Call Booked&quot;</p></div></div><div class="task" data-task="wf-1-1"><input type="checkbox" id="t-wf-1-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Remove From Workflow</span></div><p class="note">Abandoned Application + Speed To Lead</p></div></div><div class="task" data-task="wf-1-2"><input type="checkbox" id="t-wf-1-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send Email</span></div><div class="msg"><p>Subject: &quot;You&#39;re confirmed, {{contact.first_name}} (read before our call)&quot;. Include 3-min prep video + what to have ready.</p><button class="cp" type="button" data-copy="Subject: &quot;You&#39;re confirmed, {{contact.first_name}} (read before our call)&quot;. Include 3-min prep video + what to have ready.">Copy</button></div></div></div><div class="task" data-task="wf-1-3"><input type="checkbox" id="t-wf-1-3" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send SMS</span></div><div class="msg"><p>You&#39;re locked in for {{appointment.start_time}}. Reply YES to confirm so we keep your spot 👊</p><button class="cp" type="button" data-copy="You&#39;re locked in for {{appointment.start_time}}. Reply YES to confirm so we keep your spot 👊">Copy message</button></div></div></div><div class="task" data-task="wf-1-4"><input type="checkbox" id="t-wf-1-4" aria-label="Done"><div class="task-body"><div class="row"><span class="when">24h before</span><span class="what">Send SMS + Email</span></div><div class="msg"><p>Tomorrow at {{appointment.only_start_time}}: here&#39;s the agenda + one quick question so we can prep your audit.</p><button class="cp" type="button" data-copy="Tomorrow at {{appointment.only_start_time}}: here&#39;s the agenda + one quick question so we can prep your audit.">Copy message</button></div></div></div><div class="task" data-task="wf-1-5"><input type="checkbox" id="t-wf-1-5" aria-label="Done"><div class="task-body"><div class="row"><span class="when">2h before</span><span class="what">Send SMS</span></div><div class="msg"><p>Heads up, we&#39;re on in 2 hours. Meeting link: {{appointment.meeting_location}}</p><button class="cp" type="button" data-copy="Heads up, we&#39;re on in 2 hours. Meeting link: {{appointment.meeting_location}}">Copy message</button></div></div></div><div class="task" data-task="wf-1-6"><input type="checkbox" id="t-wf-1-6" aria-label="Done"><div class="task-body"><div class="row"><span class="when">10m before</span><span class="what">Send SMS</span></div><div class="msg"><p>Hopping on in 10 minutes! {{appointment.meeting_location}}</p><button class="cp" type="button" data-copy="Hopping on in 10 minutes! {{appointment.meeting_location}}">Copy message</button></div></div></div></div><div class="wf"><div class="wf-head"><div class="task" data-task="wf-2"><input type="checkbox" id="t-wf-2" aria-label="Done"><div class="task-body"><div class="row"><b>03 | Amazon Audit Call → No-Show Recovery</b><button class="cp" type="button" data-copy="03 | Amazon Audit Call → No-Show Recovery">Copy name</button></div><div class="trig">Starts when: Appointment Status changed to &quot;No Show&quot;</div><div class="goal">Goal: Rebook 30-40% of no-shows within 72 hours.</div></div></div></div>
+            <div class="task" data-task="wf-2-0"><input type="checkbox" id="t-wf-2-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Update Opportunity</span></div><p class="note">Amazon | Inbound → &quot;No Show&quot;</p></div></div><div class="task" data-task="wf-2-1"><input type="checkbox" id="t-wf-2-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">5m</span><span class="what">Send SMS</span></div><div class="msg"><p>Hey {{contact.first_name}}, looks like we missed each other. All good, life happens. Want to grab another time? {{custom_values.booking_link}}</p><button class="cp" type="button" data-copy="Hey {{contact.first_name}}, looks like we missed each other. All good, life happens. Want to grab another time? {{custom_values.booking_link}}">Copy message</button></div></div></div><div class="task" data-task="wf-2-2"><input type="checkbox" id="t-wf-2-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">1d</span><span class="what">Send Email</span></div><div class="msg"><p>Subject: &quot;Still want that audit?&quot; with a case study + reschedule button.</p><button class="cp" type="button" data-copy="Subject: &quot;Still want that audit?&quot; with a case study + reschedule button.">Copy</button></div></div></div><div class="task" data-task="wf-2-3"><input type="checkbox" id="t-wf-2-3" aria-label="Done"><div class="task-body"><div class="row"><span class="when">3d</span><span class="what">Send SMS</span></div><div class="msg"><p>Last nudge from me. Should I close out your file or keep your audit open?</p><button class="cp" type="button" data-copy="Last nudge from me. Should I close out your file or keep your audit open?">Copy message</button></div></div></div><div class="task" data-task="wf-2-4"><input type="checkbox" id="t-wf-2-4" aria-label="Done"><div class="task-body"><div class="row"><span class="when">3d</span><span class="what">If/Else</span></div><p class="note">No reply → Opportunity &quot;Lost: No Show&quot;, add tag nurture-long-term.</p></div></div></div></div></section><section class="step" id="s8"><header><span class="num">8</span><div><h2>Test it like a lead would</h2><p>Use your own phone and email.</p></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="qa-0"><input type="checkbox" id="t-qa-0" aria-label="Done"><div class="task-body"><span>Open the first page on your phone and fill in the form</span></div></div><div class="task" data-task="qa-1"><input type="checkbox" id="t-qa-1" aria-label="Done"><div class="task-body"><span>You show up in Contacts with your answers and the tags</span></div></div><div class="task" data-task="qa-2"><input type="checkbox" id="t-qa-2" aria-label="Done"><div class="task-body"><span>The text message arrives within a minute</span></div></div><div class="task" data-task="qa-3"><input type="checkbox" id="t-qa-3" aria-label="Done"><div class="task-body"><span>You appear in the pipeline in the first stage</span></div></div><div class="task" data-task="qa-4"><input type="checkbox" id="t-qa-4" aria-label="Done"><div class="task-body"><span>Book a test call: the confirmation and reminders start</span></div></div></div></section><section class="step" id="s9"><header><span class="num">9</span><div><h2>Save it as a Snapshot</h2><p>This is how agencies reuse a funnel: a Snapshot packages the pages, fields, tags, pipeline, calendars and workflows. Next client, you load the Snapshot into their account in one click instead of repeating this guide.</p><div class="where">In GoHighLevel: <b>Agency view</b> → <b>Account Snapshots</b> → <b>Create New Snapshot</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="snap-make"><input type="checkbox" id="t-snap-make" aria-label="Done"><div class="task-body"><span>Create a Snapshot from this sub-account, named <code>BAD | Amazon Growth System</code></span><button class="cp" type="button" data-copy="BAD | Amazon Growth System">Copy name</button></div></div><div class="task" data-task="snap-share"><input type="checkbox" id="t-snap-share" aria-label="Done"><div class="task-body"><span>Optional: use <b>Share</b> on the Snapshot to get a link you can send to another GoHighLevel account</span></div></div></div></section>
+  </div>
+<script>
+(function(){
+  var KEY='ff-guide:'+"bad-amazon-growth-system";
+  var saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}
+  function store(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}}
+  var boxes=[].slice.call(document.querySelectorAll('.task input'));
+  function refresh(){
+    var done=0;
+    boxes.forEach(function(b){var t=b.closest('.task');t.classList.toggle('done',b.checked);if(b.checked)done++;});
+    document.getElementById('fill').style.width=(boxes.length?done/boxes.length*100:0)+'%';
+    document.getElementById('progress').textContent=done+' of '+boxes.length+' done'+(done===boxes.length&&done?' 🎉':'');
+    document.querySelectorAll('.step').forEach(function(s,i){
+      var bs=s.querySelectorAll('.task input'),d=s.querySelectorAll('.task input:checked').length;
+      s.querySelector('[data-count]').textContent=d+' / '+bs.length;
+      s.classList.toggle('complete',d===bs.length);
+      var a=document.querySelectorAll('.toc a')[i];if(a)a.classList.toggle('done',d===bs.length);
+    });
+  }
+  boxes.forEach(function(b){var id=b.closest('.task').dataset.task;b.checked=!!saved[id];b.addEventListener('change',function(){saved[id]=b.checked;store();refresh();});});
+  document.getElementById('reset').addEventListener('click',function(){saved={};store();boxes.forEach(function(b){b.checked=false;});refresh();});
+  function fallbackCopy(text){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();return ok;}
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-copy]');if(!b)return;
+    var text=b.getAttribute('data-copy'),label=b.textContent;
+    function done(ok){b.textContent=ok?'Copied ✓':'Select and copy';b.classList.toggle('copied',ok);setTimeout(function(){b.textContent=label;b.classList.remove('copied');},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){done(true);},function(){done(fallbackCopy(text));});}
+    else done(fallbackCopy(text));
+  });
+  refresh();
+})();</script>
+</body>
+</html>
