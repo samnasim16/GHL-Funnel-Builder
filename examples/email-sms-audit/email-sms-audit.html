@@ -92,6 +92,8 @@ p{margin:0 0 1em}
 .fb-form .fb-invalid{border-color:#d92d20;background:#fff5f5}
 .fb-form-msg{margin-top:10px;font-weight:600;text-align:center}
 .fb-consent{font-size:.72rem;opacity:.6;margin-top:12px;line-height:1.4}
+.fb-co-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;font-size:1.1rem}.fb-co-row strong{font-family:var(--hf);font-size:1.8rem;color:var(--p)}
+.fb-checkout .fb-checks{margin:16px 0}
 .fb-cal{max-width:900px;margin:24px auto 0;background:var(--bg);border-radius:var(--r);overflow:hidden}
 .fb-cal iframe{width:100%;min-height:720px;border:0;display:block}
 .fb-guarantee{display:flex;gap:24px;align-items:center;max-width:760px;margin:0 auto;padding:28px;border-radius:var(--r);background:var(--alt);color:var(--tx)}
@@ -111,7 +113,14 @@ p{margin:0 0 1em}
 
 </head>
 <body>
-<div class="fb-s fb-announcement"><div class="fb-wrap">🔥 We only run 10 free audits per week.</div></div>
+<nav class="ff-nav" style="position:relative;z-index:99;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 16px;background:#111;color:#ddd;font:600 13px/1.4 system-ui,sans-serif">
+  <button type="button" data-ff-back="../index.html" style="all:unset;cursor:pointer;background:#ffd400;color:#111;border-radius:7px;padding:5px 12px;font-weight:800">← Back</button>
+  <a href="../index.html" style="color:#fff">All examples</a><span style="opacity:.4">·</span><a href="../../index.html" style="color:#fff">Home</a>
+  <span style="flex:1;min-width:200px;text-align:right;opacity:.7;font-weight:500">Concept demo by Sam Nasim for BAD Marketing. Not a live BAD Marketing page; the forms send nothing.</span>
+</nav>
+<button type="button" data-ff-back="../index.html" aria-label="Back" style="all:unset;cursor:pointer;position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:100;background:#111;color:#fff;border-radius:999px;padding:10px 16px;font:700 14px/1 system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)">← Back</button>
+<script>document.querySelectorAll('[data-ff-back]').forEach(function(b){b.addEventListener('click',function(){var fb=b.getAttribute('data-ff-back');if(history.length>1){var here=location.href;history.back();setTimeout(function(){if(location.href===here)location.href=fb;},400);}else location.href=fb;});});</script>
+<div class="fb-s fb-announcement"><div class="fb-wrap"><span>🔥 We only run 10 free audits per week.</span></div></div>
 <header class="fb-s fb-header"><div class="fb-wrap fb-row"><div class="fb-logo">BAD MARKETING</div><a class="fb-btn fb-btn-sm" href="#form">Claim My Audit</a></div></header>
 <section class="fb-s fb-hero fb-bg-dark"><div class="fb-wrap"><div class="fb-center"><div class="fb-eyebrow">For Shopify brands doing $100k+/month</div>
         <h1>Your Email List Is <span class="fb-hl">Sitting On Money</span>. Let&#39;s Go Get It.</h1>
@@ -125,7 +134,7 @@ p{margin:0 0 1em}
 <section class="fb-s fb-offer fb-bg-default"><div class="fb-wrap"><div class="fb-offer-box"><h2 class="fb-center">What&#39;s Inside Your Free Audit</h2><ul class="fb-stack"><li><span>✔ Full Klaviyo / Attentive / Postscript account teardown</span><span class="fb-val">$1,500</span></li><li><span>✔ Flow revenue gap model (in dollars)</span><span class="fb-val">$750</span></li><li><span>✔ Deliverability &amp; list health report</span><span class="fb-val">$500</span></li><li><span>✔ 30-day retention action plan</span><span class="fb-val">$750</span></li></ul><div class="fb-total"><span>Total value</span><s>$3,500</s></div><div class="fb-price">FREE</div><div class="fb-cta-row"><a class="fb-btn fb-btn-lg" href="#form">Claim My Free Audit</a></div></div></div></section>
 <section class="fb-s fb-form fb-bg-dark" id="form"><div class="fb-wrap"><div class="fb-form-box"><h2 class="fb-center">Where Should We Send Your Audit?</h2><p class="fb-center fb-muted">Step 1 of 2. Next you&#39;ll pick a time to walk through it live.</p><form class="fb-form" data-webhook="" data-redirect="./email-sms-audit-book.html" data-step="Opt-in" novalidate>
             <label><span>First name</span><input type="text" name="first_name" required></label><label><span>Work email</span><input type="email" name="email" required autocomplete="email"></label><label><span>Mobile phone</span><input type="tel" name="phone" required autocomplete="tel"></label><label><span>Store URL</span><input type="text" name="website" required></label><label><span>Monthly revenue</span><select name="monthly_revenue" required><option value="">Select…</option><option>Under $50k</option><option>$50k–$100k</option><option>$100k–$500k</option><option>$500k–$1M</option><option>$1M+</option></select></label><label><span>Email/SMS platform</span><select name="esp" required><option value="">Select…</option><option>Klaviyo</option><option>Attentive</option><option>Postscript</option><option>Omnisend</option><option>Other / None</option></select></label>
-            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit">Continue To Step 2 →</button>
+            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit"><span>Continue To Step 2 →</span></button>
             <div class="fb-form-msg" role="status"></div>
             <p class="fb-consent">By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
           </form></div></div></section>

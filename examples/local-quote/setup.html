@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Client | Local Free Quote setup guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#14161c;--muted:#5f6675;--line:#e3e6ec;--brand:#5b4be8;--brand-soft:#efedff;--ok:#0f9d63;--ok-soft:#e8f8f0;--code:#f1f2f5}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111317;--card:#1a1d23;--ink:#eceef2;--muted:#9aa1ad;--line:#2b2f37;--brand:#8b7dff;--brand-soft:#26224a;--ok:#3ccf8e;--ok-soft:#173326;--code:#24272e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--card:#1a1d23;--ink:#eceef2;--muted:#9aa1ad;--line:#2b2f37;--brand:#8b7dff;--brand-soft:#26224a;--ok:#3ccf8e;--ok-soft:#173326;--code:#24272e;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,sans-serif;padding-inline:16px}
+.guide-wrap{max-width:860px;margin:0 auto;padding-block:32px 64px;display:flex;flex-direction:column;gap:16px}
+.hero{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
+h1{margin:0;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.15;text-wrap:balance}
+.hero p{margin:0;color:var(--muted);max-width:65ch}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+.fill{height:100%;width:0;background:var(--ok);border-radius:99px;transition:width .3s}
+.bar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-weight:600;font-variant-numeric:tabular-nums}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.toc{display:flex;gap:6px;flex-wrap:wrap}
+.toc a{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700;font-size:13px}
+.toc a.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.step>header{display:flex;gap:14px;align-items:flex-start;padding:18px;border-bottom:1px solid var(--line)}
+.step>header>div{flex:1;min-width:0}
+.num{flex:none;width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}
+.step.complete .num{background:var(--ok)}
+.step h2{margin:2px 0 4px;font-size:18px}
+.step header p{margin:0;color:var(--muted);font-size:14px;max-width:65ch}
+.where{margin-top:8px;font-size:13px;color:var(--muted)}
+.where b{color:var(--ink);background:var(--code);padding:1px 7px;border-radius:6px;font-weight:600}
+.count{flex:none;font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tasks{padding:6px 18px 12px}
+.task{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.task:last-child{border-bottom:0}
+.task input{flex:none;width:20px;height:20px;margin-top:3px;accent-color:var(--ok);cursor:pointer}
+.task-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.task.done .task-body{opacity:.5}
+.task.done .task-body .row>span,.task.done .task-body>span{text-decoration:line-through}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.row>span{flex:1;min-width:140px}
+.row small{color:var(--muted)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--code);padding:2px 7px;border-radius:6px;overflow-wrap:anywhere}
+.cp{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;font:600 12px/1.2 inherit;cursor:pointer;white-space:nowrap}
+.cp:hover{border-color:var(--brand);color:var(--brand)}
+.cp.copied{background:var(--ok);border-color:var(--ok);color:#fff}
+.cp.ghost{color:var(--muted)}
+.cp:focus-visible,.task input:focus-visible,.toc a:focus-visible{outline:3px solid var(--brand-soft);outline-offset:2px}
+.note{margin:0;color:var(--muted);font-size:14px}
+.msg{display:flex;gap:10px;align-items:flex-start;background:var(--brand-soft);border-radius:10px;padding:10px 12px}
+.msg p{margin:0;flex:1;min-width:0;font-size:14px}
+.stages{margin:0;padding-left:22px;color:var(--muted)}
+.wf{border:1px solid var(--line);border-radius:12px;margin:10px 0;padding:0 14px}
+.wf-head{border-bottom:1px solid var(--line)}
+.wf-head .task{border:0}
+.trig{font-size:13px;color:var(--muted)}
+.goal{font-size:13px;color:var(--ok);font-weight:600}
+.row>.when,.row>.what{flex:none;min-width:0}
+.when{min-width:84px!important;font-weight:700;color:var(--brand);font-variant-numeric:tabular-nums}
+.what{font-weight:600}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+<nav class="ff-nav" style="position:relative;z-index:99;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 16px;background:#111;color:#ddd;font:600 13px/1.4 system-ui,sans-serif">
+  <button type="button" data-ff-back="../index.html" style="all:unset;cursor:pointer;background:#ffd400;color:#111;border-radius:7px;padding:5px 12px;font-weight:800">← Back</button>
+  <a href="../index.html" style="color:#fff">All examples</a><span style="opacity:.4">·</span><a href="../../index.html" style="color:#fff">Home</a>
+  
+</nav>
+<button type="button" data-ff-back="../index.html" aria-label="Back" style="all:unset;cursor:pointer;position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:100;background:#111;color:#fff;border-radius:999px;padding:10px 16px;font:700 14px/1 system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)">← Back</button>
+<script>document.querySelectorAll('[data-ff-back]').forEach(function(b){b.addEventListener('click',function(){var fb=b.getAttribute('data-ff-back');if(history.length>1){var here=location.href;history.back();setTimeout(function(){if(location.href===here)location.href=fb;},400);}else location.href=fb;});});</script>
+<div class="guide-wrap">
+    <header class="hero">
+      <div class="kicker">GoHighLevel setup guide</div>
+      <h1>Client | Local Free Quote</h1>
+      <p>Work top to bottom. Tick each box as you go; your progress is saved in this browser. This funnel uses 6 GoHighLevel tools: funnel pages, contacts (crm), pipeline, texts and emails, automations, reviews.</p>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="bar-row"><span id="progress">0 done</span><span class="actions"><button class="cp" type="button" data-copy="# Client | Local Free Quote: GoHighLevel Build Sheet
+
+Domain: `quote.clientbrand.com`
+
+## 0. GoHighLevel tools this funnel uses
+
+| Tool | Where in GHL | Used | Replaces |
+|---|---|---|---|
+| Funnel pages | Sites → Funnels | Yes | ClickFunnels, Leadpages |
+| Contacts (CRM) | Contacts | Yes | HubSpot, spreadsheets |
+| Booking calendar | Calendars | Not yet | Calendly, Acuity |
+| Pipeline | Opportunities | Yes | Pipedrive, Trello |
+| Texts and emails | Conversations | Yes | Mailchimp, Twilio |
+| Automations | Automation → Workflows | Yes | Zapier, ActiveCampaign |
+| Payments | Payments | Not yet | ThriveCart, SamCart |
+| Courses and memberships | Memberships | Not yet | Kajabi, Teachable |
+| Reviews | Reputation | Yes | Birdeye, Podium |
+
+## 1. Funnel steps (Sites → Funnels → New Funnel)
+
+| # | Step | Path | Sections |
+|---|---|---|---|
+| 1 | Offer | `/free-quote` | header → hero → form → testimonials → footer |
+| 2 | Thank You | `/free-quote-thanks` | thankyou → footer |
+
+For each step: add a full-width section → Custom Code element → paste the step&#39;s &quot;GHL snippet&quot; export. Set SEO title + favicon under step settings.
+
+## 2. Pipeline (Opportunities → Pipelines): **Local | Quote Requests**
+
+1. New Lead
+2. Contacted
+3. Estimate Booked
+4. Estimate Given
+5. Won
+6. Lost
+
+## 3. Custom fields (Settings → Custom Fields)
+
+| Name | Key | Type |
+|---|---|---|
+| Service | `contact.service` | Dropdown (single) |
+| UTM Source | `contact.utm_source` | Text |
+
+## 5. Tags
+
+`lead-quote` · `missed-call`
+
+## 6. Calendars
+
+| Name | Type | Duration | Notes |
+|---|---|---|---|
+| In-Home Estimate | Service calendar | 60 min | Location = contact address |
+
+## 7. Workflows (Automation → Workflows)
+
+### 01 | Free Quote → Speed To Lead
+
+**Trigger:** Inbound Webhook (funnel form) OR Form Submitted: &quot;Free Quote&quot;  
+**Goal:** First touch in under 60 seconds; a booked call before the lead goes cold.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Create/Update Contact | Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact &amp; custom fields. |
+| 0m | Add Tag | lead-quote |
+| 0m | Create/Update Opportunity | Local \| Quote Requests → &quot;New Lead&quot; (source = utm_source) |
+| 0m | Assign To User | Office manager |
+| 0m | Send SMS | Hey {{contact.first_name}}, it&#39;s {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}} |
+| 0m | Internal Notification | SMS + Slack to assigned rep: &quot;🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}&quot; |
+| 2m | If/Else | If appointment booked → end. Else → Call contact (rep whisper: &quot;New funnel lead, press 1 to connect&quot;). |
+
+### 02 | Missed Call Text-Back
+
+**Trigger:** Call Status: Missed / No answer  
+**Goal:** Never lose a call-in lead.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Send SMS | Sorry we missed you! This is [Client Brand]. How can we help? Reply here and we&#39;ll get right back to you. |
+| 0m | Add Tag | missed-call |
+| 0m | Create Opportunity | Local \| Quote Requests → New Lead |
+
+### 03 | Review Request
+
+**Trigger:** Opportunity stage changed to &quot;Won&quot;  
+**Goal:** Grow Google reviews every week.
+
+| When | Action | Details |
+|---|---|---|
+| 1d | Send Review Request | GHL Reputation → Google review link via SMS. |
+| 3d | Send Email | Reminder if no review left. |
+
+## 8. KPIs to report weekly
+
+| Metric | Target |
+|---|---|
+| Form conversion | 15%+ |
+| Contact rate in 5 min | 90%+ |
+| Lead → estimate | 40%+ |
+
+## 9. Launch QA
+
+- [ ] Submit a test lead on mobile: contact, tags, opportunity and UTMs all land in GHL
+- [ ] Speed-to-lead SMS arrives in &lt; 60s; internal notification fires
+- [ ] Book a test call: confirmation + reminder workflow enrolls, abandoned flow exits
+- [ ] Mark test appointment No-Show → recovery SMS fires
+- [ ] Pixel Helper shows PageView + Lead; Meta CAPI / GHL conversion sync on
+- [ ] A2P 10DLC brand + campaign approved for the sending number
+- [ ] Page speed: LCP &lt; 2.5s on 4G (PageSpeed Insights)
+">Copy whole guide as text</button><button class="cp ghost" type="button" id="reset">Clear ticks</button></span></div>
+      <nav class="toc"><a href="#s1">1</a><a href="#s2">2</a><a href="#s3">3</a><a href="#s4">4</a><a href="#s5">5</a><a href="#s6">6</a><a href="#s7">7</a><a href="#s8">8</a></nav>
+    </header>
+    <section class="step" id="s1"><header><span class="num">1</span><div><h2>Create the funnel and its pages</h2><p>One step per page, with the same web address. On each step add a full-width section, drag in a <b>Custom Code</b> element, and paste that page's code from the builder (Put in GoHighLevel → Copy code).</p><div class="where">In GoHighLevel: <b>Sites</b> → <b>Funnels</b> → <b>New Funnel</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="funnel"><input type="checkbox" id="t-funnel" aria-label="Done"><div class="task-body"><div class="row"><span>Name the funnel</span><code>Client | Local Free Quote</code><button class="cp" type="button" data-copy="Client | Local Free Quote">Copy</button></div></div></div><div class="task" data-task="page-0"><input type="checkbox" id="t-page-0" aria-label="Done"><div class="task-body"><div class="row"><span>Step 1: <b>Offer</b></span><code>/free-quote</code><button class="cp" type="button" data-copy="/free-quote">Copy address</button></div></div></div><div class="task" data-task="page-1"><input type="checkbox" id="t-page-1" aria-label="Done"><div class="task-body"><div class="row"><span>Step 2: <b>Thank You</b></span><code>/free-quote-thanks</code><button class="cp" type="button" data-copy="/free-quote-thanks">Copy address</button></div></div></div></div></section><section class="step" id="s2"><header><span class="num">2</span><div><h2>Add the contact fields</h2><p>Extra boxes on each contact, so you can see their answers (like revenue) in GoHighLevel. Copy the name exactly so the form answers land in the right place.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Custom Fields</b> → <b>Add Field</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="field-service"><input type="checkbox" id="t-field-service" aria-label="Done"><div class="task-body"><div class="row"><span><b>Service</b> <small>Dropdown (single)</small></span><code>{{contact.service}}</code><button class="cp" type="button" data-copy="Service">Copy name</button></div></div></div><div class="task" data-task="field-utm_source"><input type="checkbox" id="t-field-utm_source" aria-label="Done"><div class="task-body"><div class="row"><span><b>UTM Source</b> <small>Text</small></span><code>{{contact.utm_source}}</code><button class="cp" type="button" data-copy="UTM Source">Copy name</button></div></div></div></div></section><section class="step" id="s3"><header><span class="num">3</span><div><h2>Create the tags</h2><p>Labels that workflows put on leads, so you can sort and filter them.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Tags</b> → <b>Add Tag</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="tag-lead-quote"><input type="checkbox" id="t-tag-lead-quote" aria-label="Done"><div class="task-body"><div class="row"><code>lead-quote</code><button class="cp" type="button" data-copy="lead-quote">Copy</button></div></div></div><div class="task" data-task="tag-missed-call"><input type="checkbox" id="t-tag-missed-call" aria-label="Done"><div class="task-body"><div class="row"><code>missed-call</code><button class="cp" type="button" data-copy="missed-call">Copy</button></div></div></div></div></section><section class="step" id="s4"><header><span class="num">4</span><div><h2>Build the pipeline</h2><p>The board that shows where every lead is. Add the stages in this order.</p><div class="where">In GoHighLevel: <b>Opportunities</b> → <b>Pipelines</b> → <b>Create New Pipeline</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="pipeline"><input type="checkbox" id="t-pipeline" aria-label="Done"><div class="task-body"><div class="row"><span>Pipeline name</span><code>Local | Quote Requests</code><button class="cp" type="button" data-copy="Local | Quote Requests">Copy</button></div></div></div><div class="task" data-task="stages"><input type="checkbox" id="t-stages" aria-label="Done"><div class="task-body"><div class="row"><span>Stages</span><button class="cp" type="button" data-copy="New Lead
+Contacted
+Estimate Booked
+Estimate Given
+Won
+Lost">Copy all</button></div><ol class="stages"><li>New Lead</li><li>Contacted</li><li>Estimate Booked</li><li>Estimate Given</li><li>Won</li><li>Lost</li></ol></div></div></div></section><section class="step" id="s5"><header><span class="num">5</span><div><h2>Set up the calendar</h2><p>Then copy its booking link into the calendar section of your page in the builder.</p><div class="where">In GoHighLevel: <b>Calendars</b> → <b>Calendar Settings</b> → <b>Create Calendar</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="cal-0"><input type="checkbox" id="t-cal-0" aria-label="Done"><div class="task-body"><div class="row"><span><b>In-Home Estimate</b> <small>Service calendar · 60 min</small></span><button class="cp" type="button" data-copy="In-Home Estimate">Copy name</button></div><p class="note">Location = contact address</p></div></div></div></section><section class="step" id="s6"><header><span class="num">6</span><div><h2>Build the automations</h2><p>One workflow per card. Add the trigger, then each action in order. Message wording is ready to copy.</p><div class="where">In GoHighLevel: <b>Automation</b> → <b>Workflows</b> → <b>Create Workflow</b> → <b>Start from scratch</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="wf"><div class="wf-head"><div class="task" data-task="wf-0"><input type="checkbox" id="t-wf-0" aria-label="Done"><div class="task-body"><div class="row"><b>01 | Free Quote → Speed To Lead</b><button class="cp" type="button" data-copy="01 | Free Quote → Speed To Lead">Copy name</button></div><div class="trig">Starts when: Inbound Webhook (funnel form) OR Form Submitted: &quot;Free Quote&quot;</div><div class="goal">Goal: First touch in under 60 seconds; a booked call before the lead goes cold.</div></div></div></div>
+            <div class="task" data-task="wf-0-0"><input type="checkbox" id="t-wf-0-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Create/Update Contact</span></div><p class="note">Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact &amp; custom fields.</p></div></div><div class="task" data-task="wf-0-1"><input type="checkbox" id="t-wf-0-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Add Tag</span></div><p class="note">lead-quote</p></div></div><div class="task" data-task="wf-0-2"><input type="checkbox" id="t-wf-0-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Create/Update Opportunity</span></div><p class="note">Local | Quote Requests → &quot;New Lead&quot; (source = utm_source)</p></div></div><div class="task" data-task="wf-0-3"><input type="checkbox" id="t-wf-0-3" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Assign To User</span></div><p class="note">Office manager</p></div></div><div class="task" data-task="wf-0-4"><input type="checkbox" id="t-wf-0-4" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send SMS</span></div><div class="msg"><p>Hey {{contact.first_name}}, it&#39;s {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}</p><button class="cp" type="button" data-copy="Hey {{contact.first_name}}, it&#39;s {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}">Copy message</button></div></div></div><div class="task" data-task="wf-0-5"><input type="checkbox" id="t-wf-0-5" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Internal Notification</span></div><div class="msg"><p>SMS + Slack to assigned rep: &quot;🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}&quot;</p><button class="cp" type="button" data-copy="SMS + Slack to assigned rep: &quot;🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}&quot;">Copy</button></div></div></div><div class="task" data-task="wf-0-6"><input type="checkbox" id="t-wf-0-6" aria-label="Done"><div class="task-body"><div class="row"><span class="when">2m</span><span class="what">If/Else</span></div><p class="note">If appointment booked → end. Else → Call contact (rep whisper: &quot;New funnel lead, press 1 to connect&quot;).</p></div></div></div><div class="wf"><div class="wf-head"><div class="task" data-task="wf-1"><input type="checkbox" id="t-wf-1" aria-label="Done"><div class="task-body"><div class="row"><b>02 | Missed Call Text-Back</b><button class="cp" type="button" data-copy="02 | Missed Call Text-Back">Copy name</button></div><div class="trig">Starts when: Call Status: Missed / No answer</div><div class="goal">Goal: Never lose a call-in lead.</div></div></div></div>
+            <div class="task" data-task="wf-1-0"><input type="checkbox" id="t-wf-1-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send SMS</span></div><div class="msg"><p>Sorry we missed you! This is [Client Brand]. How can we help? Reply here and we&#39;ll get right back to you.</p><button class="cp" type="button" data-copy="Sorry we missed you! This is [Client Brand]. How can we help? Reply here and we&#39;ll get right back to you.">Copy message</button></div></div></div><div class="task" data-task="wf-1-1"><input type="checkbox" id="t-wf-1-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Add Tag</span></div><p class="note">missed-call</p></div></div><div class="task" data-task="wf-1-2"><input type="checkbox" id="t-wf-1-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Create Opportunity</span></div><p class="note">Local | Quote Requests → New Lead</p></div></div></div><div class="wf"><div class="wf-head"><div class="task" data-task="wf-2"><input type="checkbox" id="t-wf-2" aria-label="Done"><div class="task-body"><div class="row"><b>03 | Review Request</b><button class="cp" type="button" data-copy="03 | Review Request">Copy name</button></div><div class="trig">Starts when: Opportunity stage changed to &quot;Won&quot;</div><div class="goal">Goal: Grow Google reviews every week.</div></div></div></div>
+            <div class="task" data-task="wf-2-0"><input type="checkbox" id="t-wf-2-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">1d</span><span class="what">Send Review Request</span></div><p class="note">GHL Reputation → Google review link via SMS.</p></div></div><div class="task" data-task="wf-2-1"><input type="checkbox" id="t-wf-2-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">3d</span><span class="what">Send Email</span></div><div class="msg"><p>Reminder if no review left.</p><button class="cp" type="button" data-copy="Reminder if no review left.">Copy</button></div></div></div></div></div></section><section class="step" id="s7"><header><span class="num">7</span><div><h2>Test it like a lead would</h2><p>Use your own phone and email.</p></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="qa-0"><input type="checkbox" id="t-qa-0" aria-label="Done"><div class="task-body"><span>Open the first page on your phone and fill in the form</span></div></div><div class="task" data-task="qa-1"><input type="checkbox" id="t-qa-1" aria-label="Done"><div class="task-body"><span>You show up in Contacts with your answers and the tags</span></div></div><div class="task" data-task="qa-2"><input type="checkbox" id="t-qa-2" aria-label="Done"><div class="task-body"><span>The text message arrives within a minute</span></div></div><div class="task" data-task="qa-3"><input type="checkbox" id="t-qa-3" aria-label="Done"><div class="task-body"><span>You appear in the pipeline in the first stage</span></div></div><div class="task" data-task="qa-4"><input type="checkbox" id="t-qa-4" aria-label="Done"><div class="task-body"><span>Book a test call: the confirmation and reminders start</span></div></div></div></section><section class="step" id="s8"><header><span class="num">8</span><div><h2>Save it as a Snapshot</h2><p>This is how agencies reuse a funnel: a Snapshot packages the pages, fields, tags, pipeline, calendars and workflows. Next client, you load the Snapshot into their account in one click instead of repeating this guide.</p><div class="where">In GoHighLevel: <b>Agency view</b> → <b>Account Snapshots</b> → <b>Create New Snapshot</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="snap-make"><input type="checkbox" id="t-snap-make" aria-label="Done"><div class="task-body"><span>Create a Snapshot from this sub-account, named <code>Client | Local Free Quote</code></span><button class="cp" type="button" data-copy="Client | Local Free Quote">Copy name</button></div></div><div class="task" data-task="snap-share"><input type="checkbox" id="t-snap-share" aria-label="Done"><div class="task-body"><span>Optional: use <b>Share</b> on the Snapshot to get a link you can send to another GoHighLevel account</span></div></div></div></section>
+  </div>
+<script>
+(function(){
+  var KEY='ff-guide:'+"client-local-free-quote";
+  var saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}
+  function store(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}}
+  var boxes=[].slice.call(document.querySelectorAll('.task input'));
+  function refresh(){
+    var done=0;
+    boxes.forEach(function(b){var t=b.closest('.task');t.classList.toggle('done',b.checked);if(b.checked)done++;});
+    document.getElementById('fill').style.width=(boxes.length?done/boxes.length*100:0)+'%';
+    document.getElementById('progress').textContent=done+' of '+boxes.length+' done'+(done===boxes.length&&done?' 🎉':'');
+    document.querySelectorAll('.step').forEach(function(s,i){
+      var bs=s.querySelectorAll('.task input'),d=s.querySelectorAll('.task input:checked').length;
+      s.querySelector('[data-count]').textContent=d+' / '+bs.length;
+      s.classList.toggle('complete',d===bs.length);
+      var a=document.querySelectorAll('.toc a')[i];if(a)a.classList.toggle('done',d===bs.length);
+    });
+  }
+  boxes.forEach(function(b){var id=b.closest('.task').dataset.task;b.checked=!!saved[id];b.addEventListener('change',function(){saved[id]=b.checked;store();refresh();});});
+  document.getElementById('reset').addEventListener('click',function(){saved={};store();boxes.forEach(function(b){b.checked=false;});refresh();});
+  function fallbackCopy(text){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();return ok;}
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-copy]');if(!b)return;
+    var text=b.getAttribute('data-copy'),label=b.textContent;
+    function done(ok){b.textContent=ok?'Copied ✓':'Select and copy';b.classList.toggle('copied',ok);setTimeout(function(){b.textContent=label;b.classList.remove('copied');},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){done(true);},function(){done(fallbackCopy(text));});}
+    else done(fallbackCopy(text));
+  });
+  refresh();
+})();</script>
+</body>
+</html>

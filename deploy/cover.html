@@ -1,0 +1,183 @@
+<title>FunnelForge for BAD Marketing</title>
+<!-- Cover page for the shared Artifact deploy. The Artifact host wraps this in
+     a doctype/head/body skeleton, so it has none of its own. Published next to
+     app.html (the builder) and examples/. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; the lead timeline and funnel rows are the only full-width blocks. */
+:root{
+  --bg:#f3f4f2; --surface:#ffffff; --ink:#15171a; --muted:#5d636b; --line:#d9dcd8;
+  --signal:#ffd400; --signal-ink:#15171a; --red:#d4142a; --code-bg:#e9ebe7;
+  --display:'Bricolage Grotesque',ui-sans-serif,system-ui,sans-serif;
+  --body:'Instrument Sans',ui-sans-serif,system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121315; --surface:#1b1d20; --ink:#eceeea; --muted:#9aa0a6; --line:#2e3135;
+  --signal:#ffd400; --signal-ink:#15171a; --red:#ff5a6a; --code-bg:#24272b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121315; --surface:#1b1d20; --ink:#eceeea; --muted:#9aa0a6; --line:#2e3135;
+  --signal:#ffd400; --signal-ink:#15171a; --red:#ff5a6a; --code-bg:#24272b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--body);padding-inline:20px}
+.wrap{max-width:880px;margin:0 auto;padding-block:48px 72px;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.4rem,7vw,4.2rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.4rem,3.2vw,1.9rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:800}
+p{margin:0;max-width:65ch}
+a{color:inherit}
+code,.mono{font-family:var(--mono);font-size:.82em}
+code{background:var(--code-bg);padding:1px 6px;border-radius:4px}
+.eyebrow{font:600 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:18px}
+
+.hero{display:flex;flex-direction:column;gap:20px}
+.hero mark{background:linear-gradient(transparent 58%,var(--signal) 58%);color:inherit;padding:0 .08em}
+.lede{font-size:1.15rem;color:var(--muted)}
+.byline{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem;color:var(--muted)}
+.byline b{color:var(--ink);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:8px;font-weight:600;text-decoration:none;border:1.5px solid var(--ink)}
+.btn.primary{background:var(--signal);color:var(--signal-ink);border-color:var(--signal)}
+.btn:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.btn:hover{transform:translateY(-1px)}
+
+.timeline{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.timeline li{padding:16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;min-width:0}
+.timeline li:last-child{border-right:0}
+.timeline .t{font:600 .78rem/1 var(--mono);color:var(--red);font-variant-numeric:tabular-nums}
+.timeline b{font-family:var(--display);font-weight:800}
+.timeline span{font-size:.88rem;color:var(--muted)}
+
+.funnels{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.funnel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 20px;padding:20px 0;border-bottom:1px solid var(--line)}
+.funnel .kind{font:600 .72rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.funnel p{color:var(--muted);font-size:.95rem}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.9rem}
+.steps a{text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:4px 10px}
+.steps a:hover{border-color:var(--ink)}
+.steps .arr{color:var(--muted)}
+.guide-link{font-size:.9rem;font-weight:600;color:var(--ink);text-decoration-color:var(--signal);text-decoration-thickness:3px;text-underline-offset:4px;align-self:flex-start}
+.meta{text-align:right;font:400 .8rem/1.5 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.meta b{color:var(--ink);font-weight:600}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px 28px}
+.cols div{display:flex;flex-direction:column;gap:4px}
+.cols p{color:var(--muted);font-size:.95rem}
+
+.plan{display:grid;grid-template-columns:72px minmax(0,1fr);gap:14px 18px;margin:0}
+.plan dt{font:800 1.5rem/1 var(--display)}
+.plan dt small{display:block;font:600 .7rem/1.4 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.plan dd{margin:0;color:var(--muted)}
+
+.note{border-left:3px solid var(--signal);padding:4px 0 4px 16px;color:var(--muted);font-size:.92rem;display:flex;flex-direction:column;gap:8px}
+@media(max-width:560px){.funnel{grid-template-columns:1fr}.meta{text-align:left;white-space:normal}.timeline li{border-right:0;border-bottom:1px solid var(--line)}}
+@media(prefers-reduced-motion:reduce){.btn:hover{transform:none}}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">GoHighLevel funnel builder · concept for BAD Marketing</div>
+    <h1>Funnels that ship with the <mark>back end</mark> already built.</h1>
+    <p class="lede">FunnelForge builds the pages and the GoHighLevel setup behind them: pipeline, tags, custom fields, calendars and every follow-up workflow. It comes loaded with five funnels for BAD's own services and BAD's clients.</p>
+    <div class="byline"><span>Prepared for <b>Eddie Maalouf</b>, Founder &amp; CEO</span><span>By <b>Sam Nasim</b></span></div>
+    <div class="actions">
+      <a class="btn primary" href="app.html">Open the builder →</a>
+      <a class="btn" href="examples/paid-ads-application/scale.html">See a finished funnel</a>
+      <a class="btn" href="examples/index.html">All examples</a>
+    </div>
+  </header>
+
+  <section>
+    <div class="eyebrow">What every template automates</div>
+    <h2>A lead's first 72 hours, handled in GoHighLevel</h2>
+    <ol class="timeline">
+      <li><span class="t">0s</span><b>Form submit</b><span>Contact, tags, opportunity and UTMs land in GHL.</span></li>
+      <li><span class="t">&lt; 60s</span><b>Speed to lead</b><span>SMS to the lead, alert to the rep with their revenue band.</span></li>
+      <li><span class="t">+2m</span><b>Qualify</b><span>$1M+/mo brands go to senior strategists. The rest get nurtured.</span></li>
+      <li><span class="t">24h · 2h · 10m</span><b>Show-up</b><span>Reminders that give a reason to show, not just a time.</span></li>
+      <li><span class="t">+72h</span><b>Recovery</b><span>No-show and abandoned-application flows rebook paid-for leads.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="eyebrow">Five example funnels · click any step</div>
+    <h2>Built for BAD's service lines and clients</h2>
+    <div class="funnels">
+      <article class="funnel">
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div class="kind">Paid ads team</div><h3>Paid Ads + Free Content Application</h3>
+          <p>Sales video and application for $1M+/month brands. The qualifier sends only qualified brands to the calendar.</p>
+          <div class="steps"><a href="examples/paid-ads-application/scale.html">VSL</a><span class="arr">→</span><a href="examples/paid-ads-application/scale-book.html">Book call</a><span class="arr">→</span><a href="examples/paid-ads-application/scale-confirmed.html">Confirmed</a></div>
+          <a class="guide-link" href="examples/paid-ads-application/setup.html">📋 GoHighLevel setup guide →</a>
+        </div>
+        <div class="meta"><b>6</b> workflows<br><b>9</b>-stage pipeline</div>
+      </article>
+      <article class="funnel">
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div class="kind">Retention team</div><h3>Free Email &amp; SMS Audit</h3>
+          <p>The audit is the pitch: a two-step opt-in, then a booked walkthrough of the results.</p>
+          <div class="steps"><a href="examples/email-sms-audit/email-sms-audit.html">Opt-in</a><span class="arr">→</span><a href="examples/email-sms-audit/email-sms-audit-book.html">Book call</a><span class="arr">→</span><a href="examples/email-sms-audit/email-sms-audit-confirmed.html">Confirmed</a></div>
+          <a class="guide-link" href="examples/email-sms-audit/setup.html">📋 GoHighLevel setup guide →</a>
+        </div>
+        <div class="meta"><b>5</b> workflows<br><b>9</b>-stage pipeline</div>
+      </article>
+      <article class="funnel">
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div class="kind">Amazon team</div><h3>Amazon Growth Call</h3>
+          <p>Service page with a value stack that leads with the free compliance management bonus.</p>
+          <div class="steps"><a href="examples/amazon-growth/amazon.html">Landing</a><span class="arr">→</span><a href="examples/amazon-growth/amazon-book.html">Book call</a><span class="arr">→</span><a href="examples/amazon-growth/amazon-confirmed.html">Confirmed</a></div>
+          <a class="guide-link" href="examples/amazon-growth/setup.html">📋 GoHighLevel setup guide →</a>
+        </div>
+        <div class="meta"><b>3</b> workflows<br><b>9</b>-stage pipeline</div>
+      </article>
+      <article class="funnel">
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div class="kind">Client funnel · info products</div><h3>Free Masterclass</h3>
+          <p>The full all-in-one journey: register, get reminders, watch the replay, pay with GoHighLevel Payments, and get a course login from GoHighLevel Memberships.</p>
+          <div class="steps"><a href="examples/webinar/masterclass.html">Register</a><span class="arr">→</span><a href="examples/webinar/masterclass-confirmed.html">Confirmed</a><span class="arr">→</span><a href="examples/webinar/masterclass-replay.html">Replay + checkout</a><span class="arr">→</span><a href="examples/webinar/accelerator-welcome.html">Course access</a></div>
+          <a class="guide-link" href="examples/webinar/setup.html">📋 GoHighLevel setup guide →</a>
+        </div>
+        <div class="meta"><b>3</b> workflows<br><b>7</b>-stage pipeline</div>
+      </article>
+      <article class="funnel">
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+          <div class="kind">Client funnel · local business</div><h3>Free Quote</h3>
+          <p>A 60-second quote form with missed-call text-back and automatic review requests.</p>
+          <div class="steps"><a href="examples/local-quote/free-quote.html">Offer</a><span class="arr">→</span><a href="examples/local-quote/free-quote-thanks.html">Thank you</a></div>
+          <a class="guide-link" href="examples/local-quote/setup.html">📋 GoHighLevel setup guide →</a>
+        </div>
+        <div class="meta"><b>3</b> workflows<br><b>6</b>-stage pipeline</div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Inside the builder</div>
+    <h2>What to try in five minutes</h2>
+    <div class="cols">
+      <div><h3>Pick a goal</h3><p>Start from a plain-English goal like "Get big clients to apply". The pages and follow-ups are set up for you.</p></div>
+      <div><h3>Type on the page</h3><p>Click any headline or button and type. Hover between sections and click + to add one. No code, no jargon.</p></div>
+      <div><h3>Your system tab</h3><p>Shows which GoHighLevel tools the funnel uses (CRM, calendar, payments, courses, reviews) and every automation in plain English.</p></div>
+      <div><h3>Put in GoHighLevel</h3><p>A step-by-step guide with a copy button per page. Forms post to a GoHighLevel webhook, with merge keys like <code>{{contact.monthly_revenue}}</code>.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">If I join</div>
+    <h2>First 90 days</h2>
+    <dl class="plan">
+      <dt>30<small>days</small></dt><dd>Run the launch audit on BAD's live funnels. Fix speed to lead and show rate first, since they pay back fastest.</dd>
+      <dt>60<small>days</small></dt><dd>Turn each service line into a reusable GHL snapshot (pages, workflows, pipeline), so a new client funnel launches in days.</dd>
+      <dt>90<small>days</small></dt><dd>Weekly reporting per funnel: opt-in rate, book rate, show rate and cost per booked call by ad. Start headline and offer tests.</dd>
+    </dl>
+  </section>
+
+  <aside class="note">
+    <p>These are concept pages, not live BAD Marketing pages, and their forms send nothing. Figures come from public sources about BAD and would be checked with the team before launch.</p>
+    <p>Testimonials and client logos are left as placeholders on purpose. The launch audit flags them until real ones are added.</p>
+  </aside>
+</div>

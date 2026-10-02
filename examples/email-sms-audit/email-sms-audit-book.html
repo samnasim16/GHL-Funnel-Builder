@@ -92,6 +92,8 @@ p{margin:0 0 1em}
 .fb-form .fb-invalid{border-color:#d92d20;background:#fff5f5}
 .fb-form-msg{margin-top:10px;font-weight:600;text-align:center}
 .fb-consent{font-size:.72rem;opacity:.6;margin-top:12px;line-height:1.4}
+.fb-co-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;font-size:1.1rem}.fb-co-row strong{font-family:var(--hf);font-size:1.8rem;color:var(--p)}
+.fb-checkout .fb-checks{margin:16px 0}
 .fb-cal{max-width:900px;margin:24px auto 0;background:var(--bg);border-radius:var(--r);overflow:hidden}
 .fb-cal iframe{width:100%;min-height:720px;border:0;display:block}
 .fb-guarantee{display:flex;gap:24px;align-items:center;max-width:760px;margin:0 auto;padding:28px;border-radius:var(--r);background:var(--alt);color:var(--tx)}
@@ -111,7 +113,14 @@ p{margin:0 0 1em}
 
 </head>
 <body>
-<div class="fb-s fb-announcement"><div class="fb-wrap">⚠️ Almost done: your audit isn&#39;t scheduled yet.</div></div>
+<nav class="ff-nav" style="position:relative;z-index:99;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 16px;background:#111;color:#ddd;font:600 13px/1.4 system-ui,sans-serif">
+  <button type="button" data-ff-back="../index.html" style="all:unset;cursor:pointer;background:#ffd400;color:#111;border-radius:7px;padding:5px 12px;font-weight:800">← Back</button>
+  <a href="../index.html" style="color:#fff">All examples</a><span style="opacity:.4">·</span><a href="../../index.html" style="color:#fff">Home</a>
+  <span style="flex:1;min-width:200px;text-align:right;opacity:.7;font-weight:500">Concept demo by Sam Nasim for BAD Marketing. Not a live BAD Marketing page; the forms send nothing.</span>
+</nav>
+<button type="button" data-ff-back="../index.html" aria-label="Back" style="all:unset;cursor:pointer;position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:100;background:#111;color:#fff;border-radius:999px;padding:10px 16px;font:700 14px/1 system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)">← Back</button>
+<script>document.querySelectorAll('[data-ff-back]').forEach(function(b){b.addEventListener('click',function(){var fb=b.getAttribute('data-ff-back');if(history.length>1){var here=location.href;history.back();setTimeout(function(){if(location.href===here)location.href=fb;},400);}else location.href=fb;});});</script>
+<div class="fb-s fb-announcement"><div class="fb-wrap"><span>⚠️ Almost done: your audit isn&#39;t scheduled yet.</span></div></div>
 <section class="fb-s fb-calendar fb-bg-default" id="calendar"><div class="fb-wrap"><div class="fb-center"><h2>Step 2: Pick A Time To Walk Through Your Audit</h2><p class="fb-lead">Calls are 30 minutes on Zoom. We&#39;ll have your audit ready.</p></div><div class="fb-cal"><div class="fb-placeholder">📅 Paste your GHL calendar widget URL<br><small>Calendars → Calendar Settings → Share → Embed code → copy the iframe src</small></div></div></div></section>
 <section class="fb-s fb-steps fb-bg-alt"><div class="fb-wrap"><h2 class="fb-center">What Happens On The Call</h2><div class="fb-grid fb-grid-auto"><div class="fb-step"><div class="fb-step-n">1</div><h3>We review your audit</h3><p>Every gap, ranked by dollar impact.</p></div><div class="fb-step"><div class="fb-step-n">2</div><h3>We build your plan</h3><p>Quick wins this week, bigger plays this quarter.</p></div><div class="fb-step"><div class="fb-step-n">3</div><h3>You decide</h3><p>Run it in-house or have us run it. Zero pressure.</p></div></div></div></section>
 <footer class="fb-s fb-footer"><div class="fb-wrap fb-center"><div class="fb-footer-links"><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Service</a></div><div>© 2026 BAD Marketing. All rights reserved.</div><p class="fb-disclaimer">Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok.</p></div></footer>

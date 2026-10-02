@@ -27,7 +27,7 @@
       },
       "sections": [
         {
-          "id": "smuqg2ye113ud5",
+          "id": "smuqhapum1pwst",
           "type": "announcement",
           "props": {
             "text": "🔥 We only run 10 free audits per week.",
@@ -35,7 +35,7 @@
           }
         },
         {
-          "id": "smuqg2ye12w71g",
+          "id": "smuqhapum2rgr9",
           "type": "header",
           "props": {
             "logo": "BAD MARKETING",
@@ -45,7 +45,7 @@
           }
         },
         {
-          "id": "smuqg2ye1388qy",
+          "id": "smuqhapum3o6u8",
           "type": "hero",
           "props": {
             "eyebrow": "For Shopify brands doing $100k+/month",
@@ -61,7 +61,7 @@
           }
         },
         {
-          "id": "smuqg2ye14monm",
+          "id": "smuqhapum4quak",
           "type": "logos",
           "props": {
             "title": "Trusted by 8 & 9-figure brands",
@@ -70,7 +70,7 @@
           }
         },
         {
-          "id": "smuqg2ye15bm9q",
+          "id": "smuqhapum5a1o5",
           "type": "caseStudies",
           "props": {
             "headline": "Real Retention Wins",
@@ -79,7 +79,7 @@
           }
         },
         {
-          "id": "smuqg2ye168iwe",
+          "id": "smuqhapum6l26e",
           "type": "problem",
           "props": {
             "headline": "If Email Is Under 30% Of Your Revenue, Something's Broken",
@@ -89,7 +89,7 @@
           }
         },
         {
-          "id": "smuqg2ye1707vx",
+          "id": "smuqhapum7djyv",
           "type": "offer",
           "props": {
             "headline": "What's Inside Your Free Audit",
@@ -102,7 +102,7 @@
           }
         },
         {
-          "id": "smuqg2ye18z0ye",
+          "id": "smuqhapum8ihz5",
           "type": "form",
           "props": {
             "headline": "Where Should We Send Your Audit?",
@@ -117,7 +117,7 @@
           }
         },
         {
-          "id": "smuqg2ye190b5b",
+          "id": "smuqhapum9gtot",
           "type": "faq",
           "props": {
             "headline": "Frequently Asked Questions",
@@ -126,7 +126,7 @@
           }
         },
         {
-          "id": "smuqg2ye1ae1wp",
+          "id": "smuqhapuma0dgz",
           "type": "footer",
           "props": {
             "text": "© 2026 BAD Marketing. All rights reserved.",
@@ -144,7 +144,7 @@
       },
       "sections": [
         {
-          "id": "smuqg2ye1bui2t",
+          "id": "smuqhapumbbbb8",
           "type": "announcement",
           "props": {
             "text": "⚠️ Almost done: your audit isn't scheduled yet.",
@@ -152,7 +152,7 @@
           }
         },
         {
-          "id": "smuqg2ye1cyo9a",
+          "id": "smuqhapumcxln1",
           "type": "calendar",
           "props": {
             "headline": "Step 2: Pick A Time To Walk Through Your Audit",
@@ -162,7 +162,7 @@
           }
         },
         {
-          "id": "smuqg2ye1duyis",
+          "id": "smuqhapumdd1m7",
           "type": "steps",
           "props": {
             "headline": "What Happens On The Call",
@@ -171,7 +171,7 @@
           }
         },
         {
-          "id": "smuqg2ye1e79wy",
+          "id": "smuqhapumejsui",
           "type": "footer",
           "props": {
             "text": "© 2026 BAD Marketing. All rights reserved.",
@@ -189,7 +189,7 @@
       },
       "sections": [
         {
-          "id": "smuqg2ye1fncjn",
+          "id": "smuqhapumf8kcj",
           "type": "thankyou",
           "props": {
             "headline": "You're Booked! Your Audit Is Underway.",
@@ -199,7 +199,7 @@
           }
         },
         {
-          "id": "smuqg2ye1gpv9k",
+          "id": "smuqhapumgjmu6",
           "type": "video",
           "props": {
             "headline": "Watch This Before Our Call (3 min)",
@@ -211,7 +211,7 @@
           }
         },
         {
-          "id": "smuqg2ye1h476z",
+          "id": "smuqhapumh43zg",
           "type": "footer",
           "props": {
             "text": "© 2026 BAD Marketing. All rights reserved.",

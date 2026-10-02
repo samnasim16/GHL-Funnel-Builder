@@ -92,6 +92,8 @@ p{margin:0 0 1em}
 .fb-form .fb-invalid{border-color:#d92d20;background:#fff5f5}
 .fb-form-msg{margin-top:10px;font-weight:600;text-align:center}
 .fb-consent{font-size:.72rem;opacity:.6;margin-top:12px;line-height:1.4}
+.fb-co-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;font-size:1.1rem}.fb-co-row strong{font-family:var(--hf);font-size:1.8rem;color:var(--p)}
+.fb-checkout .fb-checks{margin:16px 0}
 .fb-cal{max-width:900px;margin:24px auto 0;background:var(--bg);border-radius:var(--r);overflow:hidden}
 .fb-cal iframe{width:100%;min-height:720px;border:0;display:block}
 .fb-guarantee{display:flex;gap:24px;align-items:center;max-width:760px;margin:0 auto;padding:28px;border-radius:var(--r);background:var(--alt);color:var(--tx)}
@@ -111,7 +113,14 @@ p{margin:0 0 1em}
 
 </head>
 <body>
-<div class="fb-s fb-announcement"><div class="fb-wrap">LIMITED: Partner with our paid ads team this month and get your content FREE <span class="fb-countdown" data-deadline="2026-10-31 23:59">--:--:--</span></div></div>
+<nav class="ff-nav" style="position:relative;z-index:99;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 16px;background:#111;color:#ddd;font:600 13px/1.4 system-ui,sans-serif">
+  <button type="button" data-ff-back="../index.html" style="all:unset;cursor:pointer;background:#ffd400;color:#111;border-radius:7px;padding:5px 12px;font-weight:800">← Back</button>
+  <a href="../index.html" style="color:#fff">All examples</a><span style="opacity:.4">·</span><a href="../../index.html" style="color:#fff">Home</a>
+  <span style="flex:1;min-width:200px;text-align:right;opacity:.7;font-weight:500">Concept demo by Sam Nasim for BAD Marketing. Not a live BAD Marketing page; the forms send nothing.</span>
+</nav>
+<button type="button" data-ff-back="../index.html" aria-label="Back" style="all:unset;cursor:pointer;position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:100;background:#111;color:#fff;border-radius:999px;padding:10px 16px;font:700 14px/1 system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)">← Back</button>
+<script>document.querySelectorAll('[data-ff-back]').forEach(function(b){b.addEventListener('click',function(){var fb=b.getAttribute('data-ff-back');if(history.length>1){var here=location.href;history.back();setTimeout(function(){if(location.href===here)location.href=fb;},400);}else location.href=fb;});});</script>
+<div class="fb-s fb-announcement"><div class="fb-wrap"><span>LIMITED: Partner with our paid ads team this month and get your content FREE</span> <span class="fb-countdown" data-deadline="2026-10-31 23:59">--:--:--</span></div></div>
 <section class="fb-s fb-hero fb-bg-dark"><div class="fb-wrap"><div class="fb-center"><div class="fb-eyebrow">Only for brands doing $1M+ per month</div>
         <h1>We Run Your Ads. We Make Your Content. <span class="fb-hl">You Pay For One</span>.</h1>
         <p class="fb-lead">Watch how our media buyers and in-house creative team scale 8 and 9-figure brands without torching margin.</p>
@@ -129,7 +138,7 @@ p{margin:0 0 1em}
 <section class="fb-s fb-testimonials fb-bg-default"><div class="fb-wrap"><h2 class="fb-center">From Founders We&#39;ve Scaled</h2><div class="fb-grid fb-grid-auto"><figure class="fb-card fb-quote"><div class="fb-stars">★★★★★</div><blockquote>“[Real founder quote about scale + profitability]”</blockquote><figcaption><strong>[Founder Name]</strong><span>Founder, [9-figure DTC brand]</span></figcaption></figure><figure class="fb-card fb-quote"><div class="fb-stars">★★★★★</div><blockquote>“[Real quote about creative volume]”</blockquote><figcaption><strong>[Name]</strong><span>CMO, [Brand]</span></figcaption></figure><figure class="fb-card fb-quote"><div class="fb-stars">★★★★★</div><blockquote>“[Real quote about communication]”</blockquote><figcaption><strong>[Name]</strong><span>Head of Growth, [Brand]</span></figcaption></figure></div></div></section>
 <section class="fb-s fb-form fb-bg-alt" id="form"><div class="fb-wrap"><div class="fb-form-box"><h2 class="fb-center">Apply To Partner With BAD</h2><p class="fb-center fb-muted">We take on a limited number of brands each month so every account gets senior attention.</p><form class="fb-form" data-webhook="" data-redirect="./scale-book.html" data-step="VSL" novalidate>
             <label><span>First name</span><input type="text" name="first_name" required></label><label><span>Last name</span><input type="text" name="last_name" required></label><label><span>Work email</span><input type="email" name="email" required autocomplete="email"></label><label><span>Phone</span><input type="tel" name="phone" required autocomplete="tel"></label><label><span>Brand website</span><input type="text" name="website" required></label><label><span>Monthly revenue</span><select name="monthly_revenue" required><option value="">Select…</option><option>Under $250k</option><option>$250k–$500k</option><option>$500k–$1M</option><option>$1M–$3M</option><option>$3M+</option></select></label><label><span>Monthly ad spend</span><select name="monthly_ad_spend" required><option value="">Select…</option><option>Under $50k</option><option>$50k–$150k</option><option>$150k–$500k</option><option>$500k+</option></select></label><label><span>Biggest growth bottleneck</span><textarea name="bottleneck" rows="3" required></textarea></label>
-            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit">Submit Application →</button>
+            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit"><span>Submit Application →</span></button>
             <div class="fb-form-msg" role="status"></div>
             <p class="fb-consent">By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
           </form></div></div></section>

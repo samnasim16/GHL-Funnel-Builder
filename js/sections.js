@@ -28,13 +28,16 @@ const safeUrl = (u = '') => {
   return '';
 };
 
-const btn = (label, href, cls = '') =>
-  `<a class="fb-btn ${cls}" href="${esc(safeUrl(href) || '#')}">${esc(label)}</a>`;
+// Marks an element as editable in place. Emits nothing outside the editor.
+const F = (ctx, key) => (ctx && ctx.editor ? ` data-f="${key}"` : '');
+
+const btn = (label, href, cls = '', attr = '') =>
+  `<a class="fb-btn ${cls}" href="${esc(safeUrl(href) || '#')}"${attr}>${esc(label)}</a>`;
 
 const sectionWrap = (type, inner, { bg = '', id = '' } = {}) =>
   `<section class="fb-s fb-${type}${bg ? ' fb-bg-' + bg : ''}"${id ? ` id="${esc(id)}"` : ''}><div class="fb-wrap">${inner}</div></section>`;
 
-const BG = { type: 'select', label: 'Background', options: ['default', 'alt', 'dark', 'primary'] };
+const BG = { type: 'select', label: 'Background', options: ['default', 'alt', 'dark', 'primary'], optionLabels: ['White', 'Light grey', 'Dark', 'Brand color'] };
 
 // Turns a YouTube / Vimeo / Loom / Wistia share link into an embeddable URL.
 export function videoEmbedUrl(url = '') {
@@ -51,49 +54,52 @@ export function videoEmbedUrl(url = '') {
 
 export const SECTIONS = {
   announcement: {
-    name: 'Urgency Bar',
+    name: 'Urgency bar',
     icon: '⚡',
+    desc: 'A thin bar at the very top. Good for urgency, like "Only 4 spots left".',
     fields: {
       text: { type: 'text', label: 'Text' },
-      deadline: { type: 'text', label: 'Countdown deadline (YYYY-MM-DD HH:MM, optional)' },
+      deadline: { type: 'text', label: 'Countdown ends at (optional)', help: 'Format: 2026-10-31 23:59' },
     },
     defaults: { text: 'Only 4 onboarding spots left this month', deadline: '' },
-    render: (p) =>
-      `<div class="fb-s fb-announcement"><div class="fb-wrap">${esc(p.text)}${
+    render: (p, ctx = {}) =>
+      `<div class="fb-s fb-announcement"><div class="fb-wrap"><span${F(ctx, 'text')}>${esc(p.text)}</span>${
         p.deadline ? ` <span class="fb-countdown" data-deadline="${esc(p.deadline)}">--:--:--</span>` : ''
       }</div></div>`,
   },
 
   header: {
-    name: 'Header / Logo',
+    name: 'Logo and button',
     icon: '▭',
+    desc: 'Your logo and one button at the top of the page.',
     fields: {
       logo: { type: 'text', label: 'Logo text' },
       logoUrl: { type: 'text', label: 'Logo image URL (optional)' },
       cta: { type: 'text', label: 'Button label' },
-      ctaLink: { type: 'text', label: 'Button link' },
+      ctaLink: { type: 'text', label: 'Button goes to' },
     },
     defaults: { logo: 'YOUR BRAND', logoUrl: '', cta: 'Book a Call', ctaLink: '#form' },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       `<header class="fb-s fb-header"><div class="fb-wrap fb-row">${
         safeUrl(p.logoUrl)
           ? `<img class="fb-logo-img" src="${esc(safeUrl(p.logoUrl))}" alt="${esc(p.logo)}">`
-          : `<div class="fb-logo">${esc(p.logo)}</div>`
-      }${p.cta ? btn(p.cta, p.ctaLink, 'fb-btn-sm') : ''}</div></header>`,
+          : `<div class="fb-logo"${F(ctx, 'logo')}>${esc(p.logo)}</div>`
+      }${p.cta ? btn(p.cta, p.ctaLink, 'fb-btn-sm', F(ctx, 'cta')) : ''}</div></header>`,
   },
 
   hero: {
-    name: 'Hero',
+    name: 'Top of page',
     icon: '★',
+    desc: 'The first thing visitors see: your big promise and a button.',
     fields: {
-      eyebrow: { type: 'text', label: 'Eyebrow (small text above headline)' },
+      eyebrow: { type: 'text', label: 'Small text above the headline' },
       headline: { type: 'textarea', label: 'Headline' },
-      highlight: { type: 'text', label: 'Words to highlight in headline' },
+      highlight: { type: 'text', label: 'Words to color in the headline' },
       sub: { type: 'textarea', label: 'Sub-headline' },
-      bullets: { type: 'textarea', label: 'Bullets (one per line)' },
+      bullets: { type: 'list', label: 'Bullet points', cols: ['Bullet'] },
       cta: { type: 'text', label: 'Button label' },
-      ctaLink: { type: 'text', label: 'Button link' },
-      note: { type: 'text', label: 'Under-button note' },
+      ctaLink: { type: 'text', label: 'Button goes to' },
+      note: { type: 'text', label: 'Small text under the button' },
       image: { type: 'text', label: 'Side image URL (optional)' },
       bg: BG,
     },
@@ -109,19 +115,19 @@ export const SECTIONS = {
       image: '',
       bg: 'dark',
     },
-    render: (p) => {
+    render: (p, ctx = {}) => {
       let h = esc(p.headline);
       if (p.highlight && p.headline.includes(p.highlight)) {
         h = h.replace(esc(p.highlight), `<span class="fb-hl">${esc(p.highlight)}</span>`);
       }
       const bl = lines(p.bullets);
       const img = safeUrl(p.image);
-      const copy = `${p.eyebrow ? `<div class="fb-eyebrow">${esc(p.eyebrow)}</div>` : ''}
-        <h1>${h.replace(/\n/g, '<br>')}</h1>
-        ${p.sub ? `<p class="fb-lead">${esc(p.sub)}</p>` : ''}
+      const copy = `${p.eyebrow ? `<div class="fb-eyebrow"${F(ctx, 'eyebrow')}>${esc(p.eyebrow)}</div>` : ''}
+        <h1${F(ctx, 'headline')}>${h.replace(/\n/g, '<br>')}</h1>
+        ${p.sub ? `<p class="fb-lead"${F(ctx, 'sub')}>${esc(p.sub)}</p>` : ''}
         ${bl.length ? `<ul class="fb-checks">${bl.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}
-        ${p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg')}</div>` : ''}
-        ${p.note ? `<div class="fb-note">${esc(p.note)}</div>` : ''}`;
+        ${p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg', F(ctx, 'cta'))}</div>` : ''}
+        ${p.note ? `<div class="fb-note"${F(ctx, 'note')}>${esc(p.note)}</div>` : ''}`;
       return sectionWrap(
         'hero',
         img
@@ -133,14 +139,15 @@ export const SECTIONS = {
   },
 
   video: {
-    name: 'Video (VSL)',
+    name: 'Video',
     icon: '▶',
+    desc: 'Show a video (for example a sales video) with a button under it.',
     fields: {
       headline: { type: 'textarea', label: 'Headline above video' },
-      url: { type: 'text', label: 'Video URL (YouTube, Vimeo, Loom, Wistia)' },
+      url: { type: 'text', label: 'Video link', help: 'Paste a YouTube, Vimeo, Loom or Wistia link.' },
       caption: { type: 'text', label: 'Caption under video' },
       cta: { type: 'text', label: 'Button label (optional)' },
-      ctaLink: { type: 'text', label: 'Button link' },
+      ctaLink: { type: 'text', label: 'Button goes to' },
       bg: BG,
     },
     defaults: {
@@ -151,19 +158,19 @@ export const SECTIONS = {
       ctaLink: '#form',
       bg: 'default',
     },
-    render: (p) => {
+    render: (p, ctx = {}) => {
       const src = videoEmbedUrl(p.url);
       return sectionWrap(
         'video',
         `<div class="fb-center">
-          ${p.headline ? `<h2>${esc(p.headline)}</h2>` : ''}
+          ${p.headline ? `<h2${F(ctx, 'headline')}>${esc(p.headline)}</h2>` : ''}
           <div class="fb-video">${
             src
               ? `<iframe src="${esc(src)}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy" title="Video"></iframe>`
               : `<div class="fb-placeholder">▶ Paste a YouTube / Vimeo / Loom / Wistia link</div>`
           }</div>
-          ${p.caption ? `<div class="fb-note">${esc(p.caption)}</div>` : ''}
-          ${p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg')}</div>` : ''}
+          ${p.caption ? `<div class="fb-note"${F(ctx, 'caption')}>${esc(p.caption)}</div>` : ''}
+          ${p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg', F(ctx, 'cta'))}</div>` : ''}
         </div>`,
         { bg: p.bg }
       );
@@ -171,18 +178,19 @@ export const SECTIONS = {
   },
 
   logos: {
-    name: 'Logo Bar / As Seen In',
+    name: 'Trusted-by logos',
     icon: '◎',
+    desc: 'A row of brand names or logos to show who trusts you.',
     fields: {
       title: { type: 'text', label: 'Title' },
-      items: { type: 'textarea', label: 'Brand names or image URLs (one per line)' },
+      items: { type: 'list', label: 'Brands (name or image link)', cols: ['Brand'] },
       bg: BG,
     },
     defaults: { title: 'Trusted by fast-growing brands', items: 'Brand One\nBrand Two\nBrand Three\nBrand Four\nBrand Five', bg: 'alt' },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'logos',
-        `${p.title ? `<div class="fb-eyebrow fb-center">${esc(p.title)}</div>` : ''}<div class="fb-logo-row">${lines(p.items)
+        `${p.title ? `<div class="fb-eyebrow fb-center"${F(ctx, 'title')}>${esc(p.title)}</div>` : ''}<div class="fb-logo-row">${lines(p.items)
           .map((i) =>
             safeUrl(i) && /^https?:/.test(i)
               ? `<img src="${esc(i)}" alt="" loading="lazy">`
@@ -194,11 +202,12 @@ export const SECTIONS = {
   },
 
   stats: {
-    name: 'Stats / Proof Numbers',
+    name: 'Big numbers',
     icon: '#',
+    desc: 'Big numbers that prove you get results.',
     fields: {
       title: { type: 'text', label: 'Title (optional)' },
-      items: { type: 'textarea', label: 'Stats: "number | label" per line' },
+      items: { type: 'list', label: 'Numbers', cols: ['Number', 'What it means'] },
       bg: BG,
     },
     defaults: {
@@ -206,10 +215,10 @@ export const SECTIONS = {
       items: '$1B+ | Client revenue managed\n150+ | In-house specialists\n4.2x | Average blended ROAS\n90 days | To measurable lift',
       bg: 'primary',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'stats',
-        `${p.title ? `<h2 class="fb-center">${esc(p.title)}</h2>` : ''}<div class="fb-grid fb-grid-4">${lines(p.items)
+        `${p.title ? `<h2 class="fb-center"${F(ctx, 'title')}>${esc(p.title)}</h2>` : ''}<div class="fb-grid fb-grid-4">${lines(p.items)
           .map((l) => {
             const [n, label] = cells(l);
             return `<div class="fb-stat"><div class="fb-stat-n">${esc(n)}</div><div class="fb-stat-l">${esc(label || '')}</div></div>`;
@@ -220,12 +229,13 @@ export const SECTIONS = {
   },
 
   problem: {
-    name: 'Problem / Agitate',
+    name: 'Their problems',
     icon: '!',
+    desc: 'Describe the problems your visitor has, so they feel understood.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
       body: { type: 'textarea', label: 'Intro paragraph' },
-      items: { type: 'textarea', label: 'Pain points (one per line)' },
+      items: { type: 'list', label: 'Problems', cols: ['Problem'] },
       bg: BG,
     },
     defaults: {
@@ -234,10 +244,10 @@ export const SECTIONS = {
       items: 'CPMs keep climbing and ROAS keeps sliding\nYour email list is huge but revenue per subscriber is flat\nCreative fatigues in days and nobody has a testing system\nYour last agency sent reports, not results',
       bg: 'default',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'problem',
-        `<div class="fb-narrow"><h2>${esc(p.headline)}</h2>${p.body ? `<p>${esc(p.body)}</p>` : ''}<ul class="fb-x">${lines(p.items)
+        `<div class="fb-narrow"><h2${F(ctx, 'headline')}>${esc(p.headline)}</h2>${p.body ? `<p${F(ctx, 'body')}>${esc(p.body)}</p>` : ''}<ul class="fb-x">${lines(p.items)
           .map((i) => `<li>${esc(i)}</li>`)
           .join('')}</ul></div>`,
         { bg: p.bg }
@@ -245,12 +255,13 @@ export const SECTIONS = {
   },
 
   features: {
-    name: 'Benefits / Services Grid',
+    name: 'What you offer',
     icon: '▦',
+    desc: 'Cards that explain what you offer.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
       sub: { type: 'textarea', label: 'Sub-headline' },
-      items: { type: 'textarea', label: 'Cards: "icon | title | description" per line' },
+      items: { type: 'list', label: 'Cards', cols: ['Emoji', 'Title', 'Description'] },
       bg: BG,
     },
     defaults: {
@@ -260,10 +271,10 @@ export const SECTIONS = {
         '📈 | Paid Social & Search | Meta, TikTok, Google and YouTube run by media buyers who own the number.\n✉️ | Email & SMS | Flows and campaigns that turn your list into a predictable revenue line.\n🎬 | Creative & UGC | A constant pipeline of new hooks, angles and UGC tested every week.\n🛒 | CRO & Funnels | Landing pages and offers built to convert cold traffic, not win design awards.',
       bg: 'alt',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'features',
-        `<div class="fb-center"><h2>${esc(p.headline)}</h2>${p.sub ? `<p class="fb-lead">${esc(p.sub)}</p>` : ''}</div><div class="fb-grid fb-grid-auto">${lines(p.items)
+        `<div class="fb-center"><h2${F(ctx, 'headline')}>${esc(p.headline)}</h2>${p.sub ? `<p class="fb-lead"${F(ctx, 'sub')}>${esc(p.sub)}</p>` : ''}</div><div class="fb-grid fb-grid-auto">${lines(p.items)
           .map((l) => {
             const [icon, title, desc] = cells(l);
             return `<div class="fb-card"><div class="fb-card-icon">${esc(icon)}</div><h3>${esc(title || '')}</h3><p>${esc(desc || '')}</p></div>`;
@@ -274,11 +285,12 @@ export const SECTIONS = {
   },
 
   steps: {
-    name: 'Process Steps',
+    name: 'How it works',
     icon: '→',
+    desc: 'Explain how it works in 3 simple steps.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
-      items: { type: 'textarea', label: 'Steps: "title | description" per line' },
+      items: { type: 'list', label: 'Steps', cols: ['Step', 'Description'] },
       bg: BG,
     },
     defaults: {
@@ -287,10 +299,10 @@ export const SECTIONS = {
         'Book your call | Pick a time that works. Takes 30 seconds.\nGet your audit | We tear down your ads, funnel and retention live on the call.\nGet your plan | Leave with a 90-day roadmap, whether you hire us or not.',
       bg: 'default',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'steps',
-        `<h2 class="fb-center">${esc(p.headline)}</h2><div class="fb-grid fb-grid-auto">${lines(p.items)
+        `<h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2><div class="fb-grid fb-grid-auto">${lines(p.items)
           .map((l, i) => {
             const [t, d] = cells(l);
             return `<div class="fb-step"><div class="fb-step-n">${i + 1}</div><h3>${esc(t)}</h3><p>${esc(d || '')}</p></div>`;
@@ -301,11 +313,12 @@ export const SECTIONS = {
   },
 
   caseStudies: {
-    name: 'Case Studies',
+    name: 'Client results',
     icon: '◆',
+    desc: 'Show results you got for clients.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
-      items: { type: 'textarea', label: 'Cases: "big result | client/niche | what we did" per line' },
+      items: { type: 'list', label: 'Results', cols: ['Result', 'Client', 'What you did'] },
       bg: BG,
     },
     defaults: {
@@ -314,10 +327,10 @@ export const SECTIONS = {
         '+58.9% | Email revenue, DTC supplement brand | Rebuilt flows and segmentation in 60 days\n+47.8% | SMS revenue, apparel brand | New SMS welcome + winback program\n3.1x | ROAS, home goods brand | Creative testing system + offer restructure',
       bg: 'alt',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'cases',
-        `<h2 class="fb-center">${esc(p.headline)}</h2><div class="fb-grid fb-grid-auto">${lines(p.items)
+        `<h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2><div class="fb-grid fb-grid-auto">${lines(p.items)
           .map((l) => {
             const [r, c, d] = cells(l);
             return `<div class="fb-card fb-case"><div class="fb-case-r">${esc(r)}</div><div class="fb-case-c">${esc(c || '')}</div><p>${esc(d || '')}</p></div>`;
@@ -330,9 +343,10 @@ export const SECTIONS = {
   testimonials: {
     name: 'Testimonials',
     icon: '❝',
+    desc: 'Quotes from happy clients.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
-      items: { type: 'textarea', label: 'Testimonials: "quote | name | role" per line' },
+      items: { type: 'list', label: 'Quotes', cols: ['Quote', 'Name', 'Role'] },
       bg: BG,
     },
     defaults: {
@@ -341,10 +355,10 @@ export const SECTIONS = {
         '[Paste a real client quote here.] | [Client Name] | Founder, [Brand]\n[Paste a real client quote here.] | [Client Name] | CMO, [Brand]',
       bg: 'default',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'testimonials',
-        `<h2 class="fb-center">${esc(p.headline)}</h2><div class="fb-grid fb-grid-auto">${lines(p.items)
+        `<h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2><div class="fb-grid fb-grid-auto">${lines(p.items)
           .map((l) => {
             const [q, n, r] = cells(l);
             return `<figure class="fb-card fb-quote"><div class="fb-stars">★★★★★</div><blockquote>“${esc(q)}”</blockquote><figcaption><strong>${esc(n || '')}</strong>${r ? `<span>${esc(r)}</span>` : ''}</figcaption></figure>`;
@@ -355,15 +369,16 @@ export const SECTIONS = {
   },
 
   offer: {
-    name: 'Offer Stack',
+    name: 'What they get',
     icon: '$',
+    desc: 'List everything they get and what it is worth.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
-      items: { type: 'textarea', label: 'Stack items: "item | value" per line' },
+      items: { type: 'list', label: 'What they get', cols: ['Item', 'Value'] },
       totalLabel: { type: 'text', label: 'Total value label' },
       price: { type: 'text', label: 'Your price (e.g. FREE, $997)' },
       cta: { type: 'text', label: 'Button label' },
-      ctaLink: { type: 'text', label: 'Button link' },
+      ctaLink: { type: 'text', label: 'Button goes to' },
       bg: BG,
     },
     defaults: {
@@ -375,38 +390,40 @@ export const SECTIONS = {
       ctaLink: '#form',
       bg: 'alt',
     },
-    render: (p) => {
+    render: (p, ctx = {}) => {
       const rows = lines(p.items).map(cells);
       const total = rows.reduce((s, [, v]) => s + (parseFloat(String(v || '').replace(/[^0-9.]/g, '')) || 0), 0);
       return sectionWrap(
         'offer',
-        `<div class="fb-offer-box"><h2 class="fb-center">${esc(p.headline)}</h2><ul class="fb-stack">${rows
+        `<div class="fb-offer-box"><h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2><ul class="fb-stack">${rows
           .map(([i, v]) => `<li><span>✔ ${esc(i)}</span><span class="fb-val">${esc(v || '')}</span></li>`)
           .join('')}</ul>${
           total
             ? `<div class="fb-total"><span>${esc(p.totalLabel || 'Total value')}</span><s>$${total.toLocaleString('en-US')}</s></div>`
             : ''
-        }<div class="fb-price">${esc(p.price)}</div>${p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg')}</div>` : ''}</div>`,
+        }<div class="fb-price"${F(ctx, 'price')}>${esc(p.price)}</div>${p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg', F(ctx, 'cta'))}</div>` : ''}</div>`,
         { bg: p.bg }
       );
     },
   },
 
   form: {
-    name: 'Opt-in / Application Form',
+    name: 'Sign-up form',
     icon: '✎',
+    desc: 'Where visitors type their name, email and phone. This is how you get leads.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
       sub: { type: 'textarea', label: 'Sub-headline' },
       fields: {
-        type: 'textarea',
-        label: 'Fields: "label | type | ghl_key | options" (types: text, email, phone, select, textarea)',
+        type: 'list',
+        label: 'Questions on the form',
+        cols: ['Question', { label: 'Answer type', options: ['text', 'email', 'phone', 'select', 'textarea'] }, 'GoHighLevel field', 'Choices (comma separated)'],
       },
       button: { type: 'text', label: 'Submit label' },
-      webhook: { type: 'text', label: 'GHL Inbound Webhook URL (Workflow trigger)' },
-      redirect: { type: 'text', label: 'Redirect after submit (next step URL)' },
-      ghlEmbed: { type: 'textarea', label: 'OR paste a native GHL form embed code (overrides fields)' },
-      consent: { type: 'textarea', label: 'SMS consent text (A2P 10DLC)' },
+      webhook: { type: 'text', label: 'Where answers go: GoHighLevel webhook link', help: 'In GoHighLevel: Automation → Workflows → new workflow → trigger "Inbound Webhook" → copy the link here.' },
+      redirect: { type: 'text', label: 'Page to show after submit (optional)', help: 'Leave empty to go to the next page of this funnel.' },
+      ghlEmbed: { type: 'textarea', label: 'Advanced: paste a GoHighLevel form embed instead', help: 'Only if you built the form inside GoHighLevel. This replaces the questions above.' },
+      consent: { type: 'textarea', label: 'Text-message permission wording', help: 'Phone carriers require this before you can text leads.' },
       bg: BG,
     },
     defaults: {
@@ -445,25 +462,26 @@ export const SECTIONS = {
                 return `<label><span>${esc(label)}</span><input type="${t}" name="${name}" ${req}${t === 'tel' ? ' autocomplete="tel"' : t === 'email' ? ' autocomplete="email"' : ''}></label>`;
               })
               .join('')}
-            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit">${esc(p.button || 'Submit')}</button>
+            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit"><span${F(ctx, 'button')}>${esc(p.button || 'Submit')}</span></button>
             <div class="fb-form-msg" role="status"></div>
             ${p.consent ? `<p class="fb-consent">${esc(p.consent)}</p>` : ''}
           </form>`;
       return sectionWrap(
         'form',
-        `<div class="fb-form-box"><h2 class="fb-center">${esc(p.headline)}</h2>${p.sub ? `<p class="fb-center fb-muted">${esc(p.sub)}</p>` : ''}${inner}</div>`,
+        `<div class="fb-form-box"><h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2>${p.sub ? `<p class="fb-center fb-muted"${F(ctx, 'sub')}>${esc(p.sub)}</p>` : ''}${inner}</div>`,
         { bg: p.bg, id: 'form' }
       );
     },
   },
 
   calendar: {
-    name: 'GHL Calendar Booking',
+    name: 'Booking calendar',
     icon: '📅',
+    desc: 'Lets visitors pick a time for a call (your GoHighLevel calendar).',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
       sub: { type: 'textarea', label: 'Sub-headline' },
-      url: { type: 'text', label: 'GHL booking widget URL (…/widget/booking/ID)' },
+      url: { type: 'text', label: 'GoHighLevel calendar link', help: 'In GoHighLevel: Calendars → your calendar → Share → copy the booking link.' },
       bg: BG,
     },
     defaults: {
@@ -472,11 +490,11 @@ export const SECTIONS = {
       url: '',
       bg: 'default',
     },
-    render: (p) => {
+    render: (p, ctx = {}) => {
       const src = safeUrl(p.url);
       return sectionWrap(
         'calendar',
-        `<div class="fb-center"><h2>${esc(p.headline)}</h2>${p.sub ? `<p class="fb-lead">${esc(p.sub)}</p>` : ''}</div><div class="fb-cal">${
+        `<div class="fb-center"><h2${F(ctx, 'headline')}>${esc(p.headline)}</h2>${p.sub ? `<p class="fb-lead"${F(ctx, 'sub')}>${esc(p.sub)}</p>` : ''}</div><div class="fb-cal">${
           src
             ? `<iframe src="${esc(src)}" scrolling="no" title="Book a call" loading="lazy"></iframe><script src="https://link.msgsndr.com/js/form_embed.js"></script>`
             : `<div class="fb-placeholder">📅 Paste your GHL calendar widget URL<br><small>Calendars → Calendar Settings → Share → Embed code → copy the iframe src</small></div>`
@@ -486,9 +504,54 @@ export const SECTIONS = {
     },
   },
 
+  checkout: {
+    name: 'Checkout',
+    icon: '💳',
+    desc: 'Take payment with GoHighLevel. Paste your payment link or order form.',
+    fields: {
+      headline: { type: 'textarea', label: 'Headline' },
+      product: { type: 'text', label: 'What they are buying' },
+      price: { type: 'text', label: 'Price' },
+      includes: { type: 'list', label: 'Included', cols: ['Item'] },
+      button: { type: 'text', label: 'Button label' },
+      payLink: { type: 'text', label: 'GoHighLevel payment link', help: 'In GoHighLevel: Payments → Payment Links → copy the link.' },
+      ghlEmbed: { type: 'textarea', label: 'Advanced: paste a GoHighLevel order form instead', help: 'From an Order Form step in GoHighLevel. Replaces the button.' },
+      note: { type: 'text', label: 'Small text under the button' },
+      bg: BG,
+    },
+    defaults: {
+      headline: 'Join Today',
+      product: '90-Day Accelerator',
+      price: '$997',
+      includes: 'Instant access to the course portal\nWeekly live coaching calls\nDone-for-you templates',
+      button: 'Get Instant Access →',
+      payLink: '',
+      ghlEmbed: '',
+      note: '🔒 Secure checkout. You get your login by email right after you pay.',
+      bg: 'alt',
+    },
+    render: (p, ctx = {}) => {
+      const link = safeUrl(p.payLink);
+      const pay = p.ghlEmbed && p.ghlEmbed.trim()
+        ? // A native GHL order form embed is the user's own code; inserted as-is.
+          `<div class="fb-ghl-embed">${p.ghlEmbed}</div>`
+        : `${btn(p.button || 'Buy now', link || '#', 'fb-btn-lg fb-btn-block', F(ctx, 'button'))}${link ? '' : ctx.editor ? '<div class="fb-note">Add your GoHighLevel payment link in the settings on the right.</div>' : ''}`;
+      return sectionWrap(
+        'checkout',
+        `<div class="fb-form-box fb-checkout"><h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2>
+          <div class="fb-co-row"><span${F(ctx, 'product')}>${esc(p.product)}</span><strong${F(ctx, 'price')}>${esc(p.price)}</strong></div>
+          <ul class="fb-checks">${lines(p.includes).map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+          ${pay}
+          ${p.note ? `<div class="fb-note fb-center"${F(ctx, 'note')}>${esc(p.note)}</div>` : ''}</div>`,
+        { bg: p.bg, id: 'checkout' }
+      );
+    },
+  },
+
   guarantee: {
     name: 'Guarantee',
     icon: '🛡',
+    desc: 'A promise that lowers their risk.',
     fields: {
       headline: { type: 'text', label: 'Headline' },
       body: { type: 'textarea', label: 'Body' },
@@ -499,16 +562,17 @@ export const SECTIONS = {
       body: 'If you don\'t walk away from the call with at least 3 things you can implement this week, tell us and we\'ll send you a $100 gift card. No hard feelings.',
       bg: 'default',
     },
-    render: (p) =>
-      sectionWrap('guarantee', `<div class="fb-guarantee"><div class="fb-seal">🛡</div><div><h3>${esc(p.headline)}</h3><p>${esc(p.body)}</p></div></div>`, { bg: p.bg }),
+    render: (p, ctx = {}) =>
+      sectionWrap('guarantee', `<div class="fb-guarantee"><div class="fb-seal">🛡</div><div><h3${F(ctx, 'headline')}>${esc(p.headline)}</h3><p${F(ctx, 'body')}>${esc(p.body)}</p></div></div>`, { bg: p.bg }),
   },
 
   faq: {
     name: 'FAQ',
     icon: '?',
+    desc: 'Answer common questions before they ask.',
     fields: {
       headline: { type: 'text', label: 'Headline' },
-      items: { type: 'textarea', label: 'FAQs: "question | answer" per line' },
+      items: { type: 'list', label: 'Questions', cols: ['Question', 'Answer'] },
       bg: BG,
     },
     defaults: {
@@ -517,10 +581,10 @@ export const SECTIONS = {
         'Is the call really free? | Yes. It\'s a working session, not a pitch deck.\nWho is this for? | Brands with product-market fit that want to scale profitably.\nWhat do I need to prepare? | Ad account and store access help, but aren\'t required.',
       bg: 'alt',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'faq',
-        `<div class="fb-narrow"><h2 class="fb-center">${esc(p.headline)}</h2>${lines(p.items)
+        `<div class="fb-narrow"><h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2>${lines(p.items)
           .map((l) => {
             const [q, a] = cells(l);
             return `<details class="fb-faq"><summary>${esc(q)}</summary><p>${esc(a || '')}</p></details>`;
@@ -531,13 +595,14 @@ export const SECTIONS = {
   },
 
   cta: {
-    name: 'Final CTA',
+    name: 'Final button',
     icon: '➜',
+    desc: 'A last push with a big button at the bottom.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
       sub: { type: 'textarea', label: 'Sub-headline' },
       cta: { type: 'text', label: 'Button label' },
-      ctaLink: { type: 'text', label: 'Button link' },
+      ctaLink: { type: 'text', label: 'Button goes to' },
       bg: BG,
     },
     defaults: {
@@ -547,23 +612,24 @@ export const SECTIONS = {
       ctaLink: '#form',
       bg: 'dark',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'cta',
-        `<div class="fb-center"><h2>${esc(p.headline)}</h2>${p.sub ? `<p class="fb-lead">${esc(p.sub)}</p>` : ''}${
-          p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg')}</div>` : ''
+        `<div class="fb-center"><h2${F(ctx, 'headline')}>${esc(p.headline)}</h2>${p.sub ? `<p class="fb-lead"${F(ctx, 'sub')}>${esc(p.sub)}</p>` : ''}${
+          p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, 'fb-btn-lg', F(ctx, 'cta'))}</div>` : ''
         }</div>`,
         { bg: p.bg }
       ),
   },
 
   thankyou: {
-    name: 'Confirmation / Next Steps',
+    name: 'Thank you',
     icon: '✓',
+    desc: 'Tells people they are signed up and what happens next.',
     fields: {
       headline: { type: 'textarea', label: 'Headline' },
       sub: { type: 'textarea', label: 'Sub-headline' },
-      items: { type: 'textarea', label: 'Checklist (one per line)' },
+      items: { type: 'list', label: 'Next steps', cols: ['Step'] },
       bg: BG,
     },
     defaults: {
@@ -572,10 +638,10 @@ export const SECTIONS = {
       items: 'Add the call to your calendar\nReply "YES" to the text so we know you got it\nWatch the 3-minute prep video below\nHave your ad account and Shopify login handy',
       bg: 'default',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'thankyou',
-        `<div class="fb-narrow fb-center"><div class="fb-check-big">✓</div><h1>${esc(p.headline)}</h1>${p.sub ? `<p class="fb-lead">${esc(p.sub)}</p>` : ''}<ol class="fb-todo">${lines(p.items)
+        `<div class="fb-narrow fb-center"><div class="fb-check-big">✓</div><h1${F(ctx, 'headline')}>${esc(p.headline)}</h1>${p.sub ? `<p class="fb-lead"${F(ctx, 'sub')}>${esc(p.sub)}</p>` : ''}<ol class="fb-todo">${lines(p.items)
           .map((i) => `<li>${esc(i)}</li>`)
           .join('')}</ol></div>`,
         { bg: p.bg }
@@ -583,18 +649,19 @@ export const SECTIONS = {
   },
 
   text: {
-    name: 'Text Block',
+    name: 'Text',
     icon: '¶',
+    desc: 'A plain block of text, like a story from the founder.',
     fields: {
       headline: { type: 'text', label: 'Headline' },
       body: { type: 'textarea', label: 'Body (blank line = new paragraph)' },
       bg: BG,
     },
     defaults: { headline: 'A Note From Our Founder', body: 'Write a short, personal story here.', bg: 'default' },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       sectionWrap(
         'text',
-        `<div class="fb-narrow">${p.headline ? `<h2>${esc(p.headline)}</h2>` : ''}${String(p.body || '')
+        `<div class="fb-narrow">${p.headline ? `<h2${F(ctx, 'headline')}>${esc(p.headline)}</h2>` : ''}${String(p.body || '')
           .split(/\n\s*\n/)
           .map((para) => `<p>${esc(para.trim()).replace(/\n/g, '<br>')}</p>`)
           .join('')}</div>`,
@@ -605,9 +672,10 @@ export const SECTIONS = {
   footer: {
     name: 'Footer',
     icon: '▁',
+    desc: 'Copyright and privacy links at the bottom. Ad platforms require these.',
     fields: {
       text: { type: 'text', label: 'Copyright text' },
-      links: { type: 'textarea', label: 'Links: "label | url" per line' },
+      links: { type: 'list', label: 'Links', cols: ['Text', 'Link'] },
       disclaimer: { type: 'textarea', label: 'Disclaimer' },
     },
     defaults: {
@@ -615,13 +683,13 @@ export const SECTIONS = {
       links: 'Privacy Policy | /privacy\nTerms | /terms',
       disclaimer: 'Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok.',
     },
-    render: (p) =>
+    render: (p, ctx = {}) =>
       `<footer class="fb-s fb-footer"><div class="fb-wrap fb-center"><div class="fb-footer-links">${lines(p.links)
         .map((l) => {
           const [t, u] = cells(l);
           return `<a href="${esc(safeUrl(u) || '#')}">${esc(t)}</a>`;
         })
-        .join('')}</div><div>${esc(p.text)}</div>${p.disclaimer ? `<p class="fb-disclaimer">${esc(p.disclaimer)}</p>` : ''}</div></footer>`,
+        .join('')}</div><div${F(ctx, 'text')}>${esc(p.text)}</div>${p.disclaimer ? `<p class="fb-disclaimer">${esc(p.disclaimer)}</p>` : ''}</div></footer>`,
   },
 };
 

@@ -26,7 +26,7 @@
       },
       "sections": [
         {
-          "id": "smuqg2yeo18isl3",
+          "id": "smuqhapv918sxf6",
           "type": "announcement",
           "props": {
             "text": "LIVE training starts in",
@@ -34,7 +34,7 @@
           }
         },
         {
-          "id": "smuqg2yeo191imr",
+          "id": "smuqhapv91915sd",
           "type": "hero",
           "props": {
             "eyebrow": "Free live masterclass",
@@ -50,7 +50,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1aqryz",
+          "id": "smuqhapv91aa9bm",
           "type": "form",
           "props": {
             "headline": "Reserve Your Seat",
@@ -65,7 +65,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1b3cjq",
+          "id": "smuqhapv91bomn1",
           "type": "text",
           "props": {
             "headline": "Who Is [Creator Name]?",
@@ -74,7 +74,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1cr8jw",
+          "id": "smuqhapv91cvvzl",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -89,7 +89,7 @@
       "path": "/masterclass-confirmed",
       "sections": [
         {
-          "id": "smuqg2yeo1dbdk7",
+          "id": "smuqhapv91dmnga",
           "type": "thankyou",
           "props": {
             "headline": "You're Registered! 🎉",
@@ -99,7 +99,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1eja0x",
+          "id": "smuqhapv91efaxw",
           "type": "video",
           "props": {
             "headline": "Watch This Quick Message From [Creator Name]",
@@ -111,7 +111,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1fk8vo",
+          "id": "smuqhapv91f1ga4",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -126,7 +126,7 @@
       "path": "/masterclass-replay",
       "sections": [
         {
-          "id": "smuqg2yeo1g4lcr",
+          "id": "smuqhapv91gz2mg",
           "type": "announcement",
           "props": {
             "text": "Replay comes down in",
@@ -134,7 +134,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1hlhju",
+          "id": "smuqhapv91harpj",
           "type": "video",
           "props": {
             "headline": "Masterclass Replay",
@@ -146,7 +146,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1itiub",
+          "id": "smuqhapv91i4486",
           "type": "offer",
           "props": {
             "headline": "Join The 90-Day Accelerator",
@@ -154,12 +154,27 @@
             "totalLabel": "Total value",
             "price": "$997",
             "cta": "Enroll Now",
-            "ctaLink": "#",
+            "ctaLink": "#checkout",
             "bg": "alt"
           }
         },
         {
-          "id": "smuqg2yeo1jbqyj",
+          "id": "smuqhapv91j9gvp",
+          "type": "checkout",
+          "props": {
+            "headline": "Join The 90-Day Accelerator",
+            "product": "90-Day Accelerator",
+            "price": "$997",
+            "includes": "Instant access to the course portal\nWeekly live coaching calls\nDone-for-you templates",
+            "button": "Get Instant Access →",
+            "payLink": "",
+            "ghlEmbed": "",
+            "note": "🔒 Secure checkout. You get your login by email right after you pay.",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqhapv91kosat",
           "type": "guarantee",
           "props": {
             "headline": "30-Day Action Guarantee",
@@ -168,7 +183,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1kapgd",
+          "id": "smuqhapv91lm9b1",
           "type": "faq",
           "props": {
             "headline": "Frequently Asked Questions",
@@ -177,7 +192,35 @@
           }
         },
         {
-          "id": "smuqg2yeo1ljmqj",
+          "id": "smuqhapv91m97om",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 Client Brand. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Welcome",
+      "path": "/accelerator-welcome",
+      "seo": {
+        "title": "Welcome To The Accelerator"
+      },
+      "sections": [
+        {
+          "id": "smuqhapv91nimmb",
+          "type": "thankyou",
+          "props": {
+            "headline": "You're In! Welcome To The Accelerator 🎉",
+            "sub": "Your login to the course portal is on its way to your inbox.",
+            "items": "Open the email titled \"Your course login\"\nLog in and watch Module 1 (20 minutes)\nBook your onboarding call from inside the portal\nJoin the private community",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqhapv91o7bwb",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -233,6 +276,13 @@
         "name": "Webinar Date",
         "key": "webinar_date",
         "type": "Date"
+      }
+    ],
+    "products": [
+      {
+        "name": "90-Day Accelerator",
+        "price": "$997",
+        "delivers": "Course portal (Memberships)"
       }
     ],
     "customValues": [
@@ -315,6 +365,43 @@
             "delay": "On purchase",
             "type": "Remove From Workflow",
             "detail": "Tag customer-accelerator, start onboarding workflow."
+          }
+        ]
+      },
+      {
+        "name": "03 | Purchase → Course Access",
+        "trigger": "Order Submitted / Payment Received (GoHighLevel Payments): 90-Day Accelerator",
+        "goal": "Buyers get their course login within a minute, no manual work.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Grant Offer Access",
+            "detail": "Memberships → offer \"90-Day Accelerator\" (course portal)."
+          },
+          {
+            "delay": "0m",
+            "type": "Add Tag",
+            "detail": "customer-accelerator"
+          },
+          {
+            "delay": "0m",
+            "type": "Update Opportunity",
+            "detail": "Masterclass | Launch → \"Purchased\" (value = order total)"
+          },
+          {
+            "delay": "0m",
+            "type": "Send Email",
+            "detail": "Subject: \"Your course login\". Portal link + login details + first step."
+          },
+          {
+            "delay": "1d",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, did you get into Module 1? Reply here if you need help logging in."
+          },
+          {
+            "delay": "7d",
+            "type": "If/Else",
+            "detail": "No course login yet → create task for coach to call."
           }
         ]
       }

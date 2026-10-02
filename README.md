@@ -14,15 +14,23 @@ node scripts/build-examples.mjs   # regenerate examples/
 
 There are no dependencies and no build step: it's plain ES modules. Open `http://localhost:5173/` for the builder and `http://localhost:5173/examples/` to browse finished funnels.
 
+## Built for first-timers
+
+- **Pick a goal, not a template.** Start by answering "What should your funnel do?" in plain words.
+- **Type on the page.** Click any headline or button and type. Hover between sections and click **+** to add one.
+- **No jargon.** Every section and page says what it's for, list fields are simple rows, and the **?** button explains every term.
+- **A 3-step guide** (Pick a goal → Edit your pages → Put it in GoHighLevel) is always visible, and the last step walks through GoHighLevel click by click with a copy button per page.
+- **Your system tab** shows the all-in-one picture: which GoHighLevel tools the funnel uses (pages, CRM, calendar, pipeline, texts and emails, automations, payments, courses, reviews), what each replaces, and every automation in one plain sentence.
+
 ## What it does
 
 | Area | What you get |
 |---|---|
-| **Visual editor** | 20 conversion sections (hero, VSL, opt-in/application form, GHL calendar, offer stack, case studies, stats, FAQ, urgency countdown…). Click any section on the page to edit it, drag to reorder, undo/redo, desktop/tablet/mobile preview. Your work saves automatically in the browser. |
+| **Visual editor** | 21 conversion sections (including a GoHighLevel checkout) (hero, VSL, opt-in/application form, GHL calendar, offer stack, case studies, stats, FAQ, urgency countdown…). Click any section on the page to edit it, drag to reorder, undo/redo, desktop/tablet/mobile preview. Your work saves automatically in the browser. |
 | **Multi-step funnels** | Steps with paths. Each form redirects to the next step and carries `first_name/email/phone` forward so the GHL calendar is prefilled. |
 | **GHL wiring** | Forms POST to a **GHL Inbound Webhook** workflow trigger (or paste a native GHL form embed). They capture UTMs plus `fbclid/gclid/ttclid` and fire Meta Pixel `Lead`. Booking uses the GHL calendar widget. SMS consent text is A2P 10DLC-ready. |
 | **GHL Blueprint** | For each funnel: pipeline stages, tags, custom fields (`{{contact.x}}`), custom values, calendars and full workflows (trigger → timed actions, with copy for the SMS/email messages), plus KPI targets. You can edit it as JSON. |
-| **Build sheet export** | One click exports a Markdown SOP an ops person can follow click by click inside a sub-account, ending with a launch QA checklist. |
+| **Setup guide** | An interactive checklist for building the back end in GoHighLevel: a tick box on every task (progress is saved), a copy button on every name, key, tag and message, and the exact menu path for each step. It ends by saving everything as a GHL **Snapshot**, so the next client is one click. It can also be copied as text for Notion or Google Docs. |
 | **Launch Audit** | Scores every step on: CTA above the fold, single goal, social proof, unfilled placeholders, form wired to GHL, phone captured, SMS consent, form length, calendar/video set, SEO title, privacy footer, pixel. Each failed check comes with the fix. |
 | **Export** | *Copy GHL Custom Code* (paste into a full-width Custom Code element), standalone HTML per step or for all steps, live preview, and funnel JSON import/export. |
 
@@ -33,7 +41,7 @@ There are no dependencies and no build step: it's plain ES modules. Open `http:/
 | Free Email & SMS Audit | Opt-in → Book → Confirmed | Speed-to-lead, qualification router, abandoned application, show-up reminders, no-show recovery |
 | Paid Ads Application (VSL) | VSL + application → Book → Confirmed | All of the above + proposal follow-up |
 | Amazon Growth Call | Landing → Book → Confirmed | Speed-to-lead, reminders, no-show |
-| Info-Product Webinar *(client funnel)* | Register → Confirmed → Replay + offer | Indoctrination + replay/cart-close |
+| Info-Product Webinar *(client funnel)* | Register → Confirmed → Replay + checkout → Course access | Indoctrination, replay/cart-close, purchase → course access (GHL Payments + Memberships) |
 | Local Business Quote *(client funnel)* | Offer → Thank you | Speed-to-lead, missed-call text-back, review request |
 
 ## Using an export in GoHighLevel
@@ -42,7 +50,8 @@ There are no dependencies and no build step: it's plain ES modules. Open `http:/
 2. In each step add a full-width section → **Custom Code** element → paste *Export → Copy GHL Custom Code*.
 3. **Automation → Workflows → New** → trigger **Inbound Webhook**. Copy the URL into the form section's *GHL Inbound Webhook URL* field, then map the fields to the contact in a *Create/Update Contact* action.
 4. **Calendars → Share → Embed**. Paste the widget URL into the calendar section.
-5. Follow the downloaded **GHL Build Sheet** for the pipeline, tags, fields, values, workflows and launch QA.
+5. Open the **Setup guide** tab and work through it. It covers the pipeline, tags, fields, values, workflows and testing.
+6. Save the finished sub-account as a **Snapshot** (Agency view → Account Snapshots). That's how GoHighLevel reuses a funnel: the next client's account is set up in one click. Snapshots can only be created inside GoHighLevel, and its API can't create workflows, so the first build is always done by hand.
 
 ## Project layout
 
@@ -53,10 +62,11 @@ js/sections.js        section library (schema + pure render functions)
 js/renderer.js        page/snippet renderer, theme CSS, runtime (forms, UTMs, countdown, pixel)
 js/templates.js       funnel templates + GHL blueprints
 js/audit.js           launch audit rules
-js/blueprint.js       Markdown build-sheet generator
+js/blueprint.js       system map + Markdown build sheet
+js/setup-guide.js     interactive setup guide (tick boxes, copy buttons)
 js/app.js             editor state, history, UI
 scripts/build-examples.mjs
-examples/             pre-rendered example funnels + build sheets
+examples/             pre-rendered example funnels + setup guides
 test/                 node:test suite
 docs/PITCH.md         pitch notes for BAD Marketing
 ```

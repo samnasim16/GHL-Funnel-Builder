@@ -86,6 +86,17 @@ const RULES = [
     fix: 'Paste the GHL booking widget URL (Calendars → Share → Embed).',
   },
   {
+    id: 'checkout',
+    label: 'Payment link set',
+    weight: 3,
+    applies: (step) => has(step, 'checkout'),
+    test: (step) => {
+      const c = first(step, 'checkout').props;
+      return /^https?:\/\//.test(c.payLink || '') || Boolean((c.ghlEmbed || '').trim());
+    },
+    fix: 'Paste a GoHighLevel payment link (Payments → Payment Links) or an order form.',
+  },
+  {
     id: 'video',
     label: 'Video URL set',
     weight: 2,

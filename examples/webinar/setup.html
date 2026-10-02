@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Client | Free Masterclass Funnel setup guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#14161c;--muted:#5f6675;--line:#e3e6ec;--brand:#5b4be8;--brand-soft:#efedff;--ok:#0f9d63;--ok-soft:#e8f8f0;--code:#f1f2f5}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#111317;--card:#1a1d23;--ink:#eceef2;--muted:#9aa1ad;--line:#2b2f37;--brand:#8b7dff;--brand-soft:#26224a;--ok:#3ccf8e;--ok-soft:#173326;--code:#24272e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--card:#1a1d23;--ink:#eceef2;--muted:#9aa1ad;--line:#2b2f37;--brand:#8b7dff;--brand-soft:#26224a;--ok:#3ccf8e;--ok-soft:#173326;--code:#24272e;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,-apple-system,sans-serif;padding-inline:16px}
+.guide-wrap{max-width:860px;margin:0 auto;padding-block:32px 64px;display:flex;flex-direction:column;gap:16px}
+.hero{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}
+h1{margin:0;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.15;text-wrap:balance}
+.hero p{margin:0;color:var(--muted);max-width:65ch}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+.fill{height:100%;width:0;background:var(--ok);border-radius:99px;transition:width .3s}
+.bar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-weight:600;font-variant-numeric:tabular-nums}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.toc{display:flex;gap:6px;flex-wrap:wrap}
+.toc a{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700;font-size:13px}
+.toc a.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.step>header{display:flex;gap:14px;align-items:flex-start;padding:18px;border-bottom:1px solid var(--line)}
+.step>header>div{flex:1;min-width:0}
+.num{flex:none;width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:800}
+.step.complete .num{background:var(--ok)}
+.step h2{margin:2px 0 4px;font-size:18px}
+.step header p{margin:0;color:var(--muted);font-size:14px;max-width:65ch}
+.where{margin-top:8px;font-size:13px;color:var(--muted)}
+.where b{color:var(--ink);background:var(--code);padding:1px 7px;border-radius:6px;font-weight:600}
+.count{flex:none;font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tasks{padding:6px 18px 12px}
+.task{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.task:last-child{border-bottom:0}
+.task input{flex:none;width:20px;height:20px;margin-top:3px;accent-color:var(--ok);cursor:pointer}
+.task-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.task.done .task-body{opacity:.5}
+.task.done .task-body .row>span,.task.done .task-body>span{text-decoration:line-through}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.row>span{flex:1;min-width:140px}
+.row small{color:var(--muted)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--code);padding:2px 7px;border-radius:6px;overflow-wrap:anywhere}
+.cp{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:5px 10px;font:600 12px/1.2 inherit;cursor:pointer;white-space:nowrap}
+.cp:hover{border-color:var(--brand);color:var(--brand)}
+.cp.copied{background:var(--ok);border-color:var(--ok);color:#fff}
+.cp.ghost{color:var(--muted)}
+.cp:focus-visible,.task input:focus-visible,.toc a:focus-visible{outline:3px solid var(--brand-soft);outline-offset:2px}
+.note{margin:0;color:var(--muted);font-size:14px}
+.msg{display:flex;gap:10px;align-items:flex-start;background:var(--brand-soft);border-radius:10px;padding:10px 12px}
+.msg p{margin:0;flex:1;min-width:0;font-size:14px}
+.stages{margin:0;padding-left:22px;color:var(--muted)}
+.wf{border:1px solid var(--line);border-radius:12px;margin:10px 0;padding:0 14px}
+.wf-head{border-bottom:1px solid var(--line)}
+.wf-head .task{border:0}
+.trig{font-size:13px;color:var(--muted)}
+.goal{font-size:13px;color:var(--ok);font-weight:600}
+.row>.when,.row>.what{flex:none;min-width:0}
+.when{min-width:84px!important;font-weight:700;color:var(--brand);font-variant-numeric:tabular-nums}
+.what{font-weight:600}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+<nav class="ff-nav" style="position:relative;z-index:99;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 16px;background:#111;color:#ddd;font:600 13px/1.4 system-ui,sans-serif">
+  <button type="button" data-ff-back="../index.html" style="all:unset;cursor:pointer;background:#ffd400;color:#111;border-radius:7px;padding:5px 12px;font-weight:800">← Back</button>
+  <a href="../index.html" style="color:#fff">All examples</a><span style="opacity:.4">·</span><a href="../../index.html" style="color:#fff">Home</a>
+  
+</nav>
+<button type="button" data-ff-back="../index.html" aria-label="Back" style="all:unset;cursor:pointer;position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom, 0px));z-index:100;background:#111;color:#fff;border-radius:999px;padding:10px 16px;font:700 14px/1 system-ui,sans-serif;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)">← Back</button>
+<script>document.querySelectorAll('[data-ff-back]').forEach(function(b){b.addEventListener('click',function(){var fb=b.getAttribute('data-ff-back');if(history.length>1){var here=location.href;history.back();setTimeout(function(){if(location.href===here)location.href=fb;},400);}else location.href=fb;});});</script>
+<div class="guide-wrap">
+    <header class="hero">
+      <div class="kicker">GoHighLevel setup guide</div>
+      <h1>Client | Free Masterclass Funnel</h1>
+      <p>Work top to bottom. Tick each box as you go; your progress is saved in this browser. This funnel uses 7 GoHighLevel tools: funnel pages, contacts (crm), pipeline, texts and emails, automations, payments, courses and memberships.</p>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="bar-row"><span id="progress">0 done</span><span class="actions"><button class="cp" type="button" data-copy="# Client | Free Masterclass Funnel: GoHighLevel Build Sheet
+
+Domain: `join.clientbrand.com`
+
+## 0. GoHighLevel tools this funnel uses
+
+| Tool | Where in GHL | Used | Replaces |
+|---|---|---|---|
+| Funnel pages | Sites → Funnels | Yes | ClickFunnels, Leadpages |
+| Contacts (CRM) | Contacts | Yes | HubSpot, spreadsheets |
+| Booking calendar | Calendars | Not yet | Calendly, Acuity |
+| Pipeline | Opportunities | Yes | Pipedrive, Trello |
+| Texts and emails | Conversations | Yes | Mailchimp, Twilio |
+| Automations | Automation → Workflows | Yes | Zapier, ActiveCampaign |
+| Payments | Payments | Yes | ThriveCart, SamCart |
+| Courses and memberships | Memberships | Yes | Kajabi, Teachable |
+| Reviews | Reputation | Not yet | Birdeye, Podium |
+
+### Products (Payments → Products)
+
+| Product | Price | Delivers |
+|---|---|---|
+| 90-Day Accelerator | $997 | Course portal (Memberships) |
+
+## 1. Funnel steps (Sites → Funnels → New Funnel)
+
+| # | Step | Path | Sections |
+|---|---|---|---|
+| 1 | Registration | `/masterclass` | announcement → hero → form → text → footer |
+| 2 | Confirmation | `/masterclass-confirmed` | thankyou → video → footer |
+| 3 | Replay + Offer | `/masterclass-replay` | announcement → video → offer → checkout → guarantee → faq → footer |
+| 4 | Welcome | `/accelerator-welcome` | thankyou → footer |
+
+For each step: add a full-width section → Custom Code element → paste the step&#39;s &quot;GHL snippet&quot; export. Set SEO title + favicon under step settings.
+
+## 2. Pipeline (Opportunities → Pipelines): **Masterclass | Launch**
+
+1. Registered
+2. Attended Live
+3. Watched Replay
+4. Clicked Offer
+5. Purchased
+6. Booked Call
+7. Not Interested
+
+## 3. Custom fields (Settings → Custom Fields)
+
+| Name | Key | Type |
+|---|---|---|
+| UTM Source | `contact.utm_source` | Text |
+| UTM Campaign | `contact.utm_campaign` | Text |
+| UTM Content (ad) | `contact.utm_content` | Text |
+| Funnel Step | `contact.funnel_step` | Text |
+| Webinar Date | `contact.webinar_date` | Date |
+
+## 4. Custom values (Settings → Custom Values)
+
+| Name | Key | Value |
+|---|---|---|
+| Webinar Link | `{{custom_values.webinar_link}}` | https://zoom.us/j/... |
+| Replay Link | `{{custom_values.replay_link}}` | https://join.clientbrand.com/masterclass-replay |
+
+## 5. Tags
+
+`webinar-registered` · `webinar-attended` · `webinar-noshow` · `offer-clicked` · `customer-accelerator`
+
+## 7. Workflows (Automation → Workflows)
+
+### 01 | Registration → Indoctrination
+
+**Trigger:** Form Submitted: Masterclass Registration  
+**Goal:** 60%+ live attendance from registrants.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Add Tag | webinar-registered |
+| 0m | Send Email | Confirmation + calendar file + &quot;what you&#39;ll learn&quot; |
+| 0m | Send SMS | You&#39;re in, {{contact.first_name}}! Text IN so I know you&#39;ll be there. |
+| Daily until event | Send Email | Value emails: story, case study, framework teaser. |
+| 1h before | Send SMS + Email | Starting in 1 hour: {{custom_values.webinar_link}} |
+| 5m after start | Send SMS | We&#39;re LIVE! Jump in: {{custom_values.webinar_link}} |
+
+### 02 | Replay + Cart Close Sequence
+
+**Trigger:** Event end (date-based) → branch on attended / no-show tag  
+**Goal:** Convert 3–8% of registrants to buyers.
+
+| When | Action | Details |
+|---|---|---|
+| +1h | Send Email | Attended: &quot;Here&#39;s the offer link + bonuses&quot;. No-show: &quot;You missed it, replay is up for 72h&quot;. |
+| +24h | Send SMS | Replay link: {{custom_values.replay_link}} |
+| +48h | Send Email | Case study + FAQ objection handling. |
+| +70h | Send SMS + Email | 2 hours left before the replay and bonuses disappear. |
+| On purchase | Remove From Workflow | Tag customer-accelerator, start onboarding workflow. |
+
+### 03 | Purchase → Course Access
+
+**Trigger:** Order Submitted / Payment Received (GoHighLevel Payments): 90-Day Accelerator  
+**Goal:** Buyers get their course login within a minute, no manual work.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Grant Offer Access | Memberships → offer &quot;90-Day Accelerator&quot; (course portal). |
+| 0m | Add Tag | customer-accelerator |
+| 0m | Update Opportunity | Masterclass \| Launch → &quot;Purchased&quot; (value = order total) |
+| 0m | Send Email | Subject: &quot;Your course login&quot;. Portal link + login details + first step. |
+| 1d | Send SMS | Hey {{contact.first_name}}, did you get into Module 1? Reply here if you need help logging in. |
+| 7d | If/Else | No course login yet → create task for coach to call. |
+
+## 8. KPIs to report weekly
+
+| Metric | Target |
+|---|---|
+| Registration rate | 30–50% |
+| Live show-up rate | 25–40% |
+| Registrant → buyer | 3–8% |
+| Cost per registrant | &lt; $10 (vertical dependent) |
+
+## 9. Launch QA
+
+- [ ] Submit a test lead on mobile: contact, tags, opportunity and UTMs all land in GHL
+- [ ] Speed-to-lead SMS arrives in &lt; 60s; internal notification fires
+- [ ] Book a test call: confirmation + reminder workflow enrolls, abandoned flow exits
+- [ ] Mark test appointment No-Show → recovery SMS fires
+- [ ] Pixel Helper shows PageView + Lead; Meta CAPI / GHL conversion sync on
+- [ ] A2P 10DLC brand + campaign approved for the sending number
+- [ ] Page speed: LCP &lt; 2.5s on 4G (PageSpeed Insights)
+">Copy whole guide as text</button><button class="cp ghost" type="button" id="reset">Clear ticks</button></span></div>
+      <nav class="toc"><a href="#s1">1</a><a href="#s2">2</a><a href="#s3">3</a><a href="#s4">4</a><a href="#s5">5</a><a href="#s6">6</a><a href="#s7">7</a><a href="#s8">8</a><a href="#s9">9</a></nav>
+    </header>
+    <section class="step" id="s1"><header><span class="num">1</span><div><h2>Create the funnel and its pages</h2><p>One step per page, with the same web address. On each step add a full-width section, drag in a <b>Custom Code</b> element, and paste that page's code from the builder (Put in GoHighLevel → Copy code).</p><div class="where">In GoHighLevel: <b>Sites</b> → <b>Funnels</b> → <b>New Funnel</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="funnel"><input type="checkbox" id="t-funnel" aria-label="Done"><div class="task-body"><div class="row"><span>Name the funnel</span><code>Client | Free Masterclass Funnel</code><button class="cp" type="button" data-copy="Client | Free Masterclass Funnel">Copy</button></div></div></div><div class="task" data-task="page-0"><input type="checkbox" id="t-page-0" aria-label="Done"><div class="task-body"><div class="row"><span>Step 1: <b>Registration</b></span><code>/masterclass</code><button class="cp" type="button" data-copy="/masterclass">Copy address</button></div></div></div><div class="task" data-task="page-1"><input type="checkbox" id="t-page-1" aria-label="Done"><div class="task-body"><div class="row"><span>Step 2: <b>Confirmation</b></span><code>/masterclass-confirmed</code><button class="cp" type="button" data-copy="/masterclass-confirmed">Copy address</button></div></div></div><div class="task" data-task="page-2"><input type="checkbox" id="t-page-2" aria-label="Done"><div class="task-body"><div class="row"><span>Step 3: <b>Replay + Offer</b></span><code>/masterclass-replay</code><button class="cp" type="button" data-copy="/masterclass-replay">Copy address</button></div></div></div><div class="task" data-task="page-3"><input type="checkbox" id="t-page-3" aria-label="Done"><div class="task-body"><div class="row"><span>Step 4: <b>Welcome</b></span><code>/accelerator-welcome</code><button class="cp" type="button" data-copy="/accelerator-welcome">Copy address</button></div></div></div></div></section><section class="step" id="s2"><header><span class="num">2</span><div><h2>Add the contact fields</h2><p>Extra boxes on each contact, so you can see their answers (like revenue) in GoHighLevel. Copy the name exactly so the form answers land in the right place.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Custom Fields</b> → <b>Add Field</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="field-utm_source"><input type="checkbox" id="t-field-utm_source" aria-label="Done"><div class="task-body"><div class="row"><span><b>UTM Source</b> <small>Text</small></span><code>{{contact.utm_source}}</code><button class="cp" type="button" data-copy="UTM Source">Copy name</button></div></div></div><div class="task" data-task="field-utm_campaign"><input type="checkbox" id="t-field-utm_campaign" aria-label="Done"><div class="task-body"><div class="row"><span><b>UTM Campaign</b> <small>Text</small></span><code>{{contact.utm_campaign}}</code><button class="cp" type="button" data-copy="UTM Campaign">Copy name</button></div></div></div><div class="task" data-task="field-utm_content"><input type="checkbox" id="t-field-utm_content" aria-label="Done"><div class="task-body"><div class="row"><span><b>UTM Content (ad)</b> <small>Text</small></span><code>{{contact.utm_content}}</code><button class="cp" type="button" data-copy="UTM Content (ad)">Copy name</button></div></div></div><div class="task" data-task="field-funnel_step"><input type="checkbox" id="t-field-funnel_step" aria-label="Done"><div class="task-body"><div class="row"><span><b>Funnel Step</b> <small>Text</small></span><code>{{contact.funnel_step}}</code><button class="cp" type="button" data-copy="Funnel Step">Copy name</button></div></div></div><div class="task" data-task="field-webinar_date"><input type="checkbox" id="t-field-webinar_date" aria-label="Done"><div class="task-body"><div class="row"><span><b>Webinar Date</b> <small>Date</small></span><code>{{contact.webinar_date}}</code><button class="cp" type="button" data-copy="Webinar Date">Copy name</button></div></div></div></div></section><section class="step" id="s3"><header><span class="num">3</span><div><h2>Add the saved values</h2><p>Text you reuse in many messages, like your booking link. Change it once here and every message updates.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Custom Values</b> → <b>Add</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="value-webinar_link"><input type="checkbox" id="t-value-webinar_link" aria-label="Done"><div class="task-body"><div class="row"><span><b>Webinar Link</b></span><button class="cp" type="button" data-copy="Webinar Link">Copy name</button></div><div class="row sub"><code>https://zoom.us/j/...</code><button class="cp" type="button" data-copy="https://zoom.us/j/...">Copy value</button></div></div></div><div class="task" data-task="value-replay_link"><input type="checkbox" id="t-value-replay_link" aria-label="Done"><div class="task-body"><div class="row"><span><b>Replay Link</b></span><button class="cp" type="button" data-copy="Replay Link">Copy name</button></div><div class="row sub"><code>https://join.clientbrand.com/masterclass-replay</code><button class="cp" type="button" data-copy="https://join.clientbrand.com/masterclass-replay">Copy value</button></div></div></div></div></section><section class="step" id="s4"><header><span class="num">4</span><div><h2>Create the tags</h2><p>Labels that workflows put on leads, so you can sort and filter them.</p><div class="where">In GoHighLevel: <b>Settings</b> → <b>Tags</b> → <b>Add Tag</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="tag-webinar-registered"><input type="checkbox" id="t-tag-webinar-registered" aria-label="Done"><div class="task-body"><div class="row"><code>webinar-registered</code><button class="cp" type="button" data-copy="webinar-registered">Copy</button></div></div></div><div class="task" data-task="tag-webinar-attended"><input type="checkbox" id="t-tag-webinar-attended" aria-label="Done"><div class="task-body"><div class="row"><code>webinar-attended</code><button class="cp" type="button" data-copy="webinar-attended">Copy</button></div></div></div><div class="task" data-task="tag-webinar-noshow"><input type="checkbox" id="t-tag-webinar-noshow" aria-label="Done"><div class="task-body"><div class="row"><code>webinar-noshow</code><button class="cp" type="button" data-copy="webinar-noshow">Copy</button></div></div></div><div class="task" data-task="tag-offer-clicked"><input type="checkbox" id="t-tag-offer-clicked" aria-label="Done"><div class="task-body"><div class="row"><code>offer-clicked</code><button class="cp" type="button" data-copy="offer-clicked">Copy</button></div></div></div><div class="task" data-task="tag-customer-accelerator"><input type="checkbox" id="t-tag-customer-accelerator" aria-label="Done"><div class="task-body"><div class="row"><code>customer-accelerator</code><button class="cp" type="button" data-copy="customer-accelerator">Copy</button></div></div></div></div></section><section class="step" id="s5"><header><span class="num">5</span><div><h2>Build the pipeline</h2><p>The board that shows where every lead is. Add the stages in this order.</p><div class="where">In GoHighLevel: <b>Opportunities</b> → <b>Pipelines</b> → <b>Create New Pipeline</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="pipeline"><input type="checkbox" id="t-pipeline" aria-label="Done"><div class="task-body"><div class="row"><span>Pipeline name</span><code>Masterclass | Launch</code><button class="cp" type="button" data-copy="Masterclass | Launch">Copy</button></div></div></div><div class="task" data-task="stages"><input type="checkbox" id="t-stages" aria-label="Done"><div class="task-body"><div class="row"><span>Stages</span><button class="cp" type="button" data-copy="Registered
+Attended Live
+Watched Replay
+Clicked Offer
+Purchased
+Booked Call
+Not Interested">Copy all</button></div><ol class="stages"><li>Registered</li><li>Attended Live</li><li>Watched Replay</li><li>Clicked Offer</li><li>Purchased</li><li>Booked Call</li><li>Not Interested</li></ol></div></div></div></section><section class="step" id="s6"><header><span class="num">6</span><div><h2>Add the product</h2><p>Then create a payment link for it and paste that into the checkout section of your page.</p><div class="where">In GoHighLevel: <b>Payments</b> → <b>Products</b> → <b>Create Product</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="product-0"><input type="checkbox" id="t-product-0" aria-label="Done"><div class="task-body"><div class="row"><span><b>90-Day Accelerator</b> <small>$997 · delivers Course portal (Memberships)</small></span><button class="cp" type="button" data-copy="90-Day Accelerator">Copy name</button></div></div></div></div></section><section class="step" id="s7"><header><span class="num">7</span><div><h2>Build the automations</h2><p>One workflow per card. Add the trigger, then each action in order. Message wording is ready to copy.</p><div class="where">In GoHighLevel: <b>Automation</b> → <b>Workflows</b> → <b>Create Workflow</b> → <b>Start from scratch</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="wf"><div class="wf-head"><div class="task" data-task="wf-0"><input type="checkbox" id="t-wf-0" aria-label="Done"><div class="task-body"><div class="row"><b>01 | Registration → Indoctrination</b><button class="cp" type="button" data-copy="01 | Registration → Indoctrination">Copy name</button></div><div class="trig">Starts when: Form Submitted: Masterclass Registration</div><div class="goal">Goal: 60%+ live attendance from registrants.</div></div></div></div>
+            <div class="task" data-task="wf-0-0"><input type="checkbox" id="t-wf-0-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Add Tag</span></div><p class="note">webinar-registered</p></div></div><div class="task" data-task="wf-0-1"><input type="checkbox" id="t-wf-0-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send Email</span></div><div class="msg"><p>Confirmation + calendar file + &quot;what you&#39;ll learn&quot;</p><button class="cp" type="button" data-copy="Confirmation + calendar file + &quot;what you&#39;ll learn&quot;">Copy</button></div></div></div><div class="task" data-task="wf-0-2"><input type="checkbox" id="t-wf-0-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send SMS</span></div><div class="msg"><p>You&#39;re in, {{contact.first_name}}! Text IN so I know you&#39;ll be there.</p><button class="cp" type="button" data-copy="You&#39;re in, {{contact.first_name}}! Text IN so I know you&#39;ll be there.">Copy message</button></div></div></div><div class="task" data-task="wf-0-3"><input type="checkbox" id="t-wf-0-3" aria-label="Done"><div class="task-body"><div class="row"><span class="when">Daily until event</span><span class="what">Send Email</span></div><div class="msg"><p>Value emails: story, case study, framework teaser.</p><button class="cp" type="button" data-copy="Value emails: story, case study, framework teaser.">Copy</button></div></div></div><div class="task" data-task="wf-0-4"><input type="checkbox" id="t-wf-0-4" aria-label="Done"><div class="task-body"><div class="row"><span class="when">1h before</span><span class="what">Send SMS + Email</span></div><div class="msg"><p>Starting in 1 hour: {{custom_values.webinar_link}}</p><button class="cp" type="button" data-copy="Starting in 1 hour: {{custom_values.webinar_link}}">Copy message</button></div></div></div><div class="task" data-task="wf-0-5"><input type="checkbox" id="t-wf-0-5" aria-label="Done"><div class="task-body"><div class="row"><span class="when">5m after start</span><span class="what">Send SMS</span></div><div class="msg"><p>We&#39;re LIVE! Jump in: {{custom_values.webinar_link}}</p><button class="cp" type="button" data-copy="We&#39;re LIVE! Jump in: {{custom_values.webinar_link}}">Copy message</button></div></div></div></div><div class="wf"><div class="wf-head"><div class="task" data-task="wf-1"><input type="checkbox" id="t-wf-1" aria-label="Done"><div class="task-body"><div class="row"><b>02 | Replay + Cart Close Sequence</b><button class="cp" type="button" data-copy="02 | Replay + Cart Close Sequence">Copy name</button></div><div class="trig">Starts when: Event end (date-based) → branch on attended / no-show tag</div><div class="goal">Goal: Convert 3–8% of registrants to buyers.</div></div></div></div>
+            <div class="task" data-task="wf-1-0"><input type="checkbox" id="t-wf-1-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">+1h</span><span class="what">Send Email</span></div><div class="msg"><p>Attended: &quot;Here&#39;s the offer link + bonuses&quot;. No-show: &quot;You missed it, replay is up for 72h&quot;.</p><button class="cp" type="button" data-copy="Attended: &quot;Here&#39;s the offer link + bonuses&quot;. No-show: &quot;You missed it, replay is up for 72h&quot;.">Copy</button></div></div></div><div class="task" data-task="wf-1-1"><input type="checkbox" id="t-wf-1-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">+24h</span><span class="what">Send SMS</span></div><div class="msg"><p>Replay link: {{custom_values.replay_link}}</p><button class="cp" type="button" data-copy="Replay link: {{custom_values.replay_link}}">Copy message</button></div></div></div><div class="task" data-task="wf-1-2"><input type="checkbox" id="t-wf-1-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">+48h</span><span class="what">Send Email</span></div><div class="msg"><p>Case study + FAQ objection handling.</p><button class="cp" type="button" data-copy="Case study + FAQ objection handling.">Copy</button></div></div></div><div class="task" data-task="wf-1-3"><input type="checkbox" id="t-wf-1-3" aria-label="Done"><div class="task-body"><div class="row"><span class="when">+70h</span><span class="what">Send SMS + Email</span></div><div class="msg"><p>2 hours left before the replay and bonuses disappear.</p><button class="cp" type="button" data-copy="2 hours left before the replay and bonuses disappear.">Copy message</button></div></div></div><div class="task" data-task="wf-1-4"><input type="checkbox" id="t-wf-1-4" aria-label="Done"><div class="task-body"><div class="row"><span class="when">On purchase</span><span class="what">Remove From Workflow</span></div><p class="note">Tag customer-accelerator, start onboarding workflow.</p></div></div></div><div class="wf"><div class="wf-head"><div class="task" data-task="wf-2"><input type="checkbox" id="t-wf-2" aria-label="Done"><div class="task-body"><div class="row"><b>03 | Purchase → Course Access</b><button class="cp" type="button" data-copy="03 | Purchase → Course Access">Copy name</button></div><div class="trig">Starts when: Order Submitted / Payment Received (GoHighLevel Payments): 90-Day Accelerator</div><div class="goal">Goal: Buyers get their course login within a minute, no manual work.</div></div></div></div>
+            <div class="task" data-task="wf-2-0"><input type="checkbox" id="t-wf-2-0" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Grant Offer Access</span></div><p class="note">Memberships → offer &quot;90-Day Accelerator&quot; (course portal).</p></div></div><div class="task" data-task="wf-2-1"><input type="checkbox" id="t-wf-2-1" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Add Tag</span></div><p class="note">customer-accelerator</p></div></div><div class="task" data-task="wf-2-2"><input type="checkbox" id="t-wf-2-2" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Update Opportunity</span></div><p class="note">Masterclass | Launch → &quot;Purchased&quot; (value = order total)</p></div></div><div class="task" data-task="wf-2-3"><input type="checkbox" id="t-wf-2-3" aria-label="Done"><div class="task-body"><div class="row"><span class="when">0m</span><span class="what">Send Email</span></div><div class="msg"><p>Subject: &quot;Your course login&quot;. Portal link + login details + first step.</p><button class="cp" type="button" data-copy="Subject: &quot;Your course login&quot;. Portal link + login details + first step.">Copy</button></div></div></div><div class="task" data-task="wf-2-4"><input type="checkbox" id="t-wf-2-4" aria-label="Done"><div class="task-body"><div class="row"><span class="when">1d</span><span class="what">Send SMS</span></div><div class="msg"><p>Hey {{contact.first_name}}, did you get into Module 1? Reply here if you need help logging in.</p><button class="cp" type="button" data-copy="Hey {{contact.first_name}}, did you get into Module 1? Reply here if you need help logging in.">Copy message</button></div></div></div><div class="task" data-task="wf-2-5"><input type="checkbox" id="t-wf-2-5" aria-label="Done"><div class="task-body"><div class="row"><span class="when">7d</span><span class="what">If/Else</span></div><p class="note">No course login yet → create task for coach to call.</p></div></div></div></div></section><section class="step" id="s8"><header><span class="num">8</span><div><h2>Test it like a lead would</h2><p>Use your own phone and email.</p></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="qa-0"><input type="checkbox" id="t-qa-0" aria-label="Done"><div class="task-body"><span>Open the first page on your phone and fill in the form</span></div></div><div class="task" data-task="qa-1"><input type="checkbox" id="t-qa-1" aria-label="Done"><div class="task-body"><span>You show up in Contacts with your answers and the tags</span></div></div><div class="task" data-task="qa-2"><input type="checkbox" id="t-qa-2" aria-label="Done"><div class="task-body"><span>The text message arrives within a minute</span></div></div><div class="task" data-task="qa-3"><input type="checkbox" id="t-qa-3" aria-label="Done"><div class="task-body"><span>You appear in the pipeline in the first stage</span></div></div><div class="task" data-task="qa-4"><input type="checkbox" id="t-qa-4" aria-label="Done"><div class="task-body"><span>Make a test purchase (then refund it): course access arrives</span></div></div></div></section><section class="step" id="s9"><header><span class="num">9</span><div><h2>Save it as a Snapshot</h2><p>This is how agencies reuse a funnel: a Snapshot packages the pages, fields, tags, pipeline, calendars and workflows. Next client, you load the Snapshot into their account in one click instead of repeating this guide.</p><div class="where">In GoHighLevel: <b>Agency view</b> → <b>Account Snapshots</b> → <b>Create New Snapshot</b></div></div><span class="count" data-count></span></header><div class="tasks"><div class="task" data-task="snap-make"><input type="checkbox" id="t-snap-make" aria-label="Done"><div class="task-body"><span>Create a Snapshot from this sub-account, named <code>Client | Free Masterclass Funnel</code></span><button class="cp" type="button" data-copy="Client | Free Masterclass Funnel">Copy name</button></div></div><div class="task" data-task="snap-share"><input type="checkbox" id="t-snap-share" aria-label="Done"><div class="task-body"><span>Optional: use <b>Share</b> on the Snapshot to get a link you can send to another GoHighLevel account</span></div></div></div></section>
+  </div>
+<script>
+(function(){
+  var KEY='ff-guide:'+"client-free-masterclass-funnel";
+  var saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}
+  function store(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}}
+  var boxes=[].slice.call(document.querySelectorAll('.task input'));
+  function refresh(){
+    var done=0;
+    boxes.forEach(function(b){var t=b.closest('.task');t.classList.toggle('done',b.checked);if(b.checked)done++;});
+    document.getElementById('fill').style.width=(boxes.length?done/boxes.length*100:0)+'%';
+    document.getElementById('progress').textContent=done+' of '+boxes.length+' done'+(done===boxes.length&&done?' 🎉':'');
+    document.querySelectorAll('.step').forEach(function(s,i){
+      var bs=s.querySelectorAll('.task input'),d=s.querySelectorAll('.task input:checked').length;
+      s.querySelector('[data-count]').textContent=d+' / '+bs.length;
+      s.classList.toggle('complete',d===bs.length);
+      var a=document.querySelectorAll('.toc a')[i];if(a)a.classList.toggle('done',d===bs.length);
+    });
+  }
+  boxes.forEach(function(b){var id=b.closest('.task').dataset.task;b.checked=!!saved[id];b.addEventListener('change',function(){saved[id]=b.checked;store();refresh();});});
+  document.getElementById('reset').addEventListener('click',function(){saved={};store();boxes.forEach(function(b){b.checked=false;});refresh();});
+  function fallbackCopy(text){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();return ok;}
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-copy]');if(!b)return;
+    var text=b.getAttribute('data-copy'),label=b.textContent;
+    function done(ok){b.textContent=ok?'Copied ✓':'Select and copy';b.classList.toggle('copied',ok);setTimeout(function(){b.textContent=label;b.classList.remove('copied');},1400);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){done(true);},function(){done(fallbackCopy(text));});}
+    else done(fallbackCopy(text));
+  });
+  refresh();
+})();</script>
+</body>
+</html>
