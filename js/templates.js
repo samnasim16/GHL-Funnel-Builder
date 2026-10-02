@@ -12,8 +12,8 @@ const BAD_THEME = {
   bg: '#ffffff',
   alt: '#f4f4f6',
   text: '#16161d',
-  headingFont: 'Montserrat',
-  bodyFont: 'Inter',
+  headingFont: 'Bricolage Grotesque',
+  bodyFont: 'Geist',
   radius: 10,
   maxWidth: 1080,
 };
@@ -386,7 +386,7 @@ export const TEMPLATES = [
     description: 'Service landing page for the Amazon team with a value-stack bonus (free compliance management) → book a call.',
     build: () => ({
       name: 'BAD | Amazon Growth System',
-      theme: { ...BAD_THEME, primary: '#ff9900', accent: '#0b0b0f', dark: '#111827', headingFont: 'Poppins' },
+      theme: { ...BAD_THEME, primary: '#ff9900', accent: '#0b0b0f', dark: '#111827', headingFont: 'Sora' },
       tracking: { metaPixel: '', domain: 'go.badmarketing.com' },
       steps: [
         {
@@ -471,7 +471,7 @@ export const TEMPLATES = [
       'The funnel BAD would build FOR an info-product client (coaches, creators): registration → confirmation → replay with offer → checkout → course access. Uses GHL Payments and Memberships end to end.',
     build: () => ({
       name: 'Client | Free Masterclass Funnel',
-      theme: { ...BAD_THEME, primary: '#6d28d9', accent: '#facc15', dark: '#140b2e', headingFont: 'Archivo Black', bodyFont: 'DM Sans' },
+      theme: { ...BAD_THEME, primary: '#6d28d9', accent: '#facc15', dark: '#140b2e', headingFont: 'Unbounded', bodyFont: 'Instrument Sans' },
       tracking: { metaPixel: '', domain: 'join.clientbrand.com' },
       steps: [
         {
@@ -618,7 +618,7 @@ export const TEMPLATES = [
     description: 'Two-step quote funnel for local service clients (med spas, home services). Offer → quick quote → thank you, with a missed-call text-back.',
     build: () => ({
       name: 'Client | Local Free Quote',
-      theme: { ...BAD_THEME, primary: '#0e7c66', accent: '#ffb703', dark: '#0f2a24', headingFont: 'Poppins', radius: 14 },
+      theme: { ...BAD_THEME, primary: '#0e7c66', accent: '#ffb703', dark: '#0f2a24', headingFont: 'Outfit', bodyFont: 'Plus Jakarta Sans', radius: 14 },
       tracking: { metaPixel: '', domain: 'quote.clientbrand.com' },
       steps: [
         {
