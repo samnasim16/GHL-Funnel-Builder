@@ -37,6 +37,11 @@ There are no dependencies and no build step: it's plain ES modules. Open `http:/
 - **Shape and effects**: button shape (rounded, pill, square), button style (solid, gradient, outline, glow), cards (shadow, outline, flat, glass), spacing, headline case, and dark-section backgrounds (glow, grid, dots, grain).
 - **Pictures**: upload with a cropper (drag, zoom, rotate, wide / 4:3 / square / portrait / circle, brightness, contrast and color). Pictures are compressed automatically (max 1600px, WebP). New sections: Picture, Picture + text and Picture gallery. The top section takes a background picture with adjustable darkness.
 
+## AI editor and web address
+
+- **✨ Ask AI to edit**: a chat panel on the canvas. Type what to change ("make the headline punchier", "add testimonials after the top", "make it feel more luxury") and it edits the page: text on any section, adding, removing or moving sections, backgrounds, colors, fonts and style. Every change is validated before it applies and can be undone in one click. Click a section first to edit just that part. It uses Claude on claude.ai or your API key elsewhere; without either, it still understands common requests.
+- **Web address**: click the address bar above the preview to set your domain and each page's address, with steps for connecting your own domain in GoHighLevel (Settings → Domains).
+
 ## What it does
 
 | Area | What you get |
@@ -92,6 +97,7 @@ js/ai-fill.js         AI auto-fill (prompt, apply, no-AI quick fill)
 js/tour.js            guided tour
 js/styles.js          looks, palettes, palette-from-color / from-logo, look suggestion
 js/images.js          photo upload, cropper and compression
+js/ai-edit.js         AI editor chat: prompt, safe edit operations, built-in commands
 scripts/build-deploy.mjs  builds deploy/main.html for the shared link
 docs/PITCH.md         pitch notes for BAD Marketing
 ```
