@@ -1,0 +1,520 @@
+{
+  "templateId": "paid-ads-application",
+  "name": "BAD | Paid Ads + Free Content Application",
+  "theme": {
+    "primary": "#ffd400",
+    "accent": "#e11d2e",
+    "dark": "#0a0a0a",
+    "bg": "#ffffff",
+    "alt": "#f4f4f6",
+    "text": "#16161d",
+    "headingFont": "Montserrat",
+    "bodyFont": "Inter",
+    "radius": 10,
+    "maxWidth": 1080
+  },
+  "tracking": {
+    "metaPixel": "",
+    "domain": "go.badmarketing.com"
+  },
+  "steps": [
+    {
+      "name": "VSL",
+      "path": "/scale",
+      "seo": {
+        "title": "Scale With BAD Marketing | Free Content Offer",
+        "description": "For brands doing $1M+/month."
+      },
+      "sections": [
+        {
+          "id": "smuqg2yekimomd",
+          "type": "announcement",
+          "props": {
+            "text": "LIMITED: Partner with our paid ads team this month and get your content FREE",
+            "deadline": "2026-10-31 23:59"
+          }
+        },
+        {
+          "id": "smuqg2yekj9c5s",
+          "type": "hero",
+          "props": {
+            "eyebrow": "Only for brands doing $1M+ per month",
+            "headline": "We Run Your Ads. We Make Your Content. You Pay For One.",
+            "highlight": "You Pay For One",
+            "sub": "Watch how our media buyers and in-house creative team scale 8 and 9-figure brands without torching margin.",
+            "bullets": "",
+            "cta": "",
+            "ctaLink": "#form",
+            "note": "",
+            "image": "",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yekk8jl5",
+          "type": "video",
+          "props": {
+            "headline": "",
+            "url": "",
+            "caption": "▶ Watch the 6-minute breakdown, then apply below",
+            "cta": "Apply To Work With Us →",
+            "ctaLink": "#form",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yekliw8q",
+          "type": "stats",
+          "props": {
+            "title": "",
+            "items": "$1B+ | Annual client revenue managed\n150+ | In-house team members\n$250M+ | Annual ad spend managed\n2015 | Scaling brands since",
+            "bg": "primary"
+          }
+        },
+        {
+          "id": "smuqg2yekmvbtj",
+          "type": "features",
+          "props": {
+            "headline": "Ads + Creative, Finally In The Same Room",
+            "sub": "",
+            "items": "🎯 | Senior media buyers | Meta, TikTok, Google & YouTube by buyers who've spent 9 figures.\n🎬 | Free content engine | Statics, UGC and video hooks produced in-house every week.\n🧪 | Testing velocity | New angles shipped weekly, scored on CAC and contribution margin, not vanity ROAS.\n📊 | Real reporting | One dashboard: spend, new-customer CAC, MER and LTV.",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yeknc008",
+          "type": "testimonials",
+          "props": {
+            "headline": "From Founders We've Scaled",
+            "items": "[Real founder quote about scale + profitability] | [Founder Name] | Founder, [9-figure DTC brand]\n[Real quote about creative volume] | [Name] | CMO, [Brand]\n[Real quote about communication] | [Name] | Head of Growth, [Brand]",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yekohhy8",
+          "type": "form",
+          "props": {
+            "headline": "Apply To Partner With BAD",
+            "sub": "We take on a limited number of brands each month so every account gets senior attention.",
+            "fields": "First name | text | first_name\nLast name | text | last_name\nWork email | email | email\nPhone | phone | phone\nBrand website | text | website\nMonthly revenue | select | monthly_revenue | Under $250k, $250k–$500k, $500k–$1M, $1M–$3M, $3M+\nMonthly ad spend | select | monthly_ad_spend | Under $50k, $50k–$150k, $150k–$500k, $500k+\nBiggest growth bottleneck | textarea | bottleneck",
+            "button": "Submit Application →",
+            "webhook": "",
+            "redirect": "",
+            "ghlEmbed": "",
+            "consent": "By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg & data rates may apply. Reply STOP to opt out.",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yekpfr2w",
+          "type": "faq",
+          "props": {
+            "headline": "Frequently Asked Questions",
+            "items": "Why only $1M+/month brands? | The free content offer only makes sense at scale. Below that, we'll point you to the right resources.\nWhat does \"free content\" include? | A monthly batch of statics, UGC-style video and hooks produced by our in-house team while you're on paid ads management.\nIs there a long-term contract? | We'll walk through terms on the call. We earn the renewal every month.\nHow fast can we launch? | Most accounts are live within 14 days of kickoff.",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yekqnz2f",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Book Strategy Call",
+      "path": "/scale-book",
+      "seo": {
+        "title": "Book Your Strategy Call | BAD Marketing"
+      },
+      "sections": [
+        {
+          "id": "smuqg2yekr4uqu",
+          "type": "hero",
+          "props": {
+            "eyebrow": "Application received ✓",
+            "headline": "Last Step: Book Your Strategy Call",
+            "highlight": "Last Step",
+            "sub": "Pick a time below. You'll meet with a senior strategist, not a sales rep.",
+            "bullets": "",
+            "cta": "",
+            "ctaLink": "#form",
+            "note": "",
+            "image": "",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yeksq57q",
+          "type": "calendar",
+          "props": {
+            "headline": "",
+            "sub": "",
+            "url": "",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yekt6ef3",
+          "type": "guarantee",
+          "props": {
+            "headline": "Our Promise For This Call",
+            "body": "You'll leave with a clear read on your account: what's working, what's wasting money, and what we'd test first. Even if we never work together.",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yekuid1a",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Confirmed",
+      "path": "/scale-confirmed",
+      "seo": {
+        "title": "Confirmed | BAD Marketing"
+      },
+      "sections": [
+        {
+          "id": "smuqg2yekvmcer",
+          "type": "thankyou",
+          "props": {
+            "headline": "You're Confirmed. Let's Scale.",
+            "sub": "Here's how to get the most out of our call:",
+            "items": "Reply YES to the confirmation text\nShare view-only Ads Manager access (instructions in your email)\nHave your last 90 days of MER / CAC handy\nBring anyone who signs off on agency decisions",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yekwjf1v",
+          "type": "caseStudies",
+          "props": {
+            "headline": "While You Wait: Recent Wins",
+            "items": "+58.9% | Email revenue, DTC supplement brand | Rebuilt flows and segmentation in 60 days\n+47.8% | SMS revenue, apparel brand | New SMS welcome + winback program\n3.1x | ROAS, home goods brand | Creative testing system + offer restructure",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yekxb5n8",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    }
+  ],
+  "blueprint": {
+    "pipeline": {
+      "name": "Paid Ads | Inbound Applications",
+      "stages": [
+        "New Lead",
+        "Application Submitted",
+        "Call Booked",
+        "Showed",
+        "No Show",
+        "Proposal Sent",
+        "Closed Won",
+        "Closed Lost",
+        "Nurture"
+      ]
+    },
+    "tags": [
+      "lead-paid-ads",
+      "offer-free-content",
+      "qualified",
+      "paid-ads-unqualified",
+      "high-spend"
+    ],
+    "customFields": [
+      {
+        "name": "Website",
+        "key": "website",
+        "type": "Text"
+      },
+      {
+        "name": "Monthly Revenue",
+        "key": "monthly_revenue",
+        "type": "Dropdown (single)"
+      },
+      {
+        "name": "UTM Source",
+        "key": "utm_source",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Campaign",
+        "key": "utm_campaign",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Content (ad)",
+        "key": "utm_content",
+        "type": "Text"
+      },
+      {
+        "name": "Funnel Step",
+        "key": "funnel_step",
+        "type": "Text"
+      },
+      {
+        "name": "Monthly Ad Spend",
+        "key": "monthly_ad_spend",
+        "type": "Dropdown (single)"
+      },
+      {
+        "name": "Biggest Bottleneck",
+        "key": "bottleneck",
+        "type": "Large text"
+      }
+    ],
+    "customValues": [
+      {
+        "name": "Booking Link",
+        "key": "booking_link",
+        "value": "https://go.badmarketing.com/scale-book"
+      }
+    ],
+    "calendars": [
+      {
+        "name": "Paid Ads Strategy Call",
+        "type": "Round Robin (senior strategists)",
+        "duration": "45 min",
+        "notes": "Form questions shown on calendar so the strategist preps"
+      }
+    ],
+    "workflows": [
+      {
+        "name": "01 | Paid Ads Application → Speed To Lead",
+        "trigger": "Inbound Webhook (funnel form) OR Form Submitted: \"Paid Ads Application\"",
+        "goal": "First touch in under 60 seconds; a booked call before the lead goes cold.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Create/Update Contact",
+            "detail": "Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact & custom fields."
+          },
+          {
+            "delay": "0m",
+            "type": "Add Tag",
+            "detail": "lead-paid-ads"
+          },
+          {
+            "delay": "0m",
+            "type": "Create/Update Opportunity",
+            "detail": "Paid Ads | Inbound Applications → \"New Lead\" (source = utm_source)"
+          },
+          {
+            "delay": "0m",
+            "type": "Assign To User",
+            "detail": "Round robin: Senior strategists (weighted by close rate)"
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, it's {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "0m",
+            "type": "Internal Notification",
+            "detail": "SMS + Slack to assigned rep: \"🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}\""
+          },
+          {
+            "delay": "2m",
+            "type": "If/Else",
+            "detail": "If appointment booked → end. Else → Call contact (rep whisper: \"New funnel lead, press 1 to connect\")."
+          }
+        ]
+      },
+      {
+        "name": "05 | Qualification Router",
+        "trigger": "Contact Changed: monthly_revenue",
+        "goal": "Protect strategist time. Senior team only talks to qualified brands.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "If/Else",
+            "detail": "monthly_revenue in [\"$1M–$3M\",\"$3M+\"] → Qualified (add tag high-spend if ad spend $150k+). Else → Unqualified: redirect to free resources, no calendar."
+          },
+          {
+            "delay": "0m",
+            "type": "Qualified branch",
+            "detail": "Add tag qualified, assign to senior strategist, keep in booking flow."
+          },
+          {
+            "delay": "0m",
+            "type": "Unqualified branch",
+            "detail": "Add tag paid-ads-unqualified, send \"growth resources\" email, enroll in 30-day nurture, skip sales calls."
+          }
+        ]
+      },
+      {
+        "name": "04 | Abandoned Application",
+        "trigger": "Tag Added: \"lead-paid-ads\" (with wait-for-appointment condition)",
+        "goal": "Recover leads who opted in but never booked.",
+        "actions": [
+          {
+            "delay": "Wait 15m",
+            "type": "Condition",
+            "detail": "If appointment booked → exit."
+          },
+          {
+            "delay": "15m",
+            "type": "Send SMS",
+            "detail": "Saw you started your application but didn't pick a time. Here's the link again: {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "1h",
+            "type": "Send Email",
+            "detail": "Subject: \"Your audit is half done\". Social proof + calendar link."
+          },
+          {
+            "delay": "1d",
+            "type": "Send SMS",
+            "detail": "Quick q: is there anything stopping you from booking? Happy to answer here."
+          },
+          {
+            "delay": "3d",
+            "type": "Update Opportunity",
+            "detail": "Paid Ads | Inbound Applications → \"Nurture\"; add to long-term newsletter."
+          }
+        ]
+      },
+      {
+        "name": "02 | Paid Ads Strategy Call → Show-Up Machine",
+        "trigger": "Customer Booked Appointment (Calendar: \"Paid Ads Strategy Call\")",
+        "goal": "Show rate 75%+. Every reminder gives them a reason to show, not just a time.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Update Opportunity",
+            "detail": "Paid Ads | Inbound Applications → \"Call Booked\""
+          },
+          {
+            "delay": "0m",
+            "type": "Remove From Workflow",
+            "detail": "Abandoned Application + Speed To Lead"
+          },
+          {
+            "delay": "0m",
+            "type": "Send Email",
+            "detail": "Subject: \"You're confirmed, {{contact.first_name}} (read before our call)\". Include 3-min prep video + what to have ready."
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "You're locked in for {{appointment.start_time}}. Reply YES to confirm so we keep your spot 👊"
+          },
+          {
+            "delay": "24h before",
+            "type": "Send SMS + Email",
+            "detail": "Tomorrow at {{appointment.only_start_time}}: here's the agenda + one quick question so we can prep your audit."
+          },
+          {
+            "delay": "2h before",
+            "type": "Send SMS",
+            "detail": "Heads up, we're on in 2 hours. Meeting link: {{appointment.meeting_location}}"
+          },
+          {
+            "delay": "10m before",
+            "type": "Send SMS",
+            "detail": "Hopping on in 10 minutes! {{appointment.meeting_location}}"
+          }
+        ]
+      },
+      {
+        "name": "03 | Paid Ads Strategy Call → No-Show Recovery",
+        "trigger": "Appointment Status changed to \"No Show\"",
+        "goal": "Rebook 30-40% of no-shows within 72 hours.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Update Opportunity",
+            "detail": "Paid Ads | Inbound Applications → \"No Show\""
+          },
+          {
+            "delay": "5m",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, looks like we missed each other. All good, life happens. Want to grab another time? {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "1d",
+            "type": "Send Email",
+            "detail": "Subject: \"Still want that audit?\" with a case study + reschedule button."
+          },
+          {
+            "delay": "3d",
+            "type": "Send SMS",
+            "detail": "Last nudge from me. Should I close out your file or keep your audit open?"
+          },
+          {
+            "delay": "3d",
+            "type": "If/Else",
+            "detail": "No reply → Opportunity \"Lost: No Show\", add tag nurture-long-term."
+          }
+        ]
+      },
+      {
+        "name": "06 | Post-Call Proposal Follow-Up",
+        "trigger": "Opportunity stage changed to \"Proposal Sent\"",
+        "goal": "Close or get a clear no within 14 days.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Send Email",
+            "detail": "Proposal recap + Loom walkthrough from the strategist."
+          },
+          {
+            "delay": "2d",
+            "type": "Send SMS",
+            "detail": "Any questions on the proposal? Happy to jump on a quick call with your team."
+          },
+          {
+            "delay": "5d",
+            "type": "Create Task",
+            "detail": "Strategist: personal video follow-up."
+          },
+          {
+            "delay": "10d",
+            "type": "Send Email",
+            "detail": "\"Should I close your file?\" breakup email."
+          }
+        ]
+      }
+    ],
+    "kpis": [
+      {
+        "metric": "VSL play rate",
+        "target": "60%+"
+      },
+      {
+        "metric": "Application rate (visitor → app)",
+        "target": "4–8%"
+      },
+      {
+        "metric": "Qualified rate",
+        "target": "40%+ of applications"
+      },
+      {
+        "metric": "Show rate",
+        "target": "70%+"
+      },
+      {
+        "metric": "Close rate on qualified calls",
+        "target": "20–30%"
+      }
+    ]
+  }
+}

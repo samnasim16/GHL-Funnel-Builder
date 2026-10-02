@@ -1,0 +1,350 @@
+{
+  "templateId": "amazon-growth",
+  "name": "BAD | Amazon Growth System",
+  "theme": {
+    "primary": "#ff9900",
+    "accent": "#0b0b0f",
+    "dark": "#111827",
+    "bg": "#ffffff",
+    "alt": "#f4f4f6",
+    "text": "#16161d",
+    "headingFont": "Poppins",
+    "bodyFont": "Inter",
+    "radius": 10,
+    "maxWidth": 1080
+  },
+  "tracking": {
+    "metaPixel": "",
+    "domain": "go.badmarketing.com"
+  },
+  "steps": [
+    {
+      "name": "Landing",
+      "path": "/amazon",
+      "seo": {
+        "title": "Amazon Growth System | BAD Marketing"
+      },
+      "sections": [
+        {
+          "id": "smuqg2yemy0y80",
+          "type": "header",
+          "props": {
+            "logo": "BAD MARKETING",
+            "logoUrl": "",
+            "cta": "Book Free Call",
+            "ctaLink": "#form"
+          }
+        },
+        {
+          "id": "smuqg2yemzq2kd",
+          "type": "hero",
+          "props": {
+            "eyebrow": "Amazon Growth System",
+            "headline": "Grow Your Amazon Revenue Without Giving Away Your Margin",
+            "highlight": "Without Giving Away Your Margin",
+            "sub": "PPC, listing optimization, creative and account health, run by one team that answers to your P&L.",
+            "bullets": "PPC structure built for TACoS, not just ACoS\nListings & A+ content rewritten to convert\nAccount health & compliance handled for you",
+            "cta": "Book My Free Amazon Audit",
+            "ctaLink": "#form",
+            "note": "Bonus: FREE monthly compliance management ($1,500 value) when you partner with us.",
+            "image": "",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yem10ckho",
+          "type": "steps",
+          "props": {
+            "headline": "The Amazon Growth System",
+            "items": "Audit | We find wasted spend, suppressed listings and keyword gaps.\nRebuild | Campaign architecture, listings and creative rebuilt in 30 days.\nScale | Weekly optimization against TACoS and contribution margin.",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yem11wyiu",
+          "type": "offer",
+          "props": {
+            "headline": "Partner This Month And Get",
+            "items": "Full PPC & listing audit | $2,000\nCampaign restructure | $3,000\nMonthly compliance management | $1,500/mo\nDedicated account manager | Included",
+            "totalLabel": "Total value",
+            "price": "Book A Call To See If You Qualify",
+            "cta": "Book My Free Call",
+            "ctaLink": "#form",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yem12lh40",
+          "type": "form",
+          "props": {
+            "headline": "Get Your Free Amazon Audit",
+            "sub": "Takes 60 seconds. We review every application personally.",
+            "fields": "First name | text | first_name\nEmail | email | email\nPhone | phone | phone\nAmazon store URL | text | website\nMonthly Amazon revenue | select | monthly_revenue | Under $50k, $50k–$250k, $250k–$1M, $1M+",
+            "button": "Book My Call →",
+            "webhook": "",
+            "redirect": "",
+            "ghlEmbed": "",
+            "consent": "By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg & data rates may apply. Reply STOP to opt out.",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yem130keq",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Book",
+      "path": "/amazon-book",
+      "sections": [
+        {
+          "id": "smuqg2yem14qs5c",
+          "type": "calendar",
+          "props": {
+            "headline": "Choose A Time For Your Amazon Audit",
+            "sub": "Your application isn't complete until you book. Choose the slot that works best.",
+            "url": "",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yem15vcur",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Confirmed",
+      "path": "/amazon-confirmed",
+      "sections": [
+        {
+          "id": "smuqg2yem16t2cr",
+          "type": "thankyou",
+          "props": {
+            "headline": "You're Booked! 📦",
+            "sub": "Check your inbox and phone. We just sent your confirmation.",
+            "items": "Reply YES to the confirmation text\nAdd a user to Seller Central for our audit (steps in your email)\nPull your last 60 days of Business Reports",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yem172tjf",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    }
+  ],
+  "blueprint": {
+    "pipeline": {
+      "name": "Amazon | Inbound",
+      "stages": [
+        "New Lead",
+        "Application Submitted",
+        "Call Booked",
+        "Showed",
+        "No Show",
+        "Proposal Sent",
+        "Closed Won",
+        "Closed Lost",
+        "Nurture"
+      ]
+    },
+    "tags": [
+      "lead-amazon",
+      "offer-free-compliance",
+      "qualified",
+      "amazon-unqualified"
+    ],
+    "customFields": [
+      {
+        "name": "Website",
+        "key": "website",
+        "type": "Text"
+      },
+      {
+        "name": "Monthly Revenue",
+        "key": "monthly_revenue",
+        "type": "Dropdown (single)"
+      },
+      {
+        "name": "UTM Source",
+        "key": "utm_source",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Campaign",
+        "key": "utm_campaign",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Content (ad)",
+        "key": "utm_content",
+        "type": "Text"
+      },
+      {
+        "name": "Funnel Step",
+        "key": "funnel_step",
+        "type": "Text"
+      }
+    ],
+    "customValues": [
+      {
+        "name": "Booking Link",
+        "key": "booking_link",
+        "value": "https://go.badmarketing.com/amazon-book"
+      }
+    ],
+    "calendars": [
+      {
+        "name": "Amazon Audit Call",
+        "type": "Round Robin",
+        "duration": "30 min",
+        "notes": ""
+      }
+    ],
+    "workflows": [
+      {
+        "name": "01 | Amazon Audit → Speed To Lead",
+        "trigger": "Inbound Webhook (funnel form) OR Form Submitted: \"Amazon Audit\"",
+        "goal": "First touch in under 60 seconds; a booked call before the lead goes cold.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Create/Update Contact",
+            "detail": "Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact & custom fields."
+          },
+          {
+            "delay": "0m",
+            "type": "Add Tag",
+            "detail": "lead-amazon"
+          },
+          {
+            "delay": "0m",
+            "type": "Create/Update Opportunity",
+            "detail": "Amazon | Inbound → \"New Lead\" (source = utm_source)"
+          },
+          {
+            "delay": "0m",
+            "type": "Assign To User",
+            "detail": "Round robin: Sales team"
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, it's {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "0m",
+            "type": "Internal Notification",
+            "detail": "SMS + Slack to assigned rep: \"🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}\""
+          },
+          {
+            "delay": "2m",
+            "type": "If/Else",
+            "detail": "If appointment booked → end. Else → Call contact (rep whisper: \"New funnel lead, press 1 to connect\")."
+          }
+        ]
+      },
+      {
+        "name": "02 | Amazon Audit Call → Show-Up Machine",
+        "trigger": "Customer Booked Appointment (Calendar: \"Amazon Audit Call\")",
+        "goal": "Show rate 75%+. Every reminder gives them a reason to show, not just a time.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Update Opportunity",
+            "detail": "Amazon | Inbound → \"Call Booked\""
+          },
+          {
+            "delay": "0m",
+            "type": "Remove From Workflow",
+            "detail": "Abandoned Application + Speed To Lead"
+          },
+          {
+            "delay": "0m",
+            "type": "Send Email",
+            "detail": "Subject: \"You're confirmed, {{contact.first_name}} (read before our call)\". Include 3-min prep video + what to have ready."
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "You're locked in for {{appointment.start_time}}. Reply YES to confirm so we keep your spot 👊"
+          },
+          {
+            "delay": "24h before",
+            "type": "Send SMS + Email",
+            "detail": "Tomorrow at {{appointment.only_start_time}}: here's the agenda + one quick question so we can prep your audit."
+          },
+          {
+            "delay": "2h before",
+            "type": "Send SMS",
+            "detail": "Heads up, we're on in 2 hours. Meeting link: {{appointment.meeting_location}}"
+          },
+          {
+            "delay": "10m before",
+            "type": "Send SMS",
+            "detail": "Hopping on in 10 minutes! {{appointment.meeting_location}}"
+          }
+        ]
+      },
+      {
+        "name": "03 | Amazon Audit Call → No-Show Recovery",
+        "trigger": "Appointment Status changed to \"No Show\"",
+        "goal": "Rebook 30-40% of no-shows within 72 hours.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Update Opportunity",
+            "detail": "Amazon | Inbound → \"No Show\""
+          },
+          {
+            "delay": "5m",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, looks like we missed each other. All good, life happens. Want to grab another time? {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "1d",
+            "type": "Send Email",
+            "detail": "Subject: \"Still want that audit?\" with a case study + reschedule button."
+          },
+          {
+            "delay": "3d",
+            "type": "Send SMS",
+            "detail": "Last nudge from me. Should I close out your file or keep your audit open?"
+          },
+          {
+            "delay": "3d",
+            "type": "If/Else",
+            "detail": "No reply → Opportunity \"Lost: No Show\", add tag nurture-long-term."
+          }
+        ]
+      }
+    ],
+    "kpis": [
+      {
+        "metric": "Landing → booked",
+        "target": "8%+"
+      },
+      {
+        "metric": "Show rate",
+        "target": "75%+"
+      }
+    ]
+  }
+}

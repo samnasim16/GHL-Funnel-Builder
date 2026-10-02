@@ -1,0 +1,12 @@
+{
+  "name": "ghl-funnel-builder",
+  "version": "1.0.0",
+  "description": "FunnelForge: a GoHighLevel funnel builder that ships pages plus the GHL back end (pipeline, tags, fields, workflows).",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "python3 -m http.server 5173",
+    "test": "node --test test/*.test.mjs"
+  },
+  "license": "UNLICENSED"
+}

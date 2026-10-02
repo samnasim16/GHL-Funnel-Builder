@@ -1,0 +1,247 @@
+{
+  "templateId": "local-quote",
+  "name": "Client | Local Free Quote",
+  "theme": {
+    "primary": "#0e7c66",
+    "accent": "#ffb703",
+    "dark": "#0f2a24",
+    "bg": "#ffffff",
+    "alt": "#f4f4f6",
+    "text": "#16161d",
+    "headingFont": "Poppins",
+    "bodyFont": "Inter",
+    "radius": 14,
+    "maxWidth": 1080
+  },
+  "tracking": {
+    "metaPixel": "",
+    "domain": "quote.clientbrand.com"
+  },
+  "steps": [
+    {
+      "name": "Offer",
+      "path": "/free-quote",
+      "sections": [
+        {
+          "id": "smuqg2yep1mw1wt",
+          "type": "header",
+          "props": {
+            "logo": "[CLIENT BRAND]",
+            "logoUrl": "",
+            "cta": "Call (555) 555-5555",
+            "ctaLink": "tel:5555555555"
+          }
+        },
+        {
+          "id": "smuqg2yep1n7qzv",
+          "type": "hero",
+          "props": {
+            "eyebrow": "Serving [City] & surrounding areas",
+            "headline": "Get Your Free [Service] Quote In 60 Seconds",
+            "highlight": "Free",
+            "sub": "Licensed, insured and rated 4.9★ by [X] local homeowners.",
+            "bullets": "Same-week appointments\nUpfront pricing, no surprises\n[X]-year workmanship warranty",
+            "cta": "Get My Free Quote",
+            "ctaLink": "#form",
+            "note": "",
+            "image": "",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yep1owyqr",
+          "type": "form",
+          "props": {
+            "headline": "Tell Us About Your Project",
+            "sub": "Takes 60 seconds. We review every application personally.",
+            "fields": "Name | text | first_name\nPhone | phone | phone\nEmail | email | email\nZip code | text | postal_code\nService needed | select | service | [Service A], [Service B], [Service C], Not sure",
+            "button": "Get My Quote →",
+            "webhook": "",
+            "redirect": "",
+            "ghlEmbed": "",
+            "consent": "By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg & data rates may apply. Reply STOP to opt out.",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yep1pu49u",
+          "type": "testimonials",
+          "props": {
+            "headline": "Your Neighbors Love Us",
+            "items": "[Paste a real client quote here.] | [Client Name] | Founder, [Brand]\n[Paste a real client quote here.] | [Client Name] | CMO, [Brand]",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yep1qtcv3",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 [Client Brand]. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Thank You",
+      "path": "/free-quote-thanks",
+      "sections": [
+        {
+          "id": "smuqg2yep1rylni",
+          "type": "thankyou",
+          "props": {
+            "headline": "Got It! We'll Text You In The Next 5 Minutes",
+            "sub": "Want it even faster? Call us now at (555) 555-5555.",
+            "items": "Watch for a text from our team\nHave a couple of photos of the project ready\nPick your appointment time",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yep1sbbwp",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 [Client Brand]. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    }
+  ],
+  "blueprint": {
+    "pipeline": {
+      "name": "Local | Quote Requests",
+      "stages": [
+        "New Lead",
+        "Contacted",
+        "Estimate Booked",
+        "Estimate Given",
+        "Won",
+        "Lost"
+      ]
+    },
+    "tags": [
+      "lead-quote",
+      "missed-call"
+    ],
+    "customFields": [
+      {
+        "name": "Service",
+        "key": "service",
+        "type": "Dropdown (single)"
+      },
+      {
+        "name": "UTM Source",
+        "key": "utm_source",
+        "type": "Text"
+      }
+    ],
+    "customValues": [],
+    "calendars": [
+      {
+        "name": "In-Home Estimate",
+        "type": "Service calendar",
+        "duration": "60 min",
+        "notes": "Location = contact address"
+      }
+    ],
+    "workflows": [
+      {
+        "name": "01 | Free Quote → Speed To Lead",
+        "trigger": "Inbound Webhook (funnel form) OR Form Submitted: \"Free Quote\"",
+        "goal": "First touch in under 60 seconds; a booked call before the lead goes cold.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Create/Update Contact",
+            "detail": "Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact & custom fields."
+          },
+          {
+            "delay": "0m",
+            "type": "Add Tag",
+            "detail": "lead-quote"
+          },
+          {
+            "delay": "0m",
+            "type": "Create/Update Opportunity",
+            "detail": "Local | Quote Requests → \"New Lead\" (source = utm_source)"
+          },
+          {
+            "delay": "0m",
+            "type": "Assign To User",
+            "detail": "Office manager"
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, it's {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "0m",
+            "type": "Internal Notification",
+            "detail": "SMS + Slack to assigned rep: \"🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}\""
+          },
+          {
+            "delay": "2m",
+            "type": "If/Else",
+            "detail": "If appointment booked → end. Else → Call contact (rep whisper: \"New funnel lead, press 1 to connect\")."
+          }
+        ]
+      },
+      {
+        "name": "02 | Missed Call Text-Back",
+        "trigger": "Call Status: Missed / No answer",
+        "goal": "Never lose a call-in lead.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "Sorry we missed you! This is [Client Brand]. How can we help? Reply here and we'll get right back to you."
+          },
+          {
+            "delay": "0m",
+            "type": "Add Tag",
+            "detail": "missed-call"
+          },
+          {
+            "delay": "0m",
+            "type": "Create Opportunity",
+            "detail": "Local | Quote Requests → New Lead"
+          }
+        ]
+      },
+      {
+        "name": "03 | Review Request",
+        "trigger": "Opportunity stage changed to \"Won\"",
+        "goal": "Grow Google reviews every week.",
+        "actions": [
+          {
+            "delay": "1d",
+            "type": "Send Review Request",
+            "detail": "GHL Reputation → Google review link via SMS."
+          },
+          {
+            "delay": "3d",
+            "type": "Send Email",
+            "detail": "Reminder if no review left."
+          }
+        ]
+      }
+    ],
+    "kpis": [
+      {
+        "metric": "Form conversion",
+        "target": "15%+"
+      },
+      {
+        "metric": "Contact rate in 5 min",
+        "target": "90%+"
+      },
+      {
+        "metric": "Lead → estimate",
+        "target": "40%+"
+      }
+    ]
+  }
+}

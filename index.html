@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FunnelForge for GHL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="brand-mark">F</span> FunnelForge <small>for GoHighLevel</small></div>
+  <input id="funnelName" class="funnel-name" aria-label="Funnel name">
+  <nav class="views" role="tablist">
+    <button data-view="pages" class="on">Pages</button>
+    <button data-view="blueprint">GHL Blueprint</button>
+    <button data-view="audit">Launch Audit <span id="scoreBadge" class="badge">–</span></button>
+  </nav>
+  <div class="top-actions">
+    <button id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
+    <button id="redoBtn" title="Redo (Ctrl+Shift+Z)">↷</button>
+    <button id="templatesBtn">Templates</button>
+    <div class="menu">
+      <button id="exportBtn" class="primary">Export ▾</button>
+      <div class="menu-list" id="exportMenu" hidden>
+        <button data-export="snippet">Copy GHL Custom Code (this step)</button>
+        <button data-export="html">Download HTML (this step)</button>
+        <button data-export="allhtml">Download HTML (all steps)</button>
+        <button data-export="preview">Open live preview tab</button>
+        <hr>
+        <button data-export="sop">Download GHL Build Sheet (.md)</button>
+        <button data-export="json">Download funnel (.json)</button>
+        <button data-export="import">Import funnel (.json)</button>
+      </div>
+    </div>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<main class="app" id="pagesView">
+  <aside class="left">
+    <div class="tabs" role="tablist">
+      <button data-tab="steps" class="on">Steps</button>
+      <button data-tab="add">Add</button>
+      <button data-tab="theme">Theme</button>
+      <button data-tab="settings">Settings</button>
+    </div>
+    <div class="tab" id="tab-steps">
+      <div class="label">Funnel steps</div>
+      <ol id="stepList" class="step-list"></ol>
+      <button id="addStep" class="ghost full">+ Add step</button>
+      <div class="label">Sections on this step <span class="hint">drag to reorder</span></div>
+      <ol id="sectionList" class="section-list"></ol>
+    </div>
+    <div class="tab" id="tab-add" hidden>
+      <div class="label">Click to add after the selected section</div>
+      <div id="library" class="library"></div>
+    </div>
+    <div class="tab" id="tab-theme" hidden>
+      <div id="themeForm" class="form"></div>
+      <div class="label">Presets</div>
+      <div id="presets" class="presets"></div>
+    </div>
+    <div class="tab" id="tab-settings" hidden>
+      <div id="settingsForm" class="form"></div>
+    </div>
+  </aside>
+
+  <section class="canvas">
+    <div class="canvas-bar">
+      <div class="devices" role="group" aria-label="Device preview">
+        <button data-device="desktop" class="on" title="Desktop">🖥</button>
+        <button data-device="tablet" title="Tablet">▭</button>
+        <button data-device="mobile" title="Mobile">📱</button>
+      </div>
+      <div class="url" id="urlBar"></div>
+    </div>
+    <div class="frame-wrap"><iframe id="frame" class="frame desktop" title="Page preview"></iframe></div>
+  </section>
+
+  <aside class="right">
+    <div id="inspector"></div>
+  </aside>
+</main>
+
+<main class="doc-view" id="blueprintView" hidden></main>
+<main class="doc-view" id="auditView" hidden></main>
+
+<dialog id="templateDialog">
+  <form method="dialog" class="dlg-head"><h2>Start from a proven funnel</h2><button aria-label="Close">✕</button></form>
+  <p class="muted">Every template ships the pages <b>and</b> the GHL back end: pipeline, tags, custom fields, calendars and workflows.</p>
+  <div id="templateGrid" class="template-grid"></div>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
