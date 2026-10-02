@@ -1,7 +1,7 @@
 // Ready-to-launch funnel templates. Each one ships the pages AND the
 // GoHighLevel back end it needs: pipeline, tags, custom fields, workflows,
 // and the KPIs to judge it by.
-import { makeSection } from './sections.js?v=b9ff416fb7';
+import { makeSection } from './sections.js?v=bef4208695';
 
 const S = (type, props) => makeSection(type, props);
 

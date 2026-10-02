@@ -1,15 +1,16 @@
-import { SECTIONS, makeSection, uid, esc, lines } from './sections.js?v=b9ff416fb7';
-import { renderStepPage, renderGhlSnippet, FONTS, FONT_META, FONT_GROUPS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js?v=b9ff416fb7';
-import { LOOKS, PALETTES, paletteFromColor, paletteFromPixels, suggestLook } from './styles.js?v=b9ff416fb7';
-import { openCropper, compressImage, readFile, samplePixels } from './images.js?v=b9ff416fb7';
-import { TEMPLATES, buildTemplate } from './templates.js?v=b9ff416fb7';
-import { auditFunnel, auditStep } from './audit.js?v=b9ff416fb7';
-import { blueprintMarkdown, systemMap } from './blueprint.js?v=b9ff416fb7';
-import { setupGuidePage } from './setup-guide.js?v=b9ff416fb7';
-import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js?v=b9ff416fb7';
-import { recommend } from './recommend.js?v=b9ff416fb7';
-import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js?v=b9ff416fb7';
-import { startTour } from './tour.js?v=b9ff416fb7';
+import { SECTIONS, makeSection, uid, esc, lines } from './sections.js?v=bef4208695';
+import { renderStepPage, renderGhlSnippet, FONTS, FONT_META, FONT_GROUPS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js?v=bef4208695';
+import { LOOKS, PALETTES, paletteFromColor, paletteFromPixels, suggestLook } from './styles.js?v=bef4208695';
+import { openCropper, compressImage, readFile, samplePixels } from './images.js?v=bef4208695';
+import { TEMPLATES, buildTemplate } from './templates.js?v=bef4208695';
+import { auditFunnel, auditStep } from './audit.js?v=bef4208695';
+import { blueprintMarkdown, systemMap } from './blueprint.js?v=bef4208695';
+import { setupGuidePage } from './setup-guide.js?v=bef4208695';
+import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js?v=bef4208695';
+import { recommend } from './recommend.js?v=bef4208695';
+import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js?v=bef4208695';
+import { startTour } from './tour.js?v=bef4208695';
+import { buildEditPrompt, applyOps, localIntent } from './ai-edit.js?v=bef4208695';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -175,6 +176,7 @@ function select(i, scroll) {
   renderSectionList();
   renderInspector();
   highlight(scroll);
+  if (!$('#chatPanel').hidden) chatScope();
 }
 
 let canvasSnap = false;
@@ -1092,7 +1094,7 @@ $('#briefQuick').addEventListener('click', () => {
 });
 $('#aiBtn').addEventListener('click', () => openBrief());
 
-const aiState = { claude: null, ready: null };
+const aiState = { claude: null, ready: null, key: '' };
 // claude.use resolves the sample function inside claude.ai, or null elsewhere (~10 s).
 aiState.ready = (window.claude?.use ? window.claude.use('sample').catch(() => null) : Promise.resolve(null)).then((fn) => {
   aiState.claude = fn;
@@ -1147,7 +1149,8 @@ let aiCtl = null;
 async function runAI() {
   const b = readBrief();
   if (!b.business || !b.sells) return briefMsg('Add your business name and what you sell so the AI has something to work with.', 'bad');
-  const key = $('#bf-key')?.value.trim();
+  const key = $('#bf-key')?.value.trim() || aiState.key;
+  if (key) aiState.key = key;
   await aiState.ready;
   if (!aiState.claude && !key)
     return briefMsg('AI writing works inside claude.ai, or here with your own Anthropic API key (box above). No key? Use <b>Quick fill</b> instead.', 'bad');
@@ -1185,12 +1188,147 @@ function aiRewrite(target) {
   openBrief({ target });
 }
 
+// ---------- web address (preview bar) ----------
+function renderUrlPreview() {
+  const d = ($('#urlDomain').value || 'your-website.com').replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const p = curStep().path || '/';
+  $('#urlPreview').textContent = `https://${d}${p}`;
+}
+$('#urlBar').addEventListener('click', () => {
+  const pop = $('#urlPop');
+  pop.hidden = !pop.hidden;
+  if (pop.hidden) return;
+  $('#urlDomain').value = state.funnel.tracking?.domain || '';
+  $('#urlPath').value = curStep().path || '';
+  $('#urlDomain').value = state.funnel.tracking?.domain || '';
+  renderUrlPreview();
+  $('#urlDomain').focus();
+});
+$('#urlClose').addEventListener('click', () => ($('#urlPop').hidden = true));
+let urlSnap = false;
+$('#urlPop').addEventListener('focusin', () => (urlSnap = false));
+$('#urlPop').addEventListener('input', (e) => {
+  if (!urlSnap) pushHistory(), (urlSnap = true);
+  if (e.target.id === 'urlDomain') state.funnel.tracking = { ...(state.funnel.tracking || {}), domain: e.target.value.trim().replace(/^https?:\/\//, '').replace(/\/$/, '') };
+  if (e.target.id === 'urlPath') {
+    let v = e.target.value.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9/_-]/g, '');
+    if (v && !v.startsWith('/')) v = '/' + v;
+    curStep().path = v;
+  }
+  renderUrlPreview();
+  save();
+  renderSteps();
+  $('#urlBar').textContent = `${state.funnel.tracking?.domain || 'your-website.com'}${curStep().path || ''}`;
+});
+
+// ---------- AI editor chat ----------
+const chat = { history: [], busy: false, ctl: null };
+const CHAT_CHIPS = ['Make the headline punchier', 'Add testimonials after the top', 'Make it feel more luxury', 'Pill-shaped buttons', 'Use blue colors', 'Remove the FAQ'];
+function chatScope() {
+  const sec = curStep().sections[state.sel];
+  $('#chatScope').textContent = sec ? `Editing: ${SECTIONS[sec.type].name} on ${curStep().name}` : `Editing: ${curStep().name}`;
+}
+function chatAdd(role, html, { undo = false } = {}) {
+  const el = document.createElement('div');
+  el.className = `msg ${role}`;
+  el.innerHTML = html + (undo ? ' <button type="button" class="link" data-chat-undo>Undo</button>' : '');
+  $('#chatLog').appendChild(el);
+  $('#chatLog').scrollTop = $('#chatLog').scrollHeight;
+  return el;
+}
+async function openChat() {
+  $('#chatPanel').hidden = false;
+  $('#chatFab').hidden = true;
+  chatScope();
+  if (!$('#chatLog').children.length) {
+    chatAdd('ai', 'Hi! Tell me what to change on this page, like <i>"make the headline shorter"</i>, <i>"add client results after the top"</i> or <i>"make it feel more luxury"</i>. Click a section first to edit just that part.');
+    $('#chatChips').innerHTML = CHAT_CHIPS.map((c) => `<button type="button" data-chip="${esc(c)}">${esc(c)}</button>`).join('');
+  }
+  await aiState.ready;
+  $('#chatKey').hidden = Boolean(aiState.claude || aiState.key);
+  $('#chatText').focus();
+}
+$('#chatFab').addEventListener('click', openChat);
+$('#chatClose').addEventListener('click', () => {
+  $('#chatPanel').hidden = true;
+  $('#chatFab').hidden = false;
+});
+$('#chatChips').addEventListener('click', (e) => {
+  const c = e.target.closest('[data-chip]')?.dataset.chip;
+  if (c) ($('#chatText').value = c), sendChat();
+});
+$('#chatLog').addEventListener('click', (e) => {
+  if (e.target.closest('[data-chat-undo]')) undo(), (e.target.disabled = true), (e.target.textContent = 'Undone');
+});
+$('#chatText').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) e.preventDefault(), sendChat();
+});
+$('#chatForm').addEventListener('submit', (e) => (e.preventDefault(), sendChat()));
+$('#chatKeyInput').addEventListener('change', (e) => (aiState.key = e.target.value.trim()));
+async function askJSON(prompt, signal) {
+  if (aiState.claude) return aiState.claude.json(prompt, { modelTier: 'default', signal, cache: false });
+  if (aiState.key) return askWithKey(aiState.key, prompt, signal);
+  return null;
+}
+async function sendChat() {
+  const text = $('#chatText').value.trim();
+  if (!text || chat.busy) return;
+  $('#chatText').value = '';
+  chatAdd('user', esc(text));
+  chat.history.push({ role: 'user', text });
+  await aiState.ready;
+  if (!aiState.claude && $('#chatKeyInput').value.trim()) aiState.key = $('#chatKeyInput').value.trim();
+  const hasAI = Boolean(aiState.claude || aiState.key);
+  let result = null;
+  if (hasAI) {
+    chat.busy = true;
+    chat.ctl = new AbortController();
+    $('#chatSend').textContent = 'Stop';
+    const thinking = chatAdd('ai', '<span class="spin"></span> Working on it…');
+    try {
+      result = await askJSON(buildEditPrompt({ funnel: state.funnel, stepIdx: state.step, selIdx: state.sel, message: text, history: chat.history }), chat.ctl.signal);
+    } catch (err) {
+      thinking.remove();
+      chat.busy = false;
+      $('#chatSend').textContent = 'Send';
+      if (err?.code === 'cancelled' || err?.name === 'AbortError') return chatAdd('ai', 'Stopped. Nothing changed.');
+      result = localIntent(text, state.funnel, state.step, state.sel);
+      if (!result) return chatAdd('ai', esc(AI_ERRORS[err?.code] || err?.message || 'Something went wrong. Try again.'));
+    }
+    thinking.remove();
+    chat.busy = false;
+    $('#chatSend').textContent = 'Send';
+  } else {
+    result = localIntent(text, state.funnel, state.step, state.sel);
+    if (!result)
+      return chatAdd(
+        'ai',
+        'Without AI connected I understand simple requests like <i>"change the headline to …"</i>, <i>"add testimonials after the top"</i>, <i>"remove the FAQ"</i>, <i>"use blue colors"</i>, <i>"pill-shaped buttons"</i> or <i>"make it feel luxury"</i>. For anything else, add an API key below, or use the claude.ai version where AI is built in.'
+      );
+  }
+  const ops = Array.isArray(result?.ops) ? result.ops : [];
+  if (!ops.length) return chatAdd('ai', esc(result?.reply || 'I couldn\'t find anything to change for that. Try being more specific.'));
+  let out = { applied: 0 };
+  commit(() => {
+    out = applyOps(state.funnel, ops);
+    state.sel = Math.min(state.sel, curStep().sections.length - 1);
+  });
+  const reply = String(result.reply || 'Done.');
+  chat.history.push({ role: 'assistant', text: reply });
+  chatAdd('ai', out.applied ? `${esc(reply)} <small class="muted">(${out.applied} change${out.applied > 1 ? 's' : ''})</small>` : 'I couldn\'t apply that safely, so nothing changed. Try rephrasing.', { undo: out.applied > 0 });
+  chatScope();
+}
+$('#chatSend').addEventListener('click', (e) => {
+  if (chat.busy) e.preventDefault(), chat.ctl?.abort();
+});
+
 // ---------- guided tour ----------
 const TOUR_KEY = 'funnelforge.tour.v1';
 const TOUR = [
   { target: '#frame', title: 'This is your page', text: 'Click any headline, sentence or button <b>right on the page</b> and type. Everything saves automatically.' },
   { target: '#stepList', title: 'Your funnel\'s pages', text: 'A funnel is a few pages in a row. Visitors go from page 1 to the next. Click a page to edit it.', before: () => $('.tabs button[data-tab="steps"]').click() },
   { target: '#inspector', title: 'Suggestions and settings', text: 'With nothing selected you get <b>suggestions</b> to get more sign-ups, each with a one-click fix. Click a section to see its settings here.' },
+  { target: '#chatFab', title: 'Ask AI to change anything', text: 'Type what you want, like "make the headline shorter" or "add testimonials", and it edits the page for you. Undo is one click.' },
   { target: '#aiBtn', title: 'Let AI write it', text: 'Describe your business in a few words and AI rewrites every page to match.' },
   { target: '.tabs', title: 'Add blocks and change the look', text: '<b>Add</b> more sections, or open <b>Style</b> to change colors and fonts in one click.' },
   { target: '.views', title: 'Your system and checklist', text: 'See what GoHighLevel does automatically, the step-by-step setup guide, and what\'s left before launch.' },

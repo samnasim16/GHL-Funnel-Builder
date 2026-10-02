@@ -2,7 +2,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=b9ff416fb7">
+<link rel="stylesheet" href="css/app.css?v=bef4208695">
 <header class="top">
   <div class="brand"><span class="brand-mark">F</span><span>FunnelForge</span></div>
   <input id="funnelName" class="funnel-name" aria-label="Funnel name" title="Rename your funnel">
@@ -80,9 +80,31 @@
         <button data-device="desktop" class="on" title="Computer">🖥 Computer</button>
         <button data-device="mobile" title="Phone">📱 Phone</button>
       </div>
-      <div class="url" id="urlBar"></div>
+      <button type="button" class="url" id="urlBar" title="Change this page's web address"></button>
+      <div class="url-pop" id="urlPop" hidden>
+        <div class="url-pop-head"><b>Web address</b><button type="button" class="x" id="urlClose" aria-label="Close">✕</button></div>
+        <label><span>Your domain</span><input id="urlDomain" placeholder="go.yourbrand.com" autocomplete="off"></label>
+        <label><span>This page's address</span><input id="urlPath" placeholder="/free-audit" autocomplete="off"></label>
+        <p class="url-preview" id="urlPreview"></p>
+        <details><summary>How to use your own domain in GoHighLevel</summary>
+          <ol>
+            <li>In GoHighLevel: <b>Settings → Domains → Add Domain</b>. A subdomain like <code>go.yourbrand.com</code> is easiest.</li>
+            <li>GoHighLevel shows you a DNS record. Add it where you bought the domain (GoDaddy, Namecheap, Cloudflare…).</li>
+            <li>Wait for it to connect (minutes to a few hours), then pick this funnel for that domain.</li>
+            <li>Type the same domain above and each page's address, so the links in your pages match.</li>
+          </ol>
+        </details>
+      </div>
     </div>
     <div class="frame-wrap"><iframe id="frame" class="frame desktop" title="Page preview"></iframe></div>
+    <button type="button" class="chat-fab" id="chatFab">✨ Ask AI to edit</button>
+    <aside class="chat" id="chatPanel" hidden aria-label="AI editor">
+      <div class="chat-head"><div><b>✨ AI editor</b><small id="chatScope">Editing this page</small></div><button type="button" class="x" id="chatClose" aria-label="Close">✕</button></div>
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-chips" id="chatChips"></div>
+      <div class="chat-key" id="chatKey" hidden><input type="password" id="chatKeyInput" placeholder="Anthropic API key (sk-ant-…) for full AI" autocomplete="off"><small>Kept only until you close this tab.</small></div>
+      <form class="chat-input" id="chatForm"><textarea id="chatText" rows="2" placeholder="Tell me what to change…" aria-label="Message"></textarea><button type="submit" class="btn" id="chatSend">Send</button></form>
+    </aside>
   </section>
 
   <aside class="right">
@@ -131,4 +153,4 @@
 
 <input type="file" id="importFile" accept=".json,application/json" hidden>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="js/app.js?v=b9ff416fb7"></script>
+<script type="module" src="js/app.js?v=bef4208695"></script>
