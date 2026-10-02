@@ -15,6 +15,7 @@ GitHub Pages serves the repo root of `main` (builder, pitch page and examples), 
 npm start          # serves the app at http://localhost:5173
 npm test           # 10 unit tests (renderer, templates, audit, build sheet, XSS escaping)
 node scripts/build-examples.mjs   # regenerate examples/
+node scripts/stamp-version.mjs    # after changing js/ or css/: cache-busting version (a test checks this)
 ```
 
 There are no dependencies and no build step: it's plain ES modules. Open `http://localhost:5173/` for the builder and `http://localhost:5173/examples/` to browse finished funnels.

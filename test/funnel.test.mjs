@@ -138,3 +138,15 @@ test('mobile styles keep the urgency bar, header and footer compact', () => {
   assert.match(mobile, /\.fb-announcement\{padding:10px 16px\}/);
   assert.match(mobile, /\.fb-header\{padding:12px 16px\}/);
 });
+
+test('every local script and stylesheet carries the same cache-busting version', async () => {
+  const { readFileSync, readdirSync } = await import('node:fs');
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const v = html.match(/js\/app\.js\?v=([0-9a-f]+)/)?.[1];
+  assert.ok(v, 'index.html stamps app.js (run node scripts/stamp-version.mjs)');
+  assert.ok(html.includes(`css/app.css?v=${v}`));
+  for (const f of readdirSync(new URL('../js/', import.meta.url))) {
+    const src = readFileSync(new URL(`../js/${f}`, import.meta.url), 'utf8');
+    for (const m of src.matchAll(/from\s+'\.\/[\w-]+\.js(\?v=([0-9a-f]+))?'/g)) assert.equal(m[2], v, `${f}: ${m[0]} (run node scripts/stamp-version.mjs)`);
+  }
+});
