@@ -4,121 +4,146 @@ import { lines } from './sections.js';
 
 const has = (step, type) => step.sections.some((s) => s.type === type);
 const first = (step, type) => step.sections.find((s) => s.type === type);
+const idxOf = (step, type) => step.sections.findIndex((s) => s.type === type);
+const PLACEHOLDER = /\[[A-Z][^\]]{2,40}\]/;
+
+// Where each problem lives, so the Checklist can jump straight to it:
+//   {idx, field}  a field of a section on this page
+//   {page: key}   a page setting (title, path)
+//   {add, at}     a section that is missing
+//   {funnel: key} / {view}  funnel-wide settings
 
 const RULES = [
   {
     id: 'cta-above-fold',
-    label: 'Clear CTA in the first screen',
+    label: 'A button at the top of the page',
     weight: 3,
     applies: (step) => !has(step, 'thankyou'),
     test: (step) =>
       step.sections.slice(0, 3).some((s) => (s.props.cta && s.props.cta.trim()) || s.type === 'form' || s.type === 'calendar'),
-    fix: 'Add a button to the hero (or put the form/calendar in the first three sections).',
+    fix: 'Add a button to the top of the page so visitors can act without scrolling.',
+    target: (step) => (idxOf(step, 'hero') >= 0 ? { idx: idxOf(step, 'hero'), field: 'cta' } : { idx: 0 }),
   },
   {
     id: 'one-goal',
-    label: 'One goal per page (no competing exits)',
+    label: 'The top button keeps visitors on the page',
     weight: 2,
     applies: () => true,
     test: (step) => {
       const hdr = first(step, 'header');
       return !hdr || !hdr.props.ctaLink || /^#|^tel:/.test(hdr.props.ctaLink);
     },
-    fix: 'Header button should anchor to the form (#form) or a phone link, not leave the page.',
+    fix: 'Point the top button at your form (#form) or a phone number, so it doesn\'t send visitors away.',
+    target: (step) => ({ idx: idxOf(step, 'header'), field: 'ctaLink' }),
   },
   {
     id: 'proof',
-    label: 'Social proof present',
+    label: 'Proof that it works (results, quotes or logos)',
     weight: 2,
     applies: (step) => step.sections.length > 3,
     test: (step) => ['testimonials', 'caseStudies', 'stats', 'logos'].some((t) => has(step, t)),
-    fix: 'Add Case Studies, Stats, Testimonials or a Logo Bar.',
+    fix: 'Add client results, big numbers, quotes or logos.',
+    target: (step) => ({ add: 'caseStudies', at: Math.max(0, idxOf(step, 'hero') + 1) }),
   },
   {
     id: 'placeholders',
-    label: 'No unfilled [placeholders]',
+    label: 'No leftover [placeholder] text',
     weight: 2,
     applies: () => true,
     test: (step) => !JSON.stringify(step.sections.map((s) => s.props)).match(/\[[A-Z][^\]]{2,40}\]/),
-    fix: 'Replace every [Bracketed placeholder] with real copy, names and quotes.',
+    fix: 'Replace every [bracketed placeholder] with your real words, names and quotes.',
+    target: (step) => {
+      const idx = step.sections.findIndex((s) => PLACEHOLDER.test(JSON.stringify(s.props)));
+      const field = idx >= 0 ? Object.keys(step.sections[idx].props).find((k) => PLACEHOLDER.test(String(step.sections[idx].props[k]))) : undefined;
+      return { idx: Math.max(0, idx), field };
+    },
   },
   {
     id: 'form-connected',
-    label: 'Form is wired to GHL',
+    label: 'Form connected to GoHighLevel',
     weight: 3,
     applies: (step) => has(step, 'form'),
     test: (step) => {
       const f = first(step, 'form').props;
       return Boolean((f.webhook && f.webhook.trim()) || (f.ghlEmbed && f.ghlEmbed.trim()));
     },
-    fix: 'Paste a GHL Inbound Webhook URL (Automation → Workflow → Inbound Webhook trigger) or a native GHL form embed.',
+    fix: 'Paste your GoHighLevel webhook link so form answers reach GoHighLevel.',
+    target: (step) => ({ idx: idxOf(step, 'form'), field: 'webhook' }),
   },
   {
     id: 'form-phone',
-    label: 'Form captures phone for speed-to-lead SMS',
+    label: 'Form asks for a phone number',
     weight: 2,
     applies: (step) => has(step, 'form') && !first(step, 'form').props.ghlEmbed,
     test: (step) => lines(first(step, 'form').props.fields).some((l) => /\|\s*phone\s*(\||$)/i.test(l)),
-    fix: 'Add a "Phone | phone | phone" field. SMS within 60s roughly doubles contact rates.',
+    fix: 'Add a phone question. Texting within a minute roughly doubles how many leads you reach.',
+    target: (step) => ({ idx: idxOf(step, 'form'), field: 'fields' }),
   },
   {
     id: 'form-consent',
-    label: 'SMS consent language (A2P 10DLC)',
+    label: 'Text-message permission wording',
     weight: 2,
     applies: (step) => has(step, 'form') && !first(step, 'form').props.ghlEmbed,
     test: (step) => /stop/i.test(first(step, 'form').props.consent || ''),
-    fix: 'Add consent text with opt-out ("Reply STOP"). Carriers block unregistered/non-compliant SMS.',
+    fix: 'Add text-message permission wording that mentions "Reply STOP". Phone carriers require it.',
+    target: (step) => ({ idx: idxOf(step, 'form'), field: 'consent' }),
   },
   {
     id: 'form-length',
-    label: 'Form is short enough (≤ 8 fields)',
+    label: 'Form is short (8 questions or fewer)',
     weight: 1,
     applies: (step) => has(step, 'form') && !first(step, 'form').props.ghlEmbed,
     test: (step) => lines(first(step, 'form').props.fields).length <= 8,
-    fix: 'Cut fields or move qualifying questions to a second step.',
+    fix: 'Remove some questions, or ask them on a later page.',
+    target: (step) => ({ idx: idxOf(step, 'form'), field: 'fields' }),
   },
   {
     id: 'calendar',
-    label: 'Calendar URL set',
+    label: 'Calendar link added',
     weight: 3,
     applies: (step) => has(step, 'calendar'),
     test: (step) => /^https?:\/\//.test(first(step, 'calendar').props.url || ''),
-    fix: 'Paste the GHL booking widget URL (Calendars → Share → Embed).',
+    fix: 'Paste your GoHighLevel calendar link (Calendars → Share).',
+    target: (step) => ({ idx: idxOf(step, 'calendar'), field: 'url' }),
   },
   {
     id: 'checkout',
-    label: 'Payment link set',
+    label: 'Payment link added',
     weight: 3,
     applies: (step) => has(step, 'checkout'),
     test: (step) => {
       const c = first(step, 'checkout').props;
       return /^https?:\/\//.test(c.payLink || '') || Boolean((c.ghlEmbed || '').trim());
     },
-    fix: 'Paste a GoHighLevel payment link (Payments → Payment Links) or an order form.',
+    fix: 'Paste your GoHighLevel payment link (Payments → Payment Links).',
+    target: (step) => ({ idx: idxOf(step, 'checkout'), field: 'payLink' }),
   },
   {
     id: 'video',
-    label: 'Video URL set',
+    label: 'Video link added',
     weight: 2,
     applies: (step) => has(step, 'video'),
     test: (step) => step.sections.filter((s) => s.type === 'video').every((s) => /^https?:\/\//.test(s.props.url || '')),
-    fix: 'Add your VSL / prep video link (YouTube, Vimeo, Loom or Wistia).',
+    fix: 'Paste your video link (YouTube, Vimeo, Loom or Wistia).',
+    target: (step) => ({ idx: step.sections.findIndex((s) => s.type === 'video' && !/^https?:\/\//.test(s.props.url || '')), field: 'url' }),
   },
   {
     id: 'seo',
-    label: 'Page title set',
+    label: 'Browser tab title added',
     weight: 1,
     applies: () => true,
     test: (step) => Boolean(step.seo && step.seo.title),
-    fix: 'Set a page title in Step settings (shows in browser tab and link previews).',
+    fix: 'Give the page a browser tab title (also shown when the link is shared).',
+    target: () => ({ page: 'title' }),
   },
   {
     id: 'footer',
-    label: 'Footer with privacy/terms (required for Meta & Google ads)',
+    label: 'Footer with privacy and terms links',
     weight: 1,
     applies: () => true,
     test: (step) => has(step, 'footer') && /privacy/i.test(first(step, 'footer').props.links || ''),
-    fix: 'Add a Footer with Privacy Policy and Terms links.',
+    fix: 'Add a footer with Privacy Policy and Terms links. Ad platforms require them.',
+    target: (step) => (has(step, 'footer') ? { idx: idxOf(step, 'footer'), field: 'links' } : { add: 'footer', at: step.sections.length }),
   },
 ];
 
@@ -129,6 +154,7 @@ export function auditStep(step) {
     weight: r.weight,
     pass: Boolean(r.test(step)),
     fix: r.fix,
+    target: r.pass ? null : r.target ? r.target(step) : null,
   }));
   const total = results.reduce((s, r) => s + r.weight, 0);
   const got = results.reduce((s, r) => s + (r.pass ? r.weight : 0), 0);
@@ -137,10 +163,12 @@ export function auditStep(step) {
 
 export function auditFunnel(funnel) {
   const steps = funnel.steps.map((s) => ({ name: s.name, ...auditStep(s) }));
+  const paths = funnel.steps.map((s) => s.path);
+  const dup = paths.findIndex((p, i) => paths.indexOf(p) !== i);
   const funnelChecks = [
-    { label: 'Meta Pixel ID set', pass: /^\d{6,20}$/.test(String(funnel.tracking?.metaPixel || '')), fix: 'Add your Pixel ID in Settings (PageView + Lead events fire automatically).' },
-    { label: 'Every step has a unique path', pass: new Set(funnel.steps.map((s) => s.path)).size === funnel.steps.length, fix: 'Give each step its own path, e.g. /audit, /audit-book.' },
-    { label: 'Workflows mapped', pass: (funnel.blueprint?.workflows || []).length > 0, fix: 'Add at least a speed-to-lead workflow in the GHL Blueprint.' },
+    { label: 'Facebook/Meta Pixel ID added', pass: /^\d{6,20}$/.test(String(funnel.tracking?.metaPixel || '')), fix: 'Add your Pixel ID so your ads know who signed up.', target: { funnel: 'metaPixel' } },
+    { label: 'Every page has its own web address', pass: dup < 0, fix: 'Give each page a different address, like /audit and /audit-book.', target: { step: Math.max(0, dup), page: 'path' } },
+    { label: 'Automations planned', pass: (funnel.blueprint?.workflows || []).length > 0, fix: 'Add at least one follow-up automation.', target: { view: 'blueprint' } },
   ];
   const score = Math.round(
     (steps.reduce((s, x) => s + x.score, 0) / Math.max(1, steps.length)) * 0.85 +
