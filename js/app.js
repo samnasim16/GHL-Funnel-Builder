@@ -1,13 +1,13 @@
-import { SECTIONS, makeSection, uid, esc, lines } from './sections.js';
-import { renderStepPage, renderGhlSnippet, FONTS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js';
-import { TEMPLATES, buildTemplate } from './templates.js';
-import { auditFunnel, auditStep } from './audit.js';
-import { blueprintMarkdown, systemMap } from './blueprint.js';
-import { setupGuidePage } from './setup-guide.js';
-import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js';
-import { recommend } from './recommend.js';
-import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js';
-import { startTour } from './tour.js';
+import { SECTIONS, makeSection, uid, esc, lines } from './sections.js?v=56fc796f51';
+import { renderStepPage, renderGhlSnippet, FONTS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js?v=56fc796f51';
+import { TEMPLATES, buildTemplate } from './templates.js?v=56fc796f51';
+import { auditFunnel, auditStep } from './audit.js?v=56fc796f51';
+import { blueprintMarkdown, systemMap } from './blueprint.js?v=56fc796f51';
+import { setupGuidePage } from './setup-guide.js?v=56fc796f51';
+import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js?v=56fc796f51';
+import { recommend } from './recommend.js?v=56fc796f51';
+import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js?v=56fc796f51';
+import { startTour } from './tour.js?v=56fc796f51';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];

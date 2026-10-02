@@ -2,7 +2,7 @@
 // The builder chooses a provider (Claude inside claude.ai, or the visitor's own
 // API key when running locally); this module builds the prompt, validates the
 // answer and applies it. Pure functions apart from the provider calls.
-import { SECTIONS } from './sections.js';
+import { SECTIONS } from './sections.js?v=56fc796f51';
 
 // Fields that are links, codes or settings: never rewritten by AI.
 const SKIP = /link|url|webhook|redirect|embed|deadline|image|logoUrl|payLink|^bg$|^fields$/i;
