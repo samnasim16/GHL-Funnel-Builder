@@ -704,25 +704,80 @@ function updateScore() {
   b.className = `badge ${score >= 85 ? 'ok' : score >= 60 ? 'warn' : 'bad'}`;
   if (state.sel < 0 && state.view === 'pages' && !insp.contains(document.activeElement)) renderInspector();
 }
-const checkItem = (r) => `<li class="${r.pass ? 'pass' : 'fail'}"><span class="st">${r.pass ? '✓' : '!'}</span><div>${esc(r.label)}${r.pass ? '' : `<small>${esc(r.fix)}</small>`}</div></li>`;
+// Checklist items: failing ones are clickable and jump to the exact fix.
+let auditTargets = [];
+const checkItem = (r, stepIdx) => {
+  if (r.pass) return `<li class="pass"><span class="st">✓</span><div>${esc(r.label)}</div></li>`;
+  const k = auditTargets.push({ step: r.target?.step ?? stepIdx, target: r.target }) - 1;
+  return `<li class="fail jump" data-jump="${k}" tabindex="0" role="button" aria-label="${esc(r.label)}: fix this"><span class="st">!</span><div>${esc(r.label)}<small>${esc(r.fix)}</small></div><span class="fix-link">Fix this →</span></li>`;
+};
 function renderAudit() {
   const a = auditFunnel(state.funnel);
+  auditTargets = [];
+  const todo = a.funnelChecks.filter((c) => !c.pass).length + a.steps.reduce((n, s) => n + s.results.filter((r) => !r.pass).length, 0);
   $('#auditView').innerHTML = `<div class="doc">
     <h1>Ready to launch?</h1>
-    <p class="lead">Before you spend money on ads, check these. A score of 85 or more means you're good to go.</p>
-    <div class="score-ring" style="margin-top:18px;background:#fff"><div class="n" style="color:${scoreColor(a.score)};font-size:44px">${a.score}</div><div><b>${a.score >= 85 ? 'Ready to launch' : 'A few things to fix'}</b><br><span class="muted">Fix the items marked ! and the score goes up.</span></div></div>
+    <p class="lead">Before you spend money on ads, check these. Click any item marked <b>!</b> and you'll go straight to the spot to fix it.</p>
+    <div class="score-ring" style="margin-top:18px;background:#fff"><div class="n" style="color:${scoreColor(a.score)};font-size:44px">${a.score}</div><div><b>${a.score >= 85 ? 'Ready to launch' : `${todo} thing${todo === 1 ? '' : 's'} left to fix`}</b><br><span class="muted">85 or more means you're good to go.</span></div></div>
     <h2>Whole funnel</h2>
-    <div class="card"><ul class="checks">${a.funnelChecks.map(checkItem).join('')}</ul></div>
-    ${a.steps.map((s, i) => `<h2>Page ${i + 1}: ${esc(s.name)} <span style="color:${scoreColor(s.score)}">${s.score}</span> <button class="btn sec sm" data-goto="${i}" style="margin-left:8px">Open page</button></h2><div class="card"><ul class="checks">${s.results.map(checkItem).join('')}</ul></div>`).join('')}
+    <div class="card"><ul class="checks">${a.funnelChecks.map((c) => checkItem(c, 0)).join('')}</ul></div>
+    ${a.steps.map((s, i) => `<h2>Page ${i + 1}: ${esc(s.name)} <span style="color:${scoreColor(s.score)}">${s.score}</span> <button class="btn sec sm" data-goto="${i}" style="margin-left:8px">Open page</button></h2><div class="card"><ul class="checks">${s.results.map((r) => checkItem(r, i)).join('')}</ul></div>`).join('')}
   </div>`;
 }
-$('#auditView').addEventListener('click', (e) => {
+
+// Jump to the exact place a problem lives and put the cursor there.
+function flash(el) {
+  if (!el) return;
+  const box = el.closest('label') || el;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  box.classList.remove('flash');
+  void box.offsetWidth;
+  box.classList.add('flash');
+  setTimeout(() => el.focus({ preventScroll: true }), 350);
+}
+function goToFix(stepIdx, t = {}) {
+  if (t.view) return setView(t.view);
+  setView('pages');
+  state.step = Math.min(Math.max(0, stepIdx), state.funnel.steps.length - 1);
+  if (t.add) {
+    commit(() => {
+      curStep().sections.splice(t.at, 0, makeSection(t.add));
+      state.sel = t.at;
+    });
+    setTimeout(() => highlight(true), 350);
+    return toast(`${SECTIONS[t.add].name} added. Click its text to make it yours.`);
+  }
+  if (t.idx !== undefined && t.idx >= 0 && curStep().sections[t.idx]) {
+    state.sel = t.idx;
+    renderAll();
+    setTimeout(() => highlight(true), 300);
+    if (t.field) flash($(`#inspector [data-f="${t.field}"]`) || $(`#inspector [data-list="${t.field}"] input, #inspector [data-list="${t.field}"] textarea`) || $(`#inspector [data-list="${t.field}"]`));
+    return;
+  }
+  // Page or funnel settings live in the panel shown when nothing is selected.
+  state.sel = -1;
+  renderAll();
+  const panel = t.funnel ? $('#funnelForm') : $('#pageForm');
+  panel?.closest('details')?.setAttribute('open', '');
+  const sel = t.funnel ? `[data-t="${t.funnel}"]` : t.page === 'title' ? '[data-seo="title"]' : `[data-s="${t.page || 'path'}"]`;
+  flash(panel?.querySelector(sel));
+}
+function onAuditJump(e) {
+  const li = e.target.closest('[data-jump]');
+  if (li) {
+    const j = auditTargets[+li.dataset.jump];
+    return goToFix(j.step, j.target || {});
+  }
   const g = e.target.dataset.goto;
   if (g === undefined) return;
   state.step = +g;
   state.sel = -1;
   setView('pages');
   renderAll();
+}
+$('#auditView').addEventListener('click', onAuditJump);
+$('#auditView').addEventListener('keydown', (e) => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('[data-jump]')) e.preventDefault(), onAuditJump(e);
 });
 
 // ---------- new funnel (goal picker) ----------

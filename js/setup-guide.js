@@ -184,7 +184,7 @@ export function setupGuideBody(funnel) {
       <p>Work top to bottom. Tick each box as you go; your progress is saved in this browser. This funnel uses ${used.length} GoHighLevel tools: ${used.map((t) => esc(t.name.toLowerCase())).join(', ')}.</p>
       <div class="bar"><div class="fill" id="fill"></div></div>
       <div class="bar-row"><span id="progress">0 done</span><span class="actions">${copyBtn(blueprintMarkdown(funnel), 'Copy whole guide as text')}<button class="cp ghost" type="button" id="reset">Clear ticks</button></span></div>
-      <nav class="toc">${parts.map((_, i) => `<a href="#s${i + 1}">${i + 1}</a>`).join('')}</nav>
+      <nav class="toc" aria-label="Jump to step">${parts.map((_, i) => `<a href="#s${i + 1}" data-step="s${i + 1}" title="Go to step ${i + 1}">${i + 1}</a>`).join('')}</nav>
     </header>
     ${parts.join('')}
   </div>`;
@@ -208,6 +208,11 @@ h1{margin:0;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.15;text-wrap:balanc
 .toc{display:flex;gap:6px;flex-wrap:wrap}
 .toc a{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;font-weight:700;font-size:13px}
 .toc a.done{background:var(--ok);border-color:var(--ok);color:#fff}
+.toc a:hover{border-color:var(--brand)}
+.step{scroll-margin-top:16px}
+.step.flash{animation:flash 1.4s ease-out}
+@keyframes flash{0%,30%{box-shadow:0 0 0 4px var(--brand)}100%{box-shadow:0 0 0 0 transparent}}
+@media(prefers-reduced-motion:reduce){.step.flash{animation:none}}
 .step{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .step>header{display:flex;gap:14px;align-items:flex-start;padding:18px;border-bottom:1px solid var(--line)}
 .step>header>div{flex:1;min-width:0}
@@ -269,6 +274,9 @@ export const guideScript = (key) => `
     });
   }
   boxes.forEach(function(b){var id=b.closest('.task').dataset.task;b.checked=!!saved[id];b.addEventListener('change',function(){saved[id]=b.checked;store();refresh();});});
+  // Jump links scroll in place. Plain #anchors would navigate the builder's
+  // embedded frame back to the builder itself.
+  document.querySelectorAll('.toc a').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.getElementById(a.getAttribute('data-step'));if(!t)return;t.scrollIntoView({behavior:'smooth',block:'start'});t.classList.remove('flash');void t.offsetWidth;t.classList.add('flash');});});
   document.getElementById('reset').addEventListener('click',function(){saved={};store();boxes.forEach(function(b){b.checked=false;});refresh();});
   function fallbackCopy(text){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();return ok;}
   document.addEventListener('click',function(e){

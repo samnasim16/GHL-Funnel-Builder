@@ -77,3 +77,24 @@ test('quick fill drops the brief into obvious places without inventing results',
   assert.match(all, /For busy dads/);
   assert.equal(f.steps[2].sections.find((s) => s.type === 'checkout').props.price, '$497');
 });
+
+test('every failing checklist item has a target that points at something real', async () => {
+  const { auditFunnel } = await import('../js/audit.js');
+  for (const t of TEMPLATES) {
+    const f = buildTemplate(t.id);
+    const a = auditFunnel(f);
+    a.steps.forEach((s, si) =>
+      s.results.filter((r) => !r.pass).forEach((r) => {
+        const tg = r.target;
+        assert.ok(tg, `${t.id}/${r.id} has a target`);
+        if (tg.idx !== undefined) {
+          const sec = f.steps[si].sections[tg.idx];
+          assert.ok(sec, `${t.id}/${r.id} idx`);
+          if (tg.field) assert.ok(tg.field in SECTIONS[sec.type].fields, `${t.id}/${r.id} field ${tg.field}`);
+        } else if (tg.add) assert.ok(SECTIONS[tg.add]);
+        else assert.ok(tg.page);
+      })
+    );
+    a.funnelChecks.filter((c) => !c.pass).forEach((c) => assert.ok(c.target, c.label));
+  }
+});

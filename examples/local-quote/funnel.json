@@ -23,7 +23,7 @@
       "path": "/free-quote",
       "sections": [
         {
-          "id": "smuqi3zzd1pidh2",
+          "id": "smuqiupk31p0uxk",
           "type": "header",
           "props": {
             "logo": "[CLIENT BRAND]",
@@ -33,7 +33,7 @@
           }
         },
         {
-          "id": "smuqi3zzd1qzbmg",
+          "id": "smuqiupk31q6c5w",
           "type": "hero",
           "props": {
             "eyebrow": "Serving [City] & surrounding areas",
@@ -49,7 +49,7 @@
           }
         },
         {
-          "id": "smuqi3zzd1rqvgl",
+          "id": "smuqiupk31rw7no",
           "type": "form",
           "props": {
             "headline": "Tell Us About Your Project",
@@ -64,7 +64,7 @@
           }
         },
         {
-          "id": "smuqi3zzd1sbzzj",
+          "id": "smuqiupk31sw5od",
           "type": "testimonials",
           "props": {
             "headline": "Your Neighbors Love Us",
@@ -73,7 +73,7 @@
           }
         },
         {
-          "id": "smuqi3zzd1t8475",
+          "id": "smuqiupk31tqdqc",
           "type": "footer",
           "props": {
             "text": "© 2026 [Client Brand]. All rights reserved.",
@@ -88,7 +88,7 @@
       "path": "/free-quote-thanks",
       "sections": [
         {
-          "id": "smuqi3zzd1ul3wj",
+          "id": "smuqiupk31urjhz",
           "type": "thankyou",
           "props": {
             "headline": "Got It! We'll Text You In The Next 5 Minutes",
@@ -98,7 +98,7 @@
           }
         },
         {
-          "id": "smuqi3zzd1v7ign",
+          "id": "smuqiupk31vgipq",
           "type": "footer",
           "props": {
             "text": "© 2026 [Client Brand]. All rights reserved.",
