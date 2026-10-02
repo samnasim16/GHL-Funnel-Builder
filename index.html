@@ -4,10 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FunnelForge for GHL</title>
+<meta name="build" content="1898ac068b">
+<script>
+// After an update, browsers can keep showing the old page for ~10 minutes.
+// Ask the server (never the cache) which build is live and reload once if newer.
+(function () {
+  var here = document.querySelector('meta[name=build]').content;
+  fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+    if (!j || !j.v || j.v === here) return;
+    try { if (sessionStorage.getItem('ff-reloaded') === j.v) return; sessionStorage.setItem('ff-reloaded', j.v); } catch (e) {}
+    location.reload();
+  }).catch(function () {});
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=f5a5c58fd9">
+<link rel="stylesheet" href="css/app.css?v=1898ac068b">
 </head>
 <body>
 <header class="top">
@@ -160,6 +173,6 @@
 
 <input type="file" id="importFile" accept=".json,application/json" hidden>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="js/app.js?v=f5a5c58fd9"></script>
+<script type="module" src="js/app.js?v=1898ac068b"></script>
 </body>
 </html>

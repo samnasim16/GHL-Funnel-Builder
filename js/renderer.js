@@ -1,6 +1,6 @@
 // Turns a funnel step into a complete, standalone HTML page that can be pasted
 // into a GoHighLevel "Custom Code" element or hosted anywhere.
-import { SECTIONS, esc } from './sections.js?v=f5a5c58fd9';
+import { SECTIONS, esc } from './sections.js?v=1898ac068b';
 
 // Curated Google Fonts, grouped so the picker can filter by feel.
 export const FONT_META = {

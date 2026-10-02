@@ -11,7 +11,9 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const strip = (s) => s.replace(/\?v=[0-9a-f]+/g, '');
 const jsFiles = readdirSync(join(root, 'js')).filter((f) => f.endsWith('.js')).map((f) => join(root, 'js', f));
 const hash = createHash('sha1');
-for (const f of [...jsFiles, join(root, 'css', 'app.css')].sort()) hash.update(strip(readFileSync(f, 'utf8')));
+const idx = join(root, 'index.html');
+const unstamp = (s) => strip(s).replace(/<meta name="build" content="[0-9a-f]+">/, '');
+for (const f of [...jsFiles, join(root, 'css', 'app.css'), idx].sort()) hash.update(unstamp(readFileSync(f, 'utf8')));
 const v = hash.digest('hex').slice(0, 10);
 
 for (const f of jsFiles) {
@@ -19,9 +21,11 @@ for (const f of jsFiles) {
   const out = src.replace(/(from\s+'\.\/[\w-]+\.js)(\?v=[0-9a-f]+)?'/g, `$1?v=${v}'`);
   if (out !== src) writeFileSync(f, out);
 }
-const idx = join(root, 'index.html');
 const html = readFileSync(idx, 'utf8')
   .replace(/href="css\/app\.css(\?v=[0-9a-f]+)?"/, `href="css/app.css?v=${v}"`)
-  .replace(/src="js\/app\.js(\?v=[0-9a-f]+)?"/, `src="js/app.js?v=${v}"`);
+  .replace(/src="js\/app\.js(\?v=[0-9a-f]+)?"/, `src="js/app.js?v=${v}"`)
+  .replace(/<meta name="build" content="[0-9a-f]+">/, `<meta name="build" content="${v}">`);
 writeFileSync(idx, html);
+// The page compares its build with this file (fetched uncached) and reloads if older.
+writeFileSync(join(root, 'version.json'), JSON.stringify({ v }) + '\n');
 console.log(`Stamped version ${v}`);

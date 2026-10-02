@@ -1,9 +1,9 @@
 // "Ask AI to edit": chat-driven edits to any part of the funnel. The AI (or the
 // built-in command parser when no AI is available) returns a list of edit
 // operations; applyOps validates every one before changing anything.
-import { SECTIONS, makeSection } from './sections.js?v=f5a5c58fd9';
-import { LOOKS, PALETTES, paletteFromColor } from './styles.js?v=f5a5c58fd9';
-import { FONTS } from './renderer.js?v=f5a5c58fd9';
+import { SECTIONS, makeSection } from './sections.js?v=1898ac068b';
+import { LOOKS, PALETTES, paletteFromColor } from './styles.js?v=1898ac068b';
+import { FONTS } from './renderer.js?v=1898ac068b';
 
 const TEXT_SKIP = /link|url|webhook|redirect|embed|deadline|image|payLink|^bg$|^fields$|images/i;
 const THEME_KEYS = {
