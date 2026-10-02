@@ -1,0 +1,494 @@
+{
+  "templateId": "email-sms-audit",
+  "name": "BAD | Free Email & SMS Audit",
+  "theme": {
+    "primary": "#e11d2e",
+    "accent": "#ffd400",
+    "dark": "#0b0b0f",
+    "bg": "#ffffff",
+    "alt": "#f4f4f6",
+    "text": "#16161d",
+    "headingFont": "Montserrat",
+    "bodyFont": "Inter",
+    "radius": 10,
+    "maxWidth": 1080
+  },
+  "tracking": {
+    "metaPixel": "",
+    "domain": "go.badmarketing.com"
+  },
+  "steps": [
+    {
+      "name": "Opt-in",
+      "path": "/email-sms-audit",
+      "seo": {
+        "title": "Free Email & SMS Audit | BAD Marketing",
+        "description": "Find the revenue your list is leaving on the table."
+      },
+      "sections": [
+        {
+          "id": "smuqg2ye113ud5",
+          "type": "announcement",
+          "props": {
+            "text": "🔥 We only run 10 free audits per week.",
+            "deadline": ""
+          }
+        },
+        {
+          "id": "smuqg2ye12w71g",
+          "type": "header",
+          "props": {
+            "logo": "BAD MARKETING",
+            "logoUrl": "",
+            "cta": "Claim My Audit",
+            "ctaLink": "#form"
+          }
+        },
+        {
+          "id": "smuqg2ye1388qy",
+          "type": "hero",
+          "props": {
+            "eyebrow": "For Shopify brands doing $100k+/month",
+            "headline": "Your Email List Is Sitting On Money. Let's Go Get It.",
+            "highlight": "Sitting On Money",
+            "sub": "Get a free, no-fluff Email & SMS teardown from the team behind brands doing $1B+ a year. We'll show you exactly which flows, segments and campaigns are leaking revenue.",
+            "bullets": "Flow-by-flow revenue gap analysis\nSegmentation & deliverability check\nSMS opportunity estimate in dollars\nA 30-day action plan you keep either way",
+            "cta": "Get My Free Audit →",
+            "ctaLink": "#form",
+            "note": "100% free. Takes 60 seconds to apply.",
+            "image": "",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2ye14monm",
+          "type": "logos",
+          "props": {
+            "title": "Trusted by 8 & 9-figure brands",
+            "items": "[Client Logo 1]\n[Client Logo 2]\n[Client Logo 3]\n[Client Logo 4]\n[Client Logo 5]",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2ye15bm9q",
+          "type": "caseStudies",
+          "props": {
+            "headline": "Real Retention Wins",
+            "items": "+58.9% | Email revenue | Flow rebuild + segmentation overhaul\n+47.78% | SMS revenue | New welcome, browse & winback SMS\n+20% | Email revenue | Campaign calendar + creative refresh",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2ye168iwe",
+          "type": "problem",
+          "props": {
+            "headline": "If Email Is Under 30% Of Your Revenue, Something's Broken",
+            "body": "Here's what we find in almost every account we audit:",
+            "items": "Welcome flow is 3 emails when it should be 9\nAbandoned cart hasn't been touched since launch\nEveryone gets the same campaign, every time\nSMS is either missing or blasting discounts",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2ye1707vx",
+          "type": "offer",
+          "props": {
+            "headline": "What's Inside Your Free Audit",
+            "items": "Full Klaviyo / Attentive / Postscript account teardown | $1,500\nFlow revenue gap model (in dollars) | $750\nDeliverability & list health report | $500\n30-day retention action plan | $750",
+            "totalLabel": "Total value",
+            "price": "FREE",
+            "cta": "Claim My Free Audit",
+            "ctaLink": "#form",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2ye18z0ye",
+          "type": "form",
+          "props": {
+            "headline": "Where Should We Send Your Audit?",
+            "sub": "Step 1 of 2. Next you'll pick a time to walk through it live.",
+            "fields": "First name | text | first_name\nWork email | email | email\nMobile phone | phone | phone\nStore URL | text | website\nMonthly revenue | select | monthly_revenue | Under $50k, $50k–$100k, $100k–$500k, $500k–$1M, $1M+\nEmail/SMS platform | select | esp | Klaviyo, Attentive, Postscript, Omnisend, Other / None",
+            "button": "Continue To Step 2 →",
+            "webhook": "",
+            "redirect": "",
+            "ghlEmbed": "",
+            "consent": "By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg & data rates may apply. Reply STOP to opt out.",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2ye190b5b",
+          "type": "faq",
+          "props": {
+            "headline": "Frequently Asked Questions",
+            "items": "Is it really free? | Yes. We do it because a good audit is the best sales pitch there is.\nWho does the audit? | A senior retention strategist, not a bot or an intern.\nDo you need access to my account? | View-only access gives a deeper audit, but we can start from your public flows.\nWhat if I already have an agency? | Great. Use the audit to hold them accountable.",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2ye1ae1wp",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Book Call",
+      "path": "/email-sms-audit-book",
+      "seo": {
+        "title": "Book Your Audit Walkthrough | BAD Marketing"
+      },
+      "sections": [
+        {
+          "id": "smuqg2ye1bui2t",
+          "type": "announcement",
+          "props": {
+            "text": "⚠️ Almost done: your audit isn't scheduled yet.",
+            "deadline": ""
+          }
+        },
+        {
+          "id": "smuqg2ye1cyo9a",
+          "type": "calendar",
+          "props": {
+            "headline": "Step 2: Pick A Time To Walk Through Your Audit",
+            "sub": "Calls are 30 minutes on Zoom. We'll have your audit ready.",
+            "url": "",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2ye1duyis",
+          "type": "steps",
+          "props": {
+            "headline": "What Happens On The Call",
+            "items": "We review your audit | Every gap, ranked by dollar impact.\nWe build your plan | Quick wins this week, bigger plays this quarter.\nYou decide | Run it in-house or have us run it. Zero pressure.",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2ye1e79wy",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Confirmed",
+      "path": "/email-sms-audit-confirmed",
+      "seo": {
+        "title": "You're Booked! | BAD Marketing"
+      },
+      "sections": [
+        {
+          "id": "smuqg2ye1fncjn",
+          "type": "thankyou",
+          "props": {
+            "headline": "You're Booked! Your Audit Is Underway.",
+            "sub": "Confirmation is on its way to your inbox and phone.",
+            "items": "Reply \"YES\" to our text to lock in your spot\nAdd the call to your calendar\nShare view-only Klaviyo access (link in email) for a deeper audit\nShow up with your top 3 retention questions",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2ye1gpv9k",
+          "type": "video",
+          "props": {
+            "headline": "Watch This Before Our Call (3 min)",
+            "url": "",
+            "caption": "",
+            "cta": "",
+            "ctaLink": "#form",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2ye1h476z",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 BAD Marketing. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    }
+  ],
+  "blueprint": {
+    "pipeline": {
+      "name": "Retention | Email & SMS Audit",
+      "stages": [
+        "New Lead",
+        "Application Submitted",
+        "Call Booked",
+        "Showed",
+        "No Show",
+        "Proposal Sent",
+        "Closed Won",
+        "Closed Lost",
+        "Nurture"
+      ]
+    },
+    "tags": [
+      "lead-email-sms-audit",
+      "source-funnel",
+      "qualified",
+      "email-sms-audit-unqualified",
+      "nurture-long-term"
+    ],
+    "customFields": [
+      {
+        "name": "Website",
+        "key": "website",
+        "type": "Text"
+      },
+      {
+        "name": "Monthly Revenue",
+        "key": "monthly_revenue",
+        "type": "Dropdown (single)"
+      },
+      {
+        "name": "UTM Source",
+        "key": "utm_source",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Campaign",
+        "key": "utm_campaign",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Content (ad)",
+        "key": "utm_content",
+        "type": "Text"
+      },
+      {
+        "name": "Funnel Step",
+        "key": "funnel_step",
+        "type": "Text"
+      },
+      {
+        "name": "ESP Platform",
+        "key": "esp",
+        "type": "Dropdown (single)"
+      }
+    ],
+    "customValues": [
+      {
+        "name": "Booking Link",
+        "key": "booking_link",
+        "value": "https://go.badmarketing.com/email-sms-audit-book"
+      }
+    ],
+    "calendars": [
+      {
+        "name": "Email & SMS Audit Walkthrough",
+        "type": "Round Robin",
+        "duration": "30 min",
+        "notes": "Buffer 15m, 24h min notice, max 6/day per strategist"
+      }
+    ],
+    "workflows": [
+      {
+        "name": "01 | Email & SMS Audit Opt-in → Speed To Lead",
+        "trigger": "Inbound Webhook (funnel form) OR Form Submitted: \"Email & SMS Audit Opt-in\"",
+        "goal": "First touch in under 60 seconds; a booked call before the lead goes cold.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Create/Update Contact",
+            "detail": "Map first_name, email, phone, website, monthly_revenue + all utm_* fields to contact & custom fields."
+          },
+          {
+            "delay": "0m",
+            "type": "Add Tag",
+            "detail": "lead-email-sms-audit"
+          },
+          {
+            "delay": "0m",
+            "type": "Create/Update Opportunity",
+            "detail": "Retention | Email & SMS Audit → \"New Lead\" (source = utm_source)"
+          },
+          {
+            "delay": "0m",
+            "type": "Assign To User",
+            "detail": "Round robin: Sales team"
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, it's {{user.first_name}} from BAD Marketing. Got your request! Grab a time on my calendar here so we can dig into your numbers: {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "0m",
+            "type": "Internal Notification",
+            "detail": "SMS + Slack to assigned rep: \"🔥 New {{contact.monthly_revenue}} lead: {{contact.name}} {{contact.phone}}\""
+          },
+          {
+            "delay": "2m",
+            "type": "If/Else",
+            "detail": "If appointment booked → end. Else → Call contact (rep whisper: \"New funnel lead, press 1 to connect\")."
+          }
+        ]
+      },
+      {
+        "name": "05 | Qualification Router",
+        "trigger": "Contact Changed: monthly_revenue",
+        "goal": "Protect strategist time. Senior team only talks to qualified brands.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "If/Else",
+            "detail": "monthly_revenue is \"Under $50k\" → Unqualified branch, else → Qualified branch"
+          },
+          {
+            "delay": "0m",
+            "type": "Qualified branch",
+            "detail": "Add tag qualified, assign to senior strategist, keep in booking flow."
+          },
+          {
+            "delay": "0m",
+            "type": "Unqualified branch",
+            "detail": "Add tag email-sms-audit-unqualified, send \"growth resources\" email, enroll in 30-day nurture, skip sales calls."
+          }
+        ]
+      },
+      {
+        "name": "04 | Abandoned Application",
+        "trigger": "Tag Added: \"lead-email-sms-audit\" (with wait-for-appointment condition)",
+        "goal": "Recover leads who opted in but never booked.",
+        "actions": [
+          {
+            "delay": "Wait 15m",
+            "type": "Condition",
+            "detail": "If appointment booked → exit."
+          },
+          {
+            "delay": "15m",
+            "type": "Send SMS",
+            "detail": "Saw you started your application but didn't pick a time. Here's the link again: {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "1h",
+            "type": "Send Email",
+            "detail": "Subject: \"Your audit is half done\". Social proof + calendar link."
+          },
+          {
+            "delay": "1d",
+            "type": "Send SMS",
+            "detail": "Quick q: is there anything stopping you from booking? Happy to answer here."
+          },
+          {
+            "delay": "3d",
+            "type": "Update Opportunity",
+            "detail": "Retention | Email & SMS Audit → \"Nurture\"; add to long-term newsletter."
+          }
+        ]
+      },
+      {
+        "name": "02 | Email & SMS Audit Walkthrough → Show-Up Machine",
+        "trigger": "Customer Booked Appointment (Calendar: \"Email & SMS Audit Walkthrough\")",
+        "goal": "Show rate 75%+. Every reminder gives them a reason to show, not just a time.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Update Opportunity",
+            "detail": "Retention | Email & SMS Audit → \"Call Booked\""
+          },
+          {
+            "delay": "0m",
+            "type": "Remove From Workflow",
+            "detail": "Abandoned Application + Speed To Lead"
+          },
+          {
+            "delay": "0m",
+            "type": "Send Email",
+            "detail": "Subject: \"You're confirmed, {{contact.first_name}} (read before our call)\". Include 3-min prep video + what to have ready."
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "You're locked in for {{appointment.start_time}}. Reply YES to confirm so we keep your spot 👊"
+          },
+          {
+            "delay": "24h before",
+            "type": "Send SMS + Email",
+            "detail": "Tomorrow at {{appointment.only_start_time}}: here's the agenda + one quick question so we can prep your audit."
+          },
+          {
+            "delay": "2h before",
+            "type": "Send SMS",
+            "detail": "Heads up, we're on in 2 hours. Meeting link: {{appointment.meeting_location}}"
+          },
+          {
+            "delay": "10m before",
+            "type": "Send SMS",
+            "detail": "Hopping on in 10 minutes! {{appointment.meeting_location}}"
+          }
+        ]
+      },
+      {
+        "name": "03 | Email & SMS Audit Walkthrough → No-Show Recovery",
+        "trigger": "Appointment Status changed to \"No Show\"",
+        "goal": "Rebook 30-40% of no-shows within 72 hours.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Update Opportunity",
+            "detail": "Retention | Email & SMS Audit → \"No Show\""
+          },
+          {
+            "delay": "5m",
+            "type": "Send SMS",
+            "detail": "Hey {{contact.first_name}}, looks like we missed each other. All good, life happens. Want to grab another time? {{custom_values.booking_link}}"
+          },
+          {
+            "delay": "1d",
+            "type": "Send Email",
+            "detail": "Subject: \"Still want that audit?\" with a case study + reschedule button."
+          },
+          {
+            "delay": "3d",
+            "type": "Send SMS",
+            "detail": "Last nudge from me. Should I close out your file or keep your audit open?"
+          },
+          {
+            "delay": "3d",
+            "type": "If/Else",
+            "detail": "No reply → Opportunity \"Lost: No Show\", add tag nurture-long-term."
+          }
+        ]
+      }
+    ],
+    "kpis": [
+      {
+        "metric": "Opt-in rate (page → step 1 submit)",
+        "target": "25–40%"
+      },
+      {
+        "metric": "Book rate (opt-in → booked)",
+        "target": "45%+"
+      },
+      {
+        "metric": "Show rate",
+        "target": "75%+"
+      },
+      {
+        "metric": "Speed to lead",
+        "target": "< 60 seconds"
+      },
+      {
+        "metric": "Cost per booked call",
+        "target": "Track by utm_content (ad level)"
+      }
+    ]
+  }
+}

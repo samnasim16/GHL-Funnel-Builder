@@ -1,0 +1,341 @@
+{
+  "templateId": "webinar",
+  "name": "Client | Free Masterclass Funnel",
+  "theme": {
+    "primary": "#6d28d9",
+    "accent": "#facc15",
+    "dark": "#140b2e",
+    "bg": "#ffffff",
+    "alt": "#f4f4f6",
+    "text": "#16161d",
+    "headingFont": "Archivo Black",
+    "bodyFont": "DM Sans",
+    "radius": 10,
+    "maxWidth": 1080
+  },
+  "tracking": {
+    "metaPixel": "",
+    "domain": "join.clientbrand.com"
+  },
+  "steps": [
+    {
+      "name": "Registration",
+      "path": "/masterclass",
+      "seo": {
+        "title": "Free Masterclass"
+      },
+      "sections": [
+        {
+          "id": "smuqg2yeo18isl3",
+          "type": "announcement",
+          "props": {
+            "text": "LIVE training starts in",
+            "deadline": "2026-10-15 19:00"
+          }
+        },
+        {
+          "id": "smuqg2yeo191imr",
+          "type": "hero",
+          "props": {
+            "eyebrow": "Free live masterclass",
+            "headline": "How To Build A 6-Figure Coaching Offer In 90 Days (Without A Big Audience)",
+            "highlight": "6-Figure",
+            "sub": "Join [Creator Name] live and steal the exact 3-step framework behind [X] client launches.",
+            "bullets": "The offer framework that sells without discounts\nHow to get your first 10 clients from a small audience\nThe one-page funnel that books calls on autopilot",
+            "cta": "Save My Free Seat",
+            "ctaLink": "#form",
+            "note": "Seats are limited to 500 live attendees.",
+            "image": "",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yeo1aqryz",
+          "type": "form",
+          "props": {
+            "headline": "Reserve Your Seat",
+            "sub": "",
+            "fields": "First name | text | first_name\nEmail | email | email\nPhone (for a text reminder) | phone | phone",
+            "button": "Register Now →",
+            "webhook": "",
+            "redirect": "",
+            "ghlEmbed": "",
+            "consent": "By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg & data rates may apply. Reply STOP to opt out.",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yeo1b3cjq",
+          "type": "text",
+          "props": {
+            "headline": "Who Is [Creator Name]?",
+            "body": "Write a 2–3 paragraph origin story here: the struggle, the breakthrough, and the results since.\n\nEnd with why they're teaching this for free.",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yeo1cr8jw",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 Client Brand. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Confirmation",
+      "path": "/masterclass-confirmed",
+      "sections": [
+        {
+          "id": "smuqg2yeo1dbdk7",
+          "type": "thankyou",
+          "props": {
+            "headline": "You're Registered! 🎉",
+            "sub": "Do these 3 things so you don't miss it:",
+            "items": "Add the training to your calendar\nText \"IN\" to the number that just messaged you\nJoin the private community for bonus material",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yeo1eja0x",
+          "type": "video",
+          "props": {
+            "headline": "Watch This Quick Message From [Creator Name]",
+            "url": "",
+            "caption": "",
+            "cta": "",
+            "ctaLink": "#form",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yeo1fk8vo",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 Client Brand. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Replay + Offer",
+      "path": "/masterclass-replay",
+      "sections": [
+        {
+          "id": "smuqg2yeo1g4lcr",
+          "type": "announcement",
+          "props": {
+            "text": "Replay comes down in",
+            "deadline": "2026-10-18 23:59"
+          }
+        },
+        {
+          "id": "smuqg2yeo1hlhju",
+          "type": "video",
+          "props": {
+            "headline": "Masterclass Replay",
+            "url": "",
+            "caption": "",
+            "cta": "Join The Program →",
+            "ctaLink": "#offer",
+            "bg": "dark"
+          }
+        },
+        {
+          "id": "smuqg2yeo1itiub",
+          "type": "offer",
+          "props": {
+            "headline": "Join The 90-Day Accelerator",
+            "items": "12-week core program | $2,997\nWeekly live coaching calls | $1,997\nDone-for-you funnel templates | $997\nPrivate community | $497",
+            "totalLabel": "Total value",
+            "price": "$997",
+            "cta": "Enroll Now",
+            "ctaLink": "#",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yeo1jbqyj",
+          "type": "guarantee",
+          "props": {
+            "headline": "30-Day Action Guarantee",
+            "body": "Do the work for 30 days. If you don't have a sellable offer, we'll refund every penny.",
+            "bg": "default"
+          }
+        },
+        {
+          "id": "smuqg2yeo1kapgd",
+          "type": "faq",
+          "props": {
+            "headline": "Frequently Asked Questions",
+            "items": "Is the call really free? | Yes. It's a working session, not a pitch deck.\nWho is this for? | Brands with product-market fit that want to scale profitably.\nWhat do I need to prepare? | Ad account and store access help, but aren't required.",
+            "bg": "alt"
+          }
+        },
+        {
+          "id": "smuqg2yeo1ljmqj",
+          "type": "footer",
+          "props": {
+            "text": "© 2026 Client Brand. All rights reserved.",
+            "links": "Privacy Policy | /privacy\nTerms of Service | /terms",
+            "disclaimer": "Results vary. Case studies reflect specific clients and are not a guarantee of future performance. This site is not part of or endorsed by Meta, Google or TikTok."
+          }
+        }
+      ]
+    }
+  ],
+  "blueprint": {
+    "pipeline": {
+      "name": "Masterclass | Launch",
+      "stages": [
+        "Registered",
+        "Attended Live",
+        "Watched Replay",
+        "Clicked Offer",
+        "Purchased",
+        "Booked Call",
+        "Not Interested"
+      ]
+    },
+    "tags": [
+      "webinar-registered",
+      "webinar-attended",
+      "webinar-noshow",
+      "offer-clicked",
+      "customer-accelerator"
+    ],
+    "customFields": [
+      {
+        "name": "UTM Source",
+        "key": "utm_source",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Campaign",
+        "key": "utm_campaign",
+        "type": "Text"
+      },
+      {
+        "name": "UTM Content (ad)",
+        "key": "utm_content",
+        "type": "Text"
+      },
+      {
+        "name": "Funnel Step",
+        "key": "funnel_step",
+        "type": "Text"
+      },
+      {
+        "name": "Webinar Date",
+        "key": "webinar_date",
+        "type": "Date"
+      }
+    ],
+    "customValues": [
+      {
+        "name": "Webinar Link",
+        "key": "webinar_link",
+        "value": "https://zoom.us/j/..."
+      },
+      {
+        "name": "Replay Link",
+        "key": "replay_link",
+        "value": "https://join.clientbrand.com/masterclass-replay"
+      }
+    ],
+    "calendars": [],
+    "workflows": [
+      {
+        "name": "01 | Registration → Indoctrination",
+        "trigger": "Form Submitted: Masterclass Registration",
+        "goal": "60%+ live attendance from registrants.",
+        "actions": [
+          {
+            "delay": "0m",
+            "type": "Add Tag",
+            "detail": "webinar-registered"
+          },
+          {
+            "delay": "0m",
+            "type": "Send Email",
+            "detail": "Confirmation + calendar file + \"what you'll learn\""
+          },
+          {
+            "delay": "0m",
+            "type": "Send SMS",
+            "detail": "You're in, {{contact.first_name}}! Text IN so I know you'll be there."
+          },
+          {
+            "delay": "Daily until event",
+            "type": "Send Email",
+            "detail": "Value emails: story, case study, framework teaser."
+          },
+          {
+            "delay": "1h before",
+            "type": "Send SMS + Email",
+            "detail": "Starting in 1 hour: {{custom_values.webinar_link}}"
+          },
+          {
+            "delay": "5m after start",
+            "type": "Send SMS",
+            "detail": "We're LIVE! Jump in: {{custom_values.webinar_link}}"
+          }
+        ]
+      },
+      {
+        "name": "02 | Replay + Cart Close Sequence",
+        "trigger": "Event end (date-based) → branch on attended / no-show tag",
+        "goal": "Convert 3–8% of registrants to buyers.",
+        "actions": [
+          {
+            "delay": "+1h",
+            "type": "Send Email",
+            "detail": "Attended: \"Here's the offer link + bonuses\". No-show: \"You missed it, replay is up for 72h\"."
+          },
+          {
+            "delay": "+24h",
+            "type": "Send SMS",
+            "detail": "Replay link: {{custom_values.replay_link}}"
+          },
+          {
+            "delay": "+48h",
+            "type": "Send Email",
+            "detail": "Case study + FAQ objection handling."
+          },
+          {
+            "delay": "+70h",
+            "type": "Send SMS + Email",
+            "detail": "2 hours left before the replay and bonuses disappear."
+          },
+          {
+            "delay": "On purchase",
+            "type": "Remove From Workflow",
+            "detail": "Tag customer-accelerator, start onboarding workflow."
+          }
+        ]
+      }
+    ],
+    "kpis": [
+      {
+        "metric": "Registration rate",
+        "target": "30–50%"
+      },
+      {
+        "metric": "Live show-up rate",
+        "target": "25–40%"
+      },
+      {
+        "metric": "Registrant → buyer",
+        "target": "3–8%"
+      },
+      {
+        "metric": "Cost per registrant",
+        "target": "< $10 (vertical dependent)"
+      }
+    ]
+  }
+}
