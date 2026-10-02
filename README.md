@@ -4,6 +4,11 @@ A funnel builder that ships the **whole funnel**: the pages plus the GoHighLevel
 
 It was built as a working demo for **BAD Marketing**. The templates are the funnels BAD would run for its own service lines (Email & SMS, Paid Ads, Amazon) and the funnels it builds for clients (info-product webinars, local lead gen).
 
+## Live site
+
+Every push to `main` publishes the builder, pitch page and examples to GitHub Pages:
+**https://samnasim16.github.io/GHL-Funnel-Builder/** (one-time setup: repo **Settings → Pages → Source: GitHub Actions**).
+
 ## Quick start
 
 ```bash
