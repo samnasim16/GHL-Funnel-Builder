@@ -4,6 +4,7 @@ import { TEMPLATES, buildTemplate } from './templates.js';
 import { auditFunnel, auditStep } from './audit.js';
 import { blueprintMarkdown, systemMap } from './blueprint.js';
 import { setupGuidePage } from './setup-guide.js';
+import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -595,7 +596,7 @@ function renderBlueprint() {
     <p class="lead">After someone fills in your form, GoHighLevel does these things for you. Nobody has to remember to follow up.</p>
     ${wfs.length ? `<div class="story">${wfs.map((w) => { const s = storyFor(w); return `<div class="card"><span class="em">${s.em}</span><div><b>${esc(s.title)}</b><p>${esc(s.text)}</p></div></div>`; }).join('')}</div>` : '<p class="muted">No automations yet.</p>'}
     ${b.pipeline ? `<h2>Where your leads move</h2><p class="lead" style="margin-bottom:12px">GoHighLevel shows every lead on a board. They move along as they book, show up and buy.</p><div class="pipeline">${b.pipeline.stages.map((s, i) => `${i ? '<span class="arr">→</span>' : ''}<div class="stage">${esc(s)}</div>`).join('')}</div>` : ''}
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px"><button class="btn" data-bp="guide">Open the setup guide →</button><button class="btn sec" data-bp="copy">Copy it as text (for Notion or Google Docs)</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px"><button class="btn" data-bp="push">⚡ Push to GoHighLevel</button><button class="btn sec" data-bp="guide">Open the setup guide</button><button class="btn sec" data-bp="copy">Copy it as text (for Notion or Google Docs)</button></div>
     <details class="tech">
       <summary>Technical details for your GoHighLevel setup</summary>
       <p class="muted">The exact tags, fields, calendars and workflow steps to create. The setup guide above has all of this as a checklist.</p>
@@ -618,6 +619,7 @@ $('#blueprintView').addEventListener('click', (e) => {
   const a = e.target.dataset.bp;
   if (!a) return;
   if (a === 'guide') return setView('guide');
+  if (a === 'push') return openPush();
   if (a === 'copy') return copy(blueprintMarkdown(state.funnel), 'Setup guide copied');
   if (a === 'apply') {
     try {
@@ -708,7 +710,7 @@ function renderPublish() {
         <div class="page-rows">${f.steps.map((s, i) => `<div><span class="step-n">${i + 1}</span><b>${esc(s.name)}</b><code>${esc(s.path || '')}</code><button class="btn sm" data-copy="${i}">Copy code</button></div>`).join('')}</div></div></li>
       ${forms.length ? `<li><div><h3>Connect your form ${formOk ? '<span class="status ok">Done</span>' : '<span class="status bad">To do</span>'}</h3><p>So form answers go into GoHighLevel: <b>Automation</b> → <b>Workflows</b> → <b>Create Workflow</b> → trigger <b>Inbound Webhook</b>. Copy the link it gives you. Back here, click the form on your page and paste the link into "Where answers go".</p></div></li>` : ''}
       ${cals.length ? `<li><div><h3>Connect your calendar ${calOk ? '<span class="status ok">Done</span>' : '<span class="status bad">To do</span>'}</h3><p>In GoHighLevel: <b>Calendars</b> → your calendar → <b>Share</b> → copy the booking link. Back here, click the calendar on your page and paste it.</p></div></li>` : ''}
-      <li><div><h3>Turn on the automatic follow-ups</h3><p>The setup guide is a checklist of every field, tag, text, email and reminder to create, with a copy button on each one.</p><button class="btn sm" data-pub="guide">Open the setup guide →</button> <button class="btn sec sm" data-pub="auto">See them in plain English</button></div></li>
+      <li><div><h3>Turn on the automatic follow-ups</h3><p><b>Push to GoHighLevel</b> creates the tags, contact fields, saved values, products and calendars for you. The setup guide covers the rest (pipeline and automations), with a copy button on every message.</p><button class="btn sm" data-pub="push">⚡ Push to GoHighLevel</button> <button class="btn sec sm" data-pub="guide">Open the setup guide</button> <button class="btn sec sm" data-pub="auto">See them in plain English</button></div></li>
       <li><div><h3>Test it yourself</h3><p>Open your live page on your phone, fill in the form with your own details, and check that the text message arrives and you show up in GoHighLevel.</p></div></li>
       <li><div><h3>Save it as a Snapshot (reuse it for every client)</h3><p>In GoHighLevel's agency view: <b>Account Snapshots</b> → <b>Create New Snapshot</b>. A Snapshot packages the pages, fields, tags, pipeline, calendars and automations, so the next client's account is set up in one click.</p></div></li>
     </ol>
@@ -732,11 +734,83 @@ $('#publishDialog').addEventListener('click', (e) => {
   if (c !== undefined) return copy(renderGhlSnippet(f, +c), `Code for "${f.steps[+c].name}" copied. Paste it into a Custom Code element.`);
   const a = e.target.dataset.pub;
   if (a === 'guide') $('#publishDialog').close(), setView('guide');
+  if (a === 'push') $('#publishDialog').close(), openPush();
   if (a === 'auto') $('#publishDialog').close(), setView('blueprint');
   if (a === 'html') download(`${slug(curStep().path || curStep().name)}.html`, renderStepPage(f, state.step));
   if (a === 'allhtml') f.steps.forEach((st, i) => setTimeout(() => download(`${i + 1}-${slug(st.path || st.name)}.html`, renderStepPage(f, i)), i * 400));
   if (a === 'json') download(`${slug(f.name)}.funnel.json`, JSON.stringify(f, null, 2), 'application/json');
   if (a === 'import') $('#importFile').click();
+});
+
+// ---------- push to GoHighLevel ----------
+const STATUS_LABEL = { created: '✓ Created', exists: '• Already there', found: '✓ Found', manual: '→ By hand', failed: '✗ Failed' };
+function renderPushDialog() {
+  const { auto, manual } = planPush(state.funnel);
+  const li = (i) => `<li>${esc(i.area)}: <b>${esc(i.name)}</b>${i.note ? ` <small>(${esc(i.note)})</small>` : ''}</li>`;
+  $('#pushBody').innerHTML = `<div class="dlg-head"><div><div class="kicker">Shortcut</div><h2>Push to GoHighLevel</h2></div><button class="x" data-close aria-label="Close">✕</button></div>
+    <p class="muted">Creates part of the setup in your GoHighLevel account for you. It's safe to run twice: anything that already exists is skipped.</p>
+    <div class="push-cols">
+      <div class="card"><h3>✓ Created for you (${auto.length})</h3><ul>${auto.map(li).join('') || '<li class="muted">Nothing for this funnel</li>'}</ul></div>
+      <div class="card"><h3>→ Still done by hand (${manual.length})</h3><ul>${manual.map(li).join('')}</ul><p class="muted small" style="margin:8px 0 0">GoHighLevel's API can't create these. The setup guide walks you through them.</p></div>
+    </div>
+    <div class="push-form">
+      <label for="pushLoc">1. Your Location ID<input id="pushLoc" autocomplete="off" placeholder="e.g. ve9EPM428h8vShlRW1KT"><span class="help">In GoHighLevel: <b>Settings → Business Profile</b>. Or copy the part after <code>/location/</code> in your GoHighLevel web address.</span></label>
+      <label for="pushToken">2. A Private Integration token<input id="pushToken" type="password" autocomplete="off" placeholder="pit-…"><span class="help">In GoHighLevel: <b>Settings → Private Integrations → Create new integration</b>, tick these permissions, then copy the token. It's only used for this push and never saved.</span>
+        <span class="scopes">${REQUIRED_SCOPES.map((x) => `<code>${esc(x)}</code>`).join('')}</span>
+        <button type="button" class="btn sec sm" data-push="scopes" style="align-self:flex-start">Copy permission list</button></label>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"><button class="btn" data-push="go">Push now</button><button class="btn sec" data-push="guide">Open the setup guide instead</button></div>
+    <div id="pushOut"></div>`;
+}
+function pushFallback(locationId) {
+  const file = `${slug(state.funnel.name)}.funnel.json`;
+  const cmd = `GHL_TOKEN=paste-your-token node scripts/push-to-ghl.mjs ${file} --location ${locationId || 'YOUR_LOCATION_ID'}`;
+  return `<div class="fallback"><b>Your browser couldn't reach GoHighLevel from this page.</b>
+    <span>This is common: browsers often aren't allowed to call GoHighLevel directly, and the shared online version of FunnelForge blocks all outside connections. The command version does the same push from your computer in about a minute:</span>
+    <span>1. <button class="btn sec sm" data-push="file">Save the funnel file</button> into the FunnelForge folder.</span>
+    <span>2. Open a terminal in that folder and run (put your token in place of <code>paste-your-token</code>):</span>
+    <pre>${esc(cmd)}</pre><button class="btn sec sm" data-push="cmd" data-cmd="${esc(cmd)}" style="align-self:flex-start">Copy command</button>
+    <span class="muted small">Needs Node.js 18 or newer. Add <code>--dry-run</code> to preview without changing anything.</span></div>`;
+}
+let pushing = false;
+async function doPush() {
+  if (pushing) return;
+  const locationId = $('#pushLoc').value.trim();
+  const token = $('#pushToken').value.trim();
+  const out = $('#pushOut');
+  if (!locationId || !token) return toast('Add your Location ID and token first');
+  pushing = true;
+  out.innerHTML = '<ul class="results" id="pushResults"></ul>';
+  const row = (r) => `<li class="s-${r.status}"><span class="st">${STATUS_LABEL[r.status] || r.status}</span><span>${esc(r.area)}: <b>${esc(r.name)}</b>${r.detail ? `<small>${esc(r.detail)}</small>` : ''}</span></li>`;
+  try {
+    const results = await runPush({
+      funnel: state.funnel,
+      token,
+      locationId,
+      fetch: window.fetch.bind(window),
+      onProgress: (r) => $('#pushResults')?.insertAdjacentHTML('beforeend', row(r)),
+    });
+    const n = (st) => results.filter((r) => r.status === st).length;
+    if (results.some((r) => r.network)) out.insertAdjacentHTML('beforeend', pushFallback(locationId));
+    else out.insertAdjacentHTML('afterbegin', `<p><b>Done:</b> ${n('created')} created, ${n('exists') + n('found')} already there, ${n('failed')} failed, ${n('manual')} to do by hand in the setup guide.</p>`);
+  } catch (err) {
+    out.innerHTML = `<p class="status bad">${esc(err.message)}</p>`;
+  } finally {
+    pushing = false;
+    $('#pushToken').value = '';
+  }
+}
+function openPush() {
+  renderPushDialog();
+  $('#pushDialog').showModal();
+}
+$('#pushDialog').addEventListener('click', (e) => {
+  const a = e.target.closest('[data-push]')?.dataset.push;
+  if (a === 'go') doPush();
+  if (a === 'guide') $('#pushDialog').close(), setView('guide');
+  if (a === 'scopes') copy(REQUIRED_SCOPES.join('\n'), 'Permission list copied');
+  if (a === 'cmd') copy(e.target.dataset.cmd, 'Command copied');
+  if (a === 'file') download(`${slug(state.funnel.name)}.funnel.json`, JSON.stringify(state.funnel, null, 2), 'application/json');
 });
 
 // ---------- help ----------

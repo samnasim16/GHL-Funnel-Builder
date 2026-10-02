@@ -32,6 +32,7 @@ There are no dependencies and no build step: it's plain ES modules. Open `http:/
 | **GHL Blueprint** | For each funnel: pipeline stages, tags, custom fields (`{{contact.x}}`), custom values, calendars and full workflows (trigger → timed actions, with copy for the SMS/email messages), plus KPI targets. You can edit it as JSON. |
 | **Setup guide** | An interactive checklist for building the back end in GoHighLevel: a tick box on every task (progress is saved), a copy button on every name, key, tag and message, and the exact menu path for each step. It ends by saving everything as a GHL **Snapshot**, so the next client is one click. It can also be copied as text for Notion or Google Docs. |
 | **Launch Audit** | Scores every step on: CTA above the fold, single goal, social proof, unfilled placeholders, form wired to GHL, phone captured, SMS consent, form length, calendar/video set, SEO title, privacy footer, pixel. Each failed check comes with the fix. |
+| **Push to GoHighLevel** | Creates the tags, contact fields, saved values, products (with price) and calendars in a sub-account using a Private Integration token. It checks whether the pipeline exists, skips anything already there, and lists what stays manual (pipeline, workflows, pages), since GoHighLevel's API can't create those. If the browser can't reach GoHighLevel, it shows the command version: `GHL_TOKEN=... node scripts/push-to-ghl.mjs funnel.json --location <id>` (add `--dry-run` to preview). |
 | **Export** | *Copy GHL Custom Code* (paste into a full-width Custom Code element), standalone HTML per step or for all steps, live preview, and funnel JSON import/export. |
 
 ## Templates
@@ -64,6 +65,8 @@ js/templates.js       funnel templates + GHL blueprints
 js/audit.js           launch audit rules
 js/blueprint.js       system map + Markdown build sheet
 js/setup-guide.js     interactive setup guide (tick boxes, copy buttons)
+js/ghl-push.js        Push to GoHighLevel (API v2 calls, shared by builder and CLI)
+scripts/push-to-ghl.mjs  command-line push
 js/app.js             editor state, history, UI
 scripts/build-examples.mjs
 examples/             pre-rendered example funnels + setup guides
