@@ -124,6 +124,8 @@ function renderSteps() {
     )
     .join('');
 }
+let armedDelete = -1;
+let armedT;
 $('#stepList').addEventListener('click', (e) => {
   const li = e.target.closest('li');
   if (!li) return;
@@ -131,7 +133,14 @@ $('#stepList').addEventListener('click', (e) => {
   const act = e.target.dataset.act;
   if (act === 'del') {
     if (state.funnel.steps.length === 1) return toast('A funnel needs at least one step');
-    if (!confirm(`Delete step "${state.funnel.steps[i].name}"?`)) return;
+    // Two-click confirm: native confirm() is unavailable in sandboxed viewers.
+    if (armedDelete !== i) {
+      armedDelete = i;
+      clearTimeout(armedT);
+      armedT = setTimeout(() => (armedDelete = -1), 3000);
+      return toast(`Click ✕ again to delete "${state.funnel.steps[i].name}"`);
+    }
+    armedDelete = -1;
     return commit(() => {
       state.funnel.steps.splice(i, 1);
       state.step = Math.max(0, Math.min(state.step, state.funnel.steps.length - 1));

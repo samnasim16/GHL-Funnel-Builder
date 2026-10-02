@@ -26,7 +26,7 @@
       },
       "sections": [
         {
-          "id": "smuqg2yeo18isl3",
+          "id": "smuqgo1bg187z79",
           "type": "announcement",
           "props": {
             "text": "LIVE training starts in",
@@ -34,7 +34,7 @@
           }
         },
         {
-          "id": "smuqg2yeo191imr",
+          "id": "smuqgo1bg1976h0",
           "type": "hero",
           "props": {
             "eyebrow": "Free live masterclass",
@@ -50,7 +50,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1aqryz",
+          "id": "smuqgo1bg1a4gno",
           "type": "form",
           "props": {
             "headline": "Reserve Your Seat",
@@ -65,7 +65,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1b3cjq",
+          "id": "smuqgo1bg1b2zxk",
           "type": "text",
           "props": {
             "headline": "Who Is [Creator Name]?",
@@ -74,7 +74,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1cr8jw",
+          "id": "smuqgo1bg1cjgsn",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -89,7 +89,7 @@
       "path": "/masterclass-confirmed",
       "sections": [
         {
-          "id": "smuqg2yeo1dbdk7",
+          "id": "smuqgo1bg1dg3xt",
           "type": "thankyou",
           "props": {
             "headline": "You're Registered! 🎉",
@@ -99,7 +99,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1eja0x",
+          "id": "smuqgo1bg1erwik",
           "type": "video",
           "props": {
             "headline": "Watch This Quick Message From [Creator Name]",
@@ -111,7 +111,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1fk8vo",
+          "id": "smuqgo1bg1f7rkf",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -126,7 +126,7 @@
       "path": "/masterclass-replay",
       "sections": [
         {
-          "id": "smuqg2yeo1g4lcr",
+          "id": "smuqgo1bg1gnj0v",
           "type": "announcement",
           "props": {
             "text": "Replay comes down in",
@@ -134,7 +134,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1hlhju",
+          "id": "smuqgo1bg1hgm8a",
           "type": "video",
           "props": {
             "headline": "Masterclass Replay",
@@ -146,7 +146,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1itiub",
+          "id": "smuqgo1bg1icn9p",
           "type": "offer",
           "props": {
             "headline": "Join The 90-Day Accelerator",
@@ -159,7 +159,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1jbqyj",
+          "id": "smuqgo1bg1jc9m1",
           "type": "guarantee",
           "props": {
             "headline": "30-Day Action Guarantee",
@@ -168,7 +168,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1kapgd",
+          "id": "smuqgo1bg1k4en4",
           "type": "faq",
           "props": {
             "headline": "Frequently Asked Questions",
@@ -177,7 +177,7 @@
           }
         },
         {
-          "id": "smuqg2yeo1ljmqj",
+          "id": "smuqgo1bg1lhddg",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
