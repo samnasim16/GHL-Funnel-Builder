@@ -1,25 +1,47 @@
 // Turns a funnel step into a complete, standalone HTML page that can be pasted
 // into a GoHighLevel "Custom Code" element or hosted anywhere.
-import { SECTIONS, esc } from './sections.js?v=56fc796f51';
+import { SECTIONS, esc } from './sections.js?v=b9ff416fb7';
 
-// Curated Google Fonts. Modern faces first; the classics stay for old funnels.
-export const FONTS = {
-  'Bricolage Grotesque': 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800',
-  Geist: 'Geist:wght@400;500;600;700;800',
-  Sora: 'Sora:wght@400;600;800',
-  Outfit: 'Outfit:wght@400;600;800',
-  'Plus Jakarta Sans': 'Plus+Jakarta+Sans:wght@400;600;800',
-  Unbounded: 'Unbounded:wght@500;700;900',
-  Syne: 'Syne:wght@500;700;800',
-  'Instrument Sans': 'Instrument+Sans:wght@400;600;700',
-  'Familjen Grotesk': 'Familjen+Grotesk:wght@400;600;700',
-  'DM Sans': 'DM+Sans:wght@400;600;800',
-  Inter: 'Inter:wght@400;600;800',
-  Montserrat: 'Montserrat:wght@400;600;800;900',
-  Poppins: 'Poppins:wght@400;600;800',
-  Oswald: 'Oswald:wght@400;600;700',
-  'Archivo Black': 'Archivo+Black',
+// Curated Google Fonts, grouped so the picker can filter by feel.
+export const FONT_META = {
+  'Bricolage Grotesque': ['Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800', 'Modern'],
+  Geist: ['Geist:wght@400;500;600;700;800', 'Modern'],
+  Sora: ['Sora:wght@400;600;800', 'Modern'],
+  Outfit: ['Outfit:wght@400;600;800', 'Friendly'],
+  'Plus Jakarta Sans': ['Plus+Jakarta+Sans:wght@400;600;800', 'Friendly'],
+  Manrope: ['Manrope:wght@400;600;800', 'Modern'],
+  Urbanist: ['Urbanist:wght@400;600;800', 'Modern'],
+  Figtree: ['Figtree:wght@400;600;800', 'Friendly'],
+  Lexend: ['Lexend:wght@400;600;800', 'Friendly'],
+  Onest: ['Onest:wght@400;600;800', 'Modern'],
+  'Red Hat Display': ['Red+Hat+Display:wght@400;600;900', 'Modern'],
+  'Instrument Sans': ['Instrument+Sans:wght@400;600;700', 'Modern'],
+  'Familjen Grotesk': ['Familjen+Grotesk:wght@400;600;700', 'Modern'],
+  'Space Grotesk': ['Space+Grotesk:wght@400;600;700', 'Tech'],
+  'DM Sans': ['DM+Sans:wght@400;600;800', 'Friendly'],
+  Rubik: ['Rubik:wght@400;600;800', 'Friendly'],
+  'Work Sans': ['Work+Sans:wght@400;600;800', 'Friendly'],
+  Inter: ['Inter:wght@400;600;800', 'Modern'],
+  Unbounded: ['Unbounded:wght@500;700;900', 'Bold'],
+  Syne: ['Syne:wght@500;700;800', 'Bold'],
+  Anton: ['Anton', 'Bold'],
+  'Bebas Neue': ['Bebas+Neue', 'Bold'],
+  'Archivo Black': ['Archivo+Black', 'Bold'],
+  Archivo: ['Archivo:wght@400;600;800', 'Bold'],
+  Oswald: ['Oswald:wght@400;600;700', 'Bold'],
+  Montserrat: ['Montserrat:wght@400;600;800;900', 'Bold'],
+  Poppins: ['Poppins:wght@400;600;800', 'Friendly'],
+  'Playfair Display': ['Playfair+Display:wght@400;600;800', 'Elegant'],
+  Fraunces: ['Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800', 'Elegant'],
+  'DM Serif Display': ['DM+Serif+Display', 'Elegant'],
+  'Instrument Serif': ['Instrument+Serif', 'Elegant'],
+  'Cormorant Garamond': ['Cormorant+Garamond:wght@400;600;700', 'Elegant'],
+  Lora: ['Lora:wght@400;600;700', 'Elegant'],
+  'Space Mono': ['Space+Mono:wght@400;700', 'Tech'],
+  'JetBrains Mono': ['JetBrains+Mono:wght@400;600;800', 'Tech'],
 };
+export const FONTS = Object.fromEntries(Object.entries(FONT_META).map(([k, v]) => [k, v[0]]));
+export const FONT_GROUPS = ['Modern', 'Bold', 'Elegant', 'Friendly', 'Tech'];
 
 // One-click font pairings shown in the Style tab.
 export const FONT_PAIRS = [
@@ -28,6 +50,12 @@ export const FONT_PAIRS = [
   { name: 'Friendly', heading: 'Outfit', body: 'Plus Jakarta Sans' },
   { name: 'Statement', heading: 'Unbounded', body: 'Instrument Sans' },
   { name: 'Editorial', heading: 'Syne', body: 'DM Sans' },
+  { name: 'Luxury', heading: 'Playfair Display', body: 'Manrope' },
+  { name: 'Magazine', heading: 'Fraunces', body: 'Figtree' },
+  { name: 'Loud', heading: 'Anton', body: 'Work Sans' },
+  { name: 'Poster', heading: 'Bebas Neue', body: 'Rubik' },
+  { name: 'Classic serif', heading: 'DM Serif Display', body: 'Lexend' },
+  { name: 'Builder', heading: 'Space Grotesk', body: 'Onest' },
   { name: 'Straight talk', heading: 'Familjen Grotesk', body: 'Geist' },
 ];
 
@@ -42,6 +70,12 @@ export const DEFAULT_THEME = {
   bodyFont: 'Geist',
   radius: 10,
   maxWidth: 1080,
+  buttonShape: 'rounded', // rounded | pill | square
+  buttonStyle: 'solid', // solid | gradient | outline | glow
+  cardStyle: 'shadow', // shadow | border | flat | glass
+  spacing: 'normal', // compact | normal | airy
+  headingCase: 'normal', // normal | upper
+  effect: 'none', // none | mesh | grid | dots | noise
 };
 
 // Readable text colour for a given background hex.
@@ -51,6 +85,33 @@ export function contrastText(hex) {
   const [r, g, b] = [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16) / 255);
   const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
   return lum > 0.6 ? '#111111' : '#ffffff';
+}
+
+// Look & feel options layered on the base styles.
+export function styleCSS(th) {
+  const pad = { compact: 52, normal: 72, airy: 104 }[th.spacing] || 72;
+  const btnR = { pill: '999px', square: '0', rounded: 'var(--r)' }[th.buttonShape] || 'var(--r)';
+  const btn = {
+    gradient: '.fb-btn{background:linear-gradient(120deg,var(--p),var(--a));color:var(--pt);text-shadow:0 1px 1px rgba(0,0,0,.15)}',
+    outline: '.fb-btn{background:transparent;color:var(--p);box-shadow:inset 0 0 0 2px var(--p)}.fb-bg-dark .fb-btn,.fb-has-bgimg .fb-btn{color:#fff;box-shadow:inset 0 0 0 2px #fff}.fb-btn:hover{background:var(--p);color:var(--pt)}',
+    glow: '.fb-btn{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 14px 40px -10px var(--p),0 0 32px -8px var(--p)}',
+  }[th.buttonStyle] || '';
+  const card = {
+    border: '.fb-card,.fb-form-box,.fb-offer-box{box-shadow:none;border:1.5px solid rgba(127,127,127,.25)}',
+    flat: '.fb-card,.fb-form-box{box-shadow:none;border:0}',
+    glass: '.fb-card,.fb-form-box{background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.55);box-shadow:0 20px 50px -24px rgba(0,0,0,.35)}.fb-bg-dark .fb-card,.fb-bg-primary .fb-card{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.16)}',
+  }[th.cardStyle] || '';
+  const fx = {
+    mesh: 'radial-gradient(60% 80% at 10% 0%,color-mix(in srgb,var(--p) 45%,transparent),transparent 60%),radial-gradient(50% 70% at 90% 10%,color-mix(in srgb,var(--a) 35%,transparent),transparent 60%)',
+    grid: 'linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px)',
+    dots: 'radial-gradient(rgba(255,255,255,.12) 1px,transparent 1.5px)',
+    noise: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E\")",
+  }[th.effect];
+  const fxSize = { grid: 'background-size:44px 44px', dots: 'background-size:22px 22px' }[th.effect] || '';
+  return `.fb-s:not(.fb-announcement):not(.fb-header):not(.fb-footer):not(.fb-logos){padding:${pad}px 20px}.fb-hero{padding:${pad + 24}px 20px}
+.fb-btn{border-radius:${btnR}}${btn}${card}
+${th.headingCase === 'upper' ? 'h1,h2,h3,.fb-logo{text-transform:uppercase;letter-spacing:.01em}' : ''}
+${fx ? `.fb-bg-dark:not(.fb-has-bgimg),.fb-bg-primary{background-image:${fx};${fxSize}}` : ''}`;
 }
 
 export function pageCSS(t = DEFAULT_THEME) {
@@ -158,7 +219,19 @@ p{margin:0 0 1em}
 .fb-footer-links{display:flex;gap:18px;justify-content:center;margin-bottom:10px}
 .fb-footer a{color:#fff}
 .fb-disclaimer{max-width:760px;margin:14px auto 0;font-size:.72rem;opacity:.6}
-@media(max-width:680px){.fb-s{padding:52px 18px}.fb-announcement{padding:10px 16px}.fb-header{padding:12px 16px}.fb-footer{padding:32px 18px}.fb-logos{padding:32px 18px}.fb-hero{padding:64px 18px}.fb-split{grid-template-columns:1fr}.fb-guarantee{flex-direction:column;text-align:center}.fb-offer-box,.fb-form-box{padding:24px}.fb-btn-lg{width:100%}}
+/* pictures */
+.fb-has-bgimg{background-size:cover;background-position:center;color:#fff}
+.fb-has-bgimg .fb-eyebrow,.fb-has-bgimg .fb-hl{color:var(--a)}
+.fb-figure{margin:0 auto;text-align:center}.fb-figure img{width:100%;border-radius:var(--r);box-shadow:0 30px 60px -30px rgba(0,0,0,.4)}
+.fb-figure figcaption{margin-top:12px;font-size:.92rem;opacity:.7}
+.fb-w-normal{max-width:720px}.fb-w-wide{max-width:var(--mw)}
+.fb-image:has(.fb-w-full){padding-left:0;padding-right:0}.fb-w-full img{border-radius:0;box-shadow:none}.fb-image:has(.fb-w-full) .fb-wrap{max-width:none}
+.fb-it-img{width:100%;border-radius:var(--r);box-shadow:0 30px 60px -28px rgba(0,0,0,.4);aspect-ratio:4/3;object-fit:cover}
+.fb-it .fb-left{margin-left:0;text-align:left}
+.fb-gallery{display:grid;gap:14px;margin-top:24px}.fb-cols-2{grid-template-columns:repeat(2,1fr)}.fb-cols-3{grid-template-columns:repeat(3,1fr)}.fb-cols-4{grid-template-columns:repeat(4,1fr)}
+.fb-gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);transition:transform .25s}.fb-gallery img:hover{transform:scale(1.02)}
+${styleCSS(th)}
+@media(max-width:680px){.fb-s{padding:52px 18px}.fb-gallery{grid-template-columns:repeat(2,1fr)}.fb-it-right{display:flex;flex-direction:column-reverse}.fb-announcement{padding:10px 16px}.fb-header{padding:12px 16px}.fb-footer{padding:32px 18px}.fb-logos{padding:32px 18px}.fb-hero{padding:64px 18px}.fb-split{grid-template-columns:1fr}.fb-guarantee{flex-direction:column;text-align:center}.fb-offer-box,.fb-form-box{padding:24px}.fb-btn-lg{width:100%}}
 `;
 }
 

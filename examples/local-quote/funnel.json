@@ -23,7 +23,7 @@
       "path": "/free-quote",
       "sections": [
         {
-          "id": "smuqiupk31p0uxk",
+          "id": "smuqjjwa11p5sxk",
           "type": "header",
           "props": {
             "logo": "[CLIENT BRAND]",
@@ -33,7 +33,7 @@
           }
         },
         {
-          "id": "smuqiupk31q6c5w",
+          "id": "smuqjjwa11q8aye",
           "type": "hero",
           "props": {
             "eyebrow": "Serving [City] & surrounding areas",
@@ -45,11 +45,13 @@
             "ctaLink": "#form",
             "note": "",
             "image": "",
+            "bgImage": "",
+            "overlay": "medium",
             "bg": "dark"
           }
         },
         {
-          "id": "smuqiupk31rw7no",
+          "id": "smuqjjwa11rac9b",
           "type": "form",
           "props": {
             "headline": "Tell Us About Your Project",
@@ -64,7 +66,7 @@
           }
         },
         {
-          "id": "smuqiupk31sw5od",
+          "id": "smuqjjwa11s1lpx",
           "type": "testimonials",
           "props": {
             "headline": "Your Neighbors Love Us",
@@ -73,7 +75,7 @@
           }
         },
         {
-          "id": "smuqiupk31tqdqc",
+          "id": "smuqjjwa11t516o",
           "type": "footer",
           "props": {
             "text": "© 2026 [Client Brand]. All rights reserved.",
@@ -88,7 +90,7 @@
       "path": "/free-quote-thanks",
       "sections": [
         {
-          "id": "smuqiupk31urjhz",
+          "id": "smuqjjwa11u9aww",
           "type": "thankyou",
           "props": {
             "headline": "Got It! We'll Text You In The Next 5 Minutes",
@@ -98,7 +100,7 @@
           }
         },
         {
-          "id": "smuqiupk31vgipq",
+          "id": "smuqjjwa11vng9h",
           "type": "footer",
           "props": {
             "text": "© 2026 [Client Brand]. All rights reserved.",

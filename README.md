@@ -28,6 +28,15 @@ There are no dependencies and no build step: it's plain ES modules. Open `http:/
 - **A 3-step guide** (Pick a goal → Edit your pages → Put it in GoHighLevel) is always visible, and the last step walks through GoHighLevel click by click with a copy button per page.
 - **Your system tab** shows the all-in-one picture: which GoHighLevel tools the funnel uses (pages, CRM, calendar, pipeline, texts and emails, automations, payments, courses, reviews), what each replaces, and every automation in one plain sentence.
 
+## Design tools
+
+- **Looks**: 10 one-click designs (Bold agency, Modern gradient, Glass, Neon night, Minimal luxe, Brutalist, Soft & friendly, Editorial, Clean SaaS, Poster). Each sets colors, fonts, button shape and style, cards, spacing, headline case and background effect.
+- **✨ Pick a look for my business**: AI picks a look, brand color and fonts from the business description. Without AI it matches by business type.
+- **Colors**: 24 palettes, "Build from my color" (a full palette from one brand color) and "Match my logo" (pulls brand colors out of an uploaded logo).
+- **Fonts**: 35 Google Fonts in a searchable browser grouped by Modern, Bold, Elegant, Friendly and Tech, plus 12 pairings.
+- **Shape and effects**: button shape (rounded, pill, square), button style (solid, gradient, outline, glow), cards (shadow, outline, flat, glass), spacing, headline case, and dark-section backgrounds (glow, grid, dots, grain).
+- **Pictures**: upload with a cropper (drag, zoom, rotate, wide / 4:3 / square / portrait / circle, brightness, contrast and color). Pictures are compressed automatically (max 1600px, WebP). New sections: Picture, Picture + text and Picture gallery. The top section takes a background picture with adjustable darkness.
+
 ## What it does
 
 | Area | What you get |
@@ -81,6 +90,8 @@ pitch.html            one-page pitch for BAD Marketing
 js/recommend.js       page suggestions with one-click fixes
 js/ai-fill.js         AI auto-fill (prompt, apply, no-AI quick fill)
 js/tour.js            guided tour
+js/styles.js          looks, palettes, palette-from-color / from-logo, look suggestion
+js/images.js          photo upload, cropper and compression
 scripts/build-deploy.mjs  builds deploy/main.html for the shared link
 docs/PITCH.md         pitch notes for BAD Marketing
 ```

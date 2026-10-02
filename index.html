@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/app.css?v=56fc796f51">
+<link rel="stylesheet" href="css/app.css?v=b9ff416fb7">
 </head>
 <body>
 <header class="top">
@@ -57,14 +57,27 @@
       <div id="library" class="library"></div>
     </div>
     <div class="tab" id="tab-theme" hidden>
-      <div class="label">Pick a look</div>
-      <div id="presets" class="presets"></div>
+      <button id="aiLook" class="btn ai full" type="button">✨ Pick a look for my business</button>
+      <div class="label">Looks <span class="hint">one click changes everything</span></div>
+      <div id="looks" class="looks"></div>
+      <div class="label">Colors</div>
+      <div id="palettes" class="palettes"></div>
+      <div class="color-tools">
+        <label class="seed" title="Pick one brand color and we build the rest"><input type="color" id="seedColor" value="#6d5dfc" aria-label="Brand color"><span>Build from my color</span></label>
+        <button type="button" id="logoColors" class="ghost-btn">🎨 Match my logo</button>
+        <input type="file" id="logoFile" accept="image/*" hidden>
+      </div>
+      <details class="more"><summary>Fine-tune each color</summary><div id="themeForm" class="form"></div></details>
       <div class="label">Fonts</div>
       <div id="fontPairs" class="font-pairs"></div>
-      <details class="more">
-        <summary>Customize colors and fonts</summary>
-        <div id="themeForm" class="form"></div>
+      <details class="more" id="fontBrowser"><summary>Browse all fonts</summary>
+        <div class="font-target seg2"><button type="button" data-ft="headingFont" class="on">Headlines</button><button type="button" data-ft="bodyFont">Text</button></div>
+        <input type="search" id="fontSearch" class="font-search" placeholder="Search fonts" aria-label="Search fonts">
+        <div id="fontGroups" class="font-groups"></div>
+        <div id="fontList" class="font-list"></div>
       </details>
+      <div class="label">Shape and effects</div>
+      <div id="shapeForm" class="shape-form"></div>
     </div>
   </aside>
 
@@ -125,6 +138,6 @@
 
 <input type="file" id="importFile" accept=".json,application/json" hidden>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script type="module" src="js/app.js?v=56fc796f51"></script>
+<script type="module" src="js/app.js?v=b9ff416fb7"></script>
 </body>
 </html>

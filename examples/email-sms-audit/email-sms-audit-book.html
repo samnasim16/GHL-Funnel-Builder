@@ -108,7 +108,22 @@ p{margin:0 0 1em}
 .fb-footer-links{display:flex;gap:18px;justify-content:center;margin-bottom:10px}
 .fb-footer a{color:#fff}
 .fb-disclaimer{max-width:760px;margin:14px auto 0;font-size:.72rem;opacity:.6}
-@media(max-width:680px){.fb-s{padding:52px 18px}.fb-announcement{padding:10px 16px}.fb-header{padding:12px 16px}.fb-footer{padding:32px 18px}.fb-logos{padding:32px 18px}.fb-hero{padding:64px 18px}.fb-split{grid-template-columns:1fr}.fb-guarantee{flex-direction:column;text-align:center}.fb-offer-box,.fb-form-box{padding:24px}.fb-btn-lg{width:100%}}
+/* pictures */
+.fb-has-bgimg{background-size:cover;background-position:center;color:#fff}
+.fb-has-bgimg .fb-eyebrow,.fb-has-bgimg .fb-hl{color:var(--a)}
+.fb-figure{margin:0 auto;text-align:center}.fb-figure img{width:100%;border-radius:var(--r);box-shadow:0 30px 60px -30px rgba(0,0,0,.4)}
+.fb-figure figcaption{margin-top:12px;font-size:.92rem;opacity:.7}
+.fb-w-normal{max-width:720px}.fb-w-wide{max-width:var(--mw)}
+.fb-image:has(.fb-w-full){padding-left:0;padding-right:0}.fb-w-full img{border-radius:0;box-shadow:none}.fb-image:has(.fb-w-full) .fb-wrap{max-width:none}
+.fb-it-img{width:100%;border-radius:var(--r);box-shadow:0 30px 60px -28px rgba(0,0,0,.4);aspect-ratio:4/3;object-fit:cover}
+.fb-it .fb-left{margin-left:0;text-align:left}
+.fb-gallery{display:grid;gap:14px;margin-top:24px}.fb-cols-2{grid-template-columns:repeat(2,1fr)}.fb-cols-3{grid-template-columns:repeat(3,1fr)}.fb-cols-4{grid-template-columns:repeat(4,1fr)}
+.fb-gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r);transition:transform .25s}.fb-gallery img:hover{transform:scale(1.02)}
+.fb-s:not(.fb-announcement):not(.fb-header):not(.fb-footer):not(.fb-logos){padding:72px 20px}.fb-hero{padding:96px 20px}
+.fb-btn{border-radius:var(--r)}
+
+
+@media(max-width:680px){.fb-s{padding:52px 18px}.fb-gallery{grid-template-columns:repeat(2,1fr)}.fb-it-right{display:flex;flex-direction:column-reverse}.fb-announcement{padding:10px 16px}.fb-header{padding:12px 16px}.fb-footer{padding:32px 18px}.fb-logos{padding:32px 18px}.fb-hero{padding:64px 18px}.fb-split{grid-template-columns:1fr}.fb-guarantee{flex-direction:column;text-align:center}.fb-offer-box,.fb-form-box{padding:24px}.fb-btn-lg{width:100%}}
 </style>
 
 </head>
