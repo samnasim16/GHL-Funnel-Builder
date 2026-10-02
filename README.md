@@ -71,6 +71,11 @@ js/app.js             editor state, history, UI
 scripts/build-examples.mjs
 examples/             pre-rendered example funnels + setup guides
 test/                 node:test suite
+pitch.html            one-page pitch for BAD Marketing
+js/recommend.js       page suggestions with one-click fixes
+js/ai-fill.js         AI auto-fill (prompt, apply, no-AI quick fill)
+js/tour.js            guided tour
+scripts/build-deploy.mjs  builds deploy/main.html for the shared link
 docs/PITCH.md         pitch notes for BAD Marketing
 ```
 

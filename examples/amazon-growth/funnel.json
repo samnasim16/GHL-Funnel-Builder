@@ -8,8 +8,8 @@
     "bg": "#ffffff",
     "alt": "#f4f4f6",
     "text": "#16161d",
-    "headingFont": "Poppins",
-    "bodyFont": "Inter",
+    "headingFont": "Sora",
+    "bodyFont": "Geist",
     "radius": 10,
     "maxWidth": 1080
   },
@@ -26,7 +26,7 @@
       },
       "sections": [
         {
-          "id": "smuqhapv8yab86",
+          "id": "smuqi3zz8ydb8v",
           "type": "header",
           "props": {
             "logo": "BAD MARKETING",
@@ -36,7 +36,7 @@
           }
         },
         {
-          "id": "smuqhapv8zkqnl",
+          "id": "smuqi3zz8znnoc",
           "type": "hero",
           "props": {
             "eyebrow": "Amazon Growth System",
@@ -52,7 +52,7 @@
           }
         },
         {
-          "id": "smuqhapv810vmt6",
+          "id": "smuqi3zz81091q9",
           "type": "steps",
           "props": {
             "headline": "The Amazon Growth System",
@@ -61,7 +61,7 @@
           }
         },
         {
-          "id": "smuqhapv8111iu2",
+          "id": "smuqi3zz811zbo7",
           "type": "offer",
           "props": {
             "headline": "Partner This Month And Get",
@@ -74,7 +74,7 @@
           }
         },
         {
-          "id": "smuqhapv812dl4m",
+          "id": "smuqi3zz812mpl2",
           "type": "form",
           "props": {
             "headline": "Get Your Free Amazon Audit",
@@ -89,7 +89,7 @@
           }
         },
         {
-          "id": "smuqhapv8139fqy",
+          "id": "smuqi3zz8139tfc",
           "type": "footer",
           "props": {
             "text": "© 2026 BAD Marketing. All rights reserved.",
@@ -104,7 +104,7 @@
       "path": "/amazon-book",
       "sections": [
         {
-          "id": "smuqhapv814oo49",
+          "id": "smuqi3zz814yyu9",
           "type": "calendar",
           "props": {
             "headline": "Choose A Time For Your Amazon Audit",
@@ -114,7 +114,7 @@
           }
         },
         {
-          "id": "smuqhapv8154vej",
+          "id": "smuqi3zz815v97c",
           "type": "footer",
           "props": {
             "text": "© 2026 BAD Marketing. All rights reserved.",
@@ -129,7 +129,7 @@
       "path": "/amazon-confirmed",
       "sections": [
         {
-          "id": "smuqhapv816idfq",
+          "id": "smuqi3zz816b840",
           "type": "thankyou",
           "props": {
             "headline": "You're Booked! 📦",
@@ -139,7 +139,7 @@
           }
         },
         {
-          "id": "smuqhapv817zipt",
+          "id": "smuqi3zz817tzyy",
           "type": "footer",
           "props": {
             "text": "© 2026 BAD Marketing. All rights reserved.",

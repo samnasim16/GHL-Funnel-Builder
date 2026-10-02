@@ -2,14 +2,34 @@
 // into a GoHighLevel "Custom Code" element or hosted anywhere.
 import { SECTIONS, esc } from './sections.js';
 
+// Curated Google Fonts. Modern faces first; the classics stay for old funnels.
 export const FONTS = {
+  'Bricolage Grotesque': 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800',
+  Geist: 'Geist:wght@400;500;600;700;800',
+  Sora: 'Sora:wght@400;600;800',
+  Outfit: 'Outfit:wght@400;600;800',
+  'Plus Jakarta Sans': 'Plus+Jakarta+Sans:wght@400;600;800',
+  Unbounded: 'Unbounded:wght@500;700;900',
+  Syne: 'Syne:wght@500;700;800',
+  'Instrument Sans': 'Instrument+Sans:wght@400;600;700',
+  'Familjen Grotesk': 'Familjen+Grotesk:wght@400;600;700',
+  'DM Sans': 'DM+Sans:wght@400;600;800',
   Inter: 'Inter:wght@400;600;800',
   Montserrat: 'Montserrat:wght@400;600;800;900',
   Poppins: 'Poppins:wght@400;600;800',
-  'DM Sans': 'DM+Sans:wght@400;600;800',
   Oswald: 'Oswald:wght@400;600;700',
   'Archivo Black': 'Archivo+Black',
 };
+
+// One-click font pairings shown in the Style tab.
+export const FONT_PAIRS = [
+  { name: 'Bold & modern', heading: 'Bricolage Grotesque', body: 'Geist' },
+  { name: 'Clean tech', heading: 'Sora', body: 'Geist' },
+  { name: 'Friendly', heading: 'Outfit', body: 'Plus Jakarta Sans' },
+  { name: 'Statement', heading: 'Unbounded', body: 'Instrument Sans' },
+  { name: 'Editorial', heading: 'Syne', body: 'DM Sans' },
+  { name: 'Straight talk', heading: 'Familjen Grotesk', body: 'Geist' },
+];
 
 export const DEFAULT_THEME = {
   primary: '#e11d2e',
@@ -18,8 +38,8 @@ export const DEFAULT_THEME = {
   bg: '#ffffff',
   alt: '#f4f4f6',
   text: '#16161d',
-  headingFont: 'Montserrat',
-  bodyFont: 'Inter',
+  headingFont: 'Bricolage Grotesque',
+  bodyFont: 'Geist',
   radius: 10,
   maxWidth: 1080,
 };
@@ -138,7 +158,7 @@ p{margin:0 0 1em}
 .fb-footer-links{display:flex;gap:18px;justify-content:center;margin-bottom:10px}
 .fb-footer a{color:#fff}
 .fb-disclaimer{max-width:760px;margin:14px auto 0;font-size:.72rem;opacity:.6}
-@media(max-width:760px){.fb-s{padding:52px 18px}.fb-hero{padding:64px 18px}.fb-split{grid-template-columns:1fr}.fb-guarantee{flex-direction:column;text-align:center}.fb-offer-box,.fb-form-box{padding:24px}.fb-btn-lg{width:100%}}
+@media(max-width:680px){.fb-s{padding:52px 18px}.fb-announcement{padding:10px 16px}.fb-header{padding:12px 16px}.fb-footer{padding:32px 18px}.fb-logos{padding:32px 18px}.fb-hero{padding:64px 18px}.fb-split{grid-template-columns:1fr}.fb-guarantee{flex-direction:column;text-align:center}.fb-offer-box,.fb-form-box{padding:24px}.fb-btn-lg{width:100%}}
 `;
 }
 

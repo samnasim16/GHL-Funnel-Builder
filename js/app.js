@@ -1,10 +1,13 @@
 import { SECTIONS, makeSection, uid, esc, lines } from './sections.js';
-import { renderStepPage, renderGhlSnippet, FONTS, DEFAULT_THEME } from './renderer.js';
+import { renderStepPage, renderGhlSnippet, FONTS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js';
 import { TEMPLATES, buildTemplate } from './templates.js';
 import { auditFunnel, auditStep } from './audit.js';
 import { blueprintMarkdown, systemMap } from './blueprint.js';
 import { setupGuidePage } from './setup-guide.js';
 import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js';
+import { recommend } from './recommend.js';
+import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js';
+import { startTour } from './tour.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -364,6 +367,10 @@ const PRESETS = [
 ];
 function renderTheme() {
   const t = { ...DEFAULT_THEME, ...state.funnel.theme };
+  $('#fontPairs').innerHTML = FONT_PAIRS.map(
+    (fp, i) =>
+      `<button data-fp="${i}" class="${fp.heading === t.headingFont && fp.body === t.bodyFont ? 'on' : ''}"><span class="fp-h" style="font-family:'${fp.heading}',sans-serif">${esc(fp.name)}</span><span class="fp-b" style="font-family:'${fp.body}',sans-serif">${esc(fp.heading)} + ${esc(fp.body)}</span></button>`
+  ).join('');
   $('#presets').innerHTML = PRESETS.map(
     (p, i) =>
       `<button data-p="${i}" class="${p.primary === t.primary && p.dark === t.dark ? 'on' : ''}"><div class="sw"><i style="background:${p.primary}"></i><i style="background:${p.accent}"></i><i style="background:${p.dark}"></i></div>${p.name}</button>`
@@ -397,6 +404,15 @@ $('#themeForm').addEventListener('input', (e) => {
   if (k === 'radius') e.target.previousElementSibling.textContent = `Rounded corners: ${v}px`;
   save();
   renderFrame();
+});
+// Load every pairing's fonts once so the previews render in their own faces.
+document.head.insertAdjacentHTML('beforeend', fontLink({ headingFont: 'Sora', bodyFont: 'Outfit' }) + FONT_PAIRS.map((fp) => fontLink({ headingFont: fp.heading, bodyFont: fp.body }).replace(/<link rel="preconnect"[^>]*>/g, '')).join(''));
+$('#fontPairs').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-fp]');
+  if (!b) return;
+  const fp = FONT_PAIRS[+b.dataset.fp];
+  commit(() => (state.funnel.theme = { ...state.funnel.theme, headingFont: fp.heading, bodyFont: fp.body }));
+  toast(`${fp.name} fonts applied`);
 });
 $('#presets').addEventListener('click', (e) => {
   const b = e.target.closest('button');
@@ -459,11 +475,17 @@ function renderInspector() {
   const sec = step.sections[state.sel];
   if (!sec) {
     const a = auditStep(step);
-    const todo = a.results.filter((r) => !r.pass);
+    const recs = recommend(state.funnel, state.step);
+    const LEVEL = { high: 'Do this first', medium: 'Worth doing', tip: 'Nice to have' };
     box.innerHTML = `
-      <div class="tip"><b>How to edit</b><span>👆 Click any text on the page and type over it.</span><span>➕ Hover between sections and click <b>+</b> to add one.</span><span>🧩 Click a section to see all its settings here.</span></div>
-      <div class="score-ring"><div class="n" style="color:${scoreColor(a.score)}">${a.score}</div><div><b>This page is ${a.score >= 85 ? 'ready' : 'almost ready'}</b><br><span class="muted small">${todo.length ? `${todo.length} thing${todo.length > 1 ? 's' : ''} to fix before you launch` : 'Nothing left to fix'}</span></div></div>
-      ${todo.length ? `<ul class="checks">${todo.map((r) => `<li class="fail"><span class="st">!</span><div>${esc(r.label)}<small>${esc(r.fix)}</small></div></li>`).join('')}</ul>` : ''}
+      <div class="score-ring"><div class="n" style="color:${scoreColor(a.score)}">${a.score}</div><div><b>${esc(step.name)} is ${a.score >= 85 ? 'ready to launch' : 'almost ready'}</b><br><span class="muted small">Click any text on the page to change it.</span></div></div>
+      <div class="recs-head"><h3>Suggestions</h3><span class="muted small">${recs.length ? `${recs.length} ways to get more sign-ups` : 'Nothing to improve here'}</span></div>
+      <ul class="recs">${recs
+        .map(
+          (r, k) => `<li class="rec lv-${r.level}"><div class="rec-top"><span class="rec-lv">${LEVEL[r.level]}</span></div><b>${esc(r.title)}</b><p>${esc(r.why)}</p><button class="btn sm ${r.level === 'high' ? '' : 'sec'}" data-rec="${k}">${esc(r.fix.label)}</button></li>`
+        )
+        .join('')}</ul>
+      <button class="btn sec full" data-a="ai-page" style="margin:6px 0 14px">✨ Rewrite this page with AI</button>
       <details class="panel" style="margin-top:14px"><summary>Page settings</summary><div class="form" id="pageForm">
         <label><span>Page name</span><input type="text" data-s="name" value="${esc(step.name)}"></label>
         <label><span>Web address</span><input type="text" data-s="path" value="${esc(step.path || '')}"><div class="help">The end of the link, like /free-audit. Use the same one in GoHighLevel.</div></label>
@@ -484,6 +506,7 @@ function renderInspector() {
   box.innerHTML = `<div class="insp-head"><h3>${def.icon} ${esc(def.name)}</h3><div class="insp-actions">
       <button data-a="up" title="Move up">↑</button><button data-a="down" title="Move down">↓</button><button data-a="dup" title="Duplicate">⧉</button><button data-a="del" class="danger" title="Delete">🗑</button><button data-a="close" title="Done">✓</button></div></div>
     <p class="insp-desc">${esc(def.desc || '')}</p>
+    <button class="btn sec sm ai-sm" data-a="ai-section">✨ Rewrite this section with AI</button>
     <div class="form">
       ${content.map(([k, f]) => fieldHTML(k, f, sec.props[k] ?? '')).join('')}
       ${links.length ? `<div class="group">Links and connections</div>${links.map(([k, f]) => fieldHTML(k, f, sec.props[k] ?? '')).join('')}` : ''}
@@ -544,11 +567,45 @@ insp.addEventListener('click', (e) => {
     inspSnap = false;
     return setProp(seg.parentElement.dataset.seg, seg.dataset.v);
   }
+  const rec = e.target.closest('[data-rec]');
+  if (rec) return applyRecommendation(recommend(state.funnel, state.step)[+rec.dataset.rec]);
   const a = e.target.closest('[data-a]')?.dataset.a;
   if (!a) return;
   if (a === 'close') return select(-1, false);
+  if (a === 'ai-section') return aiRewrite({ step: state.step, idx: state.sel });
+  if (a === 'ai-page') return aiRewrite({ step: state.step });
   sectionAction(a, state.sel);
 });
+
+function applyRecommendation(r) {
+  if (!r) return;
+  const f = r.fix;
+  if (f.type === 'select') {
+    select(f.idx, true);
+    if (f.field) setTimeout(() => $(`#inspector [data-f="${f.field}"], #inspector [data-list="${f.field}"] input`)?.focus(), 50);
+    return;
+  }
+  if (f.type === 'set') {
+    commit(() => {
+      curStep().sections[f.idx].props[f.key] = f.value;
+      state.sel = -1;
+    });
+    setTimeout(() => {
+      state.sel = f.idx;
+      highlight(true);
+      state.sel = -1;
+    }, 350);
+    return toast('Done. Press Undo if you prefer it the old way.');
+  }
+  if (f.type === 'add') {
+    commit(() => {
+      curStep().sections.splice(f.at, 0, makeSection(f.section, f.props || {}));
+      state.sel = f.at;
+    });
+    setTimeout(() => highlight(true), 350);
+    toast(`${SECTIONS[f.section].name} added. Click its text to make it yours.`);
+  }
+}
 
 // ---------- tabs / views / devices ----------
 $('.tabs').addEventListener('click', (e) => {
@@ -679,8 +736,15 @@ function renderTemplates() {
       ${n ? `<div class="auto">+ ${n} automatic follow-up${n > 1 ? 's' : ''}</div>` : ''}</button>`;
   }).join('');
 }
-$('#newBtn').addEventListener('click', () => $('#templateDialog').showModal());
-$('#changeGoal').addEventListener('click', () => $('#templateDialog').showModal());
+function openWelcome({ intro = false } = {}) {
+  $('#welcomeIntro').hidden = !intro;
+  $('#goalStep').hidden = false;
+  $('#briefStep').hidden = true;
+  if (!$('#templateDialog').open) $('#templateDialog').showModal();
+  setTimeout(() => $('#templateGrid .tpl')?.focus(), 30);
+}
+$('#newBtn').addEventListener('click', () => openWelcome());
+$('#changeGoal').addEventListener('click', () => openWelcome());
 $('#templateGrid').addEventListener('click', (e) => {
   const b = e.target.closest('.tpl');
   if (!b) return;
@@ -689,10 +753,180 @@ $('#templateGrid').addEventListener('click', (e) => {
     state.step = 0;
     state.sel = -1;
   });
-  $('#templateDialog').close();
   setView('pages');
-  toast('Your funnel is ready. Click any text on the page to change it.');
+  openBrief({ fromWelcome: true });
 });
+
+// ---------- AI: brief + providers ----------
+let briefFromWelcome = false;
+let briefTarget = null; // null = whole funnel, {step} = one page, {step, idx} = one section
+function renderBriefForm() {
+  const b = state.funnel.brief || {};
+  $('#briefForm').innerHTML =
+    BRIEF_FIELDS.map((f) => `<label for="bf-${f.key}"><span>${esc(f.label)}${f.required ? '' : ''}</span><input id="bf-${f.key}" data-bf="${f.key}" value="${esc(b[f.key] || '')}" placeholder="${esc(f.placeholder)}" autocomplete="off"></label>`).join('') +
+    `<label for="bf-tone"><span>Tone</span><select id="bf-tone" data-bf="tone">${TONES.map((t) => `<option ${t === b.tone ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+     <label for="bf-key" class="api-key" ${aiState.claude ? 'hidden' : ''}><span>Anthropic API key <small class="muted">(only needed outside claude.ai)</small></span><input id="bf-key" type="password" data-bf-key placeholder="sk-ant-…" autocomplete="off"><span class="help">Used for this request only, never saved. Get one at console.anthropic.com.</span></label>`;
+}
+function readBrief() {
+  const b = {};
+  $$('[data-bf]', $('#briefForm')).forEach((el) => (b[el.dataset.bf] = el.value.trim()));
+  return b;
+}
+function openBrief({ fromWelcome = false, target = null } = {}) {
+  briefFromWelcome = fromWelcome;
+  briefTarget = target;
+  $('#welcomeIntro').hidden = true;
+  $('#goalStep').hidden = true;
+  $('#briefStep').hidden = false;
+  $('#briefKicker').textContent = fromWelcome ? 'Step 2 of 2' : target ? (target.idx !== undefined ? 'Rewrite one section' : 'Rewrite this page') : 'Write with AI';
+  $('#briefSkip').textContent = fromWelcome ? "Skip, I'll edit it myself" : 'Cancel';
+  $('#briefQuick').hidden = Boolean(target);
+  $('#briefStatus').hidden = true;
+  renderBriefForm();
+  if (!$('#templateDialog').open) $('#templateDialog').showModal();
+  setTimeout(() => $('#bf-business')?.focus(), 30);
+}
+function finishBrief() {
+  $('#templateDialog').close();
+  if (briefFromWelcome) maybeStartTour();
+}
+$('#briefSkip').addEventListener('click', () => {
+  finishBrief();
+  if (briefFromWelcome) toast('Your funnel is ready. Click any text on the page to change it.');
+});
+$('#briefQuick').addEventListener('click', () => {
+  const b = readBrief();
+  if (!b.business && !b.sells) return briefMsg('Add your business name or what you sell first.', 'bad');
+  commit(() => {
+    state.funnel.brief = b;
+    quickFill(state.funnel, b);
+  });
+  finishBrief();
+  toast('Filled in the basics. Use ✨ AI write to rewrite every section, or click any text to edit.');
+});
+$('#aiBtn').addEventListener('click', () => openBrief());
+
+const aiState = { claude: null, ready: null };
+// claude.use resolves the sample function inside claude.ai, or null elsewhere (~10 s).
+aiState.ready = (window.claude?.use ? window.claude.use('sample').catch(() => null) : Promise.resolve(null)).then((fn) => {
+  aiState.claude = fn;
+  if (fn && $('#briefStep') && !$('#briefStep').hidden) renderBriefForm();
+  return fn;
+});
+
+function parseJsonLoose(text) {
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    const m = String(text).match(/\{[\s\S]*\}/);
+    if (m) return JSON.parse(m[0]);
+    throw new Error('The AI reply was not in the expected format. Try again.');
+  }
+}
+// Visitor's own key (local use). Official SDK, loaded only when needed.
+async function askWithKey(apiKey, prompt, signal) {
+  const { default: Anthropic } = await import('https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk/+esm');
+  const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
+  const msg = await client.beta.messages
+    .stream(
+      {
+        model: 'claude-opus-5-5',
+        max_tokens: 32000,
+        output_config: { effort: 'medium' },
+        betas: ['server-side-fallback-2026-07-01'],
+        fallbacks: 'default',
+        messages: [{ role: 'user', content: prompt }],
+      },
+      { signal }
+    )
+    .finalMessage();
+  if (msg.stop_reason === 'refusal') throw new Error('Claude declined this request. Try describing the business differently.');
+  return parseJsonLoose(msg.content.filter((b) => b.type === 'text').map((b) => b.text).join(''));
+}
+const AI_ERRORS = {
+  not_granted: 'AI was not allowed for this page. You can still use Quick fill or edit by hand.',
+  sampling_disabled: 'AI is not available on this account. Use Quick fill or edit by hand.',
+  rate_limited: 'Too many AI requests right now. Wait a minute and try again.',
+  invalid_json: 'The AI reply came back in the wrong format. Try again.',
+  refused: 'Claude declined this request. Try describing the business differently.',
+  session_expired: 'Please sign in to claude.ai again, then retry.',
+};
+function briefMsg(text, kind = '') {
+  const el = $('#briefStatus');
+  el.hidden = false;
+  el.className = `brief-status ${kind}`;
+  el.innerHTML = text;
+}
+let aiCtl = null;
+async function runAI() {
+  const b = readBrief();
+  if (!b.business || !b.sells) return briefMsg('Add your business name and what you sell so the AI has something to work with.', 'bad');
+  const key = $('#bf-key')?.value.trim();
+  await aiState.ready;
+  if (!aiState.claude && !key)
+    return briefMsg('AI writing works inside claude.ai, or here with your own Anthropic API key (box above). No key? Use <b>Quick fill</b> instead.', 'bad');
+  const items = collectFillable(state.funnel, briefTarget && briefTarget.idx !== undefined ? briefTarget : undefined).filter((it) => !briefTarget || it.step === briefTarget.step);
+  const goal = (GOALS[state.funnel.templateId] || {}).goal || '';
+  const prompt = buildPrompt(b, items, goal);
+  aiCtl = new AbortController();
+  $('#briefAI').disabled = true;
+  $('#briefStop').hidden = false;
+  briefMsg(`<span class="spin"></span> Writing ${items.length} section${items.length > 1 ? 's' : ''} for ${esc(b.business)}… this usually takes 20-60 seconds.`);
+  try {
+    const answer = aiState.claude
+      ? await aiState.claude.json(prompt, { modelTier: 'default', signal: aiCtl.signal, cache: false })
+      : await askWithKey(key, prompt, aiCtl.signal);
+    let changed = 0;
+    commit(() => {
+      state.funnel.brief = b;
+      changed = applyFill(state.funnel, answer, items);
+    });
+    if (!changed) return briefMsg('The AI didn\'t return any changes. Try adding more detail and run it again.', 'bad');
+    finishBrief();
+    toast(`AI rewrote ${changed} piece${changed > 1 ? 's' : ''} of text. Press Undo to go back.`);
+  } catch (e) {
+    if (e?.code === 'cancelled' || e?.name === 'AbortError') return briefMsg('Stopped. Nothing was changed.');
+    briefMsg(esc(AI_ERRORS[e?.code] || e?.message || 'Something went wrong. Try again.'), 'bad');
+  } finally {
+    $('#briefAI').disabled = false;
+    $('#briefStop').hidden = true;
+    aiCtl = null;
+  }
+}
+$('#briefAI').addEventListener('click', runAI);
+$('#briefStop').addEventListener('click', () => aiCtl?.abort());
+function aiRewrite(target) {
+  openBrief({ target });
+}
+
+// ---------- guided tour ----------
+const TOUR_KEY = 'funnelforge.tour.v1';
+const TOUR = [
+  { target: '#frame', title: 'This is your page', text: 'Click any headline, sentence or button <b>right on the page</b> and type. Everything saves automatically.' },
+  { target: '#stepList', title: 'Your funnel\'s pages', text: 'A funnel is a few pages in a row. Visitors go from page 1 to the next. Click a page to edit it.', before: () => $('.tabs button[data-tab="steps"]').click() },
+  { target: '#inspector', title: 'Suggestions and settings', text: 'With nothing selected you get <b>suggestions</b> to get more sign-ups, each with a one-click fix. Click a section to see its settings here.' },
+  { target: '#aiBtn', title: 'Let AI write it', text: 'Describe your business in a few words and AI rewrites every page to match.' },
+  { target: '.tabs', title: 'Add blocks and change the look', text: '<b>Add</b> more sections, or open <b>Style</b> to change colors and fonts in one click.' },
+  { target: '.views', title: 'Your system and checklist', text: 'See what GoHighLevel does automatically, the step-by-step setup guide, and what\'s left before launch.' },
+  { target: '#publishBtn', title: 'Go live', text: 'When you\'re happy, <b>Go live</b> walks you through putting it in GoHighLevel, one step at a time.' },
+];
+function runTour() {
+  setView('pages');
+  startTour(TOUR, {
+    onDone: () => {
+      try {
+        localStorage.setItem(TOUR_KEY, '1');
+      } catch (e) {}
+    },
+  });
+}
+function maybeStartTour() {
+  let seen = false;
+  try {
+    seen = localStorage.getItem(TOUR_KEY) === '1';
+  } catch (e) {}
+  if (!seen) setTimeout(runTour, 400);
+}
 $('#importLink').addEventListener('click', () => $('#importFile').click());
 
 // ---------- put it in GoHighLevel ----------
@@ -814,10 +1048,15 @@ $('#pushDialog').addEventListener('click', (e) => {
 });
 
 // ---------- help ----------
-$('#helpBody').innerHTML = `<div class="dlg-head"><h2>Words you'll see</h2><button class="x" data-close aria-label="Close">✕</button></div>
+$('#helpBody').innerHTML = `<div class="dlg-head"><h2>Help</h2><button class="x" data-close aria-label="Close">✕</button></div>
+  <div class="help-actions"><button class="btn" data-help="tour">▶ Take the 1-minute tour</button><a class="btn sec" href="examples/index.html">See finished examples</a><a class="btn sec" href="pitch.html">Read the pitch</a></div>
+  <h3 style="margin:20px 0 0">Words you'll see</h3>
   <p class="muted">New to funnels? Here's what everything means.</p>
   <div class="gloss">${GLOSSARY.map(([w, d]) => `<div><b>${esc(w)}</b><p>${esc(d)}</p></div>`).join('')}</div>`;
 $('#helpBtn').addEventListener('click', () => $('#helpDialog').showModal());
+$('#helpDialog').addEventListener('click', (e) => {
+  if (e.target.closest('[data-help="tour"]')) $('#helpDialog').close(), runTour();
+});
 
 // ---------- files ----------
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'page';
@@ -903,8 +1142,6 @@ function renderAll() {
   save();
 }
 
-// On the shared deploy the builder lives at app.html next to the cover page.
-if (/app\.html$/.test(location.pathname)) $('#homeLink').hidden = false;
 
 const saved = loadSaved();
 if (saved) {
@@ -915,4 +1152,4 @@ if (saved) {
 }
 renderTemplates();
 renderAll();
-if (!saved) $('#templateDialog').showModal();
+if (!saved) openWelcome({ intro: true });

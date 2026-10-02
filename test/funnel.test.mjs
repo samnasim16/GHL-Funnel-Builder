@@ -131,3 +131,10 @@ test('setup guide has a tick box per task and copy buttons for SMS copy', async 
   }
   assert.doesNotThrow(() => new Function(guideScript('x')));
 });
+
+test('mobile styles keep the urgency bar, header and footer compact', () => {
+  const css = renderStepPage(buildTemplate('email-sms-audit'), 0);
+  const mobile = css.slice(css.indexOf('@media(max-width:680px)'));
+  assert.match(mobile, /\.fb-announcement\{padding:10px 16px\}/);
+  assert.match(mobile, /\.fb-header\{padding:12px 16px\}/);
+});
