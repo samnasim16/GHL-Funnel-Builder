@@ -1,6 +1,6 @@
 // Recommendations: specific, conversion-focused suggestions for one page, each
 // with a one-click fix the builder can apply. Pure: takes data, returns data.
-import { lines } from './sections.js?v=56fc796f51';
+import { lines } from './sections.js?v=b9ff416fb7';
 
 const GENERIC_BUTTONS = /^(submit|send|click here|go|continue|next|ok|enter)\W*$/i;
 const PLACEHOLDER = /\[[A-Z][^\]]{2,40}\]/;

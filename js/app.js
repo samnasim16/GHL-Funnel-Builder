@@ -1,13 +1,15 @@
-import { SECTIONS, makeSection, uid, esc, lines } from './sections.js?v=56fc796f51';
-import { renderStepPage, renderGhlSnippet, FONTS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js?v=56fc796f51';
-import { TEMPLATES, buildTemplate } from './templates.js?v=56fc796f51';
-import { auditFunnel, auditStep } from './audit.js?v=56fc796f51';
-import { blueprintMarkdown, systemMap } from './blueprint.js?v=56fc796f51';
-import { setupGuidePage } from './setup-guide.js?v=56fc796f51';
-import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js?v=56fc796f51';
-import { recommend } from './recommend.js?v=56fc796f51';
-import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js?v=56fc796f51';
-import { startTour } from './tour.js?v=56fc796f51';
+import { SECTIONS, makeSection, uid, esc, lines } from './sections.js?v=b9ff416fb7';
+import { renderStepPage, renderGhlSnippet, FONTS, FONT_META, FONT_GROUPS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js?v=b9ff416fb7';
+import { LOOKS, PALETTES, paletteFromColor, paletteFromPixels, suggestLook } from './styles.js?v=b9ff416fb7';
+import { openCropper, compressImage, readFile, samplePixels } from './images.js?v=b9ff416fb7';
+import { TEMPLATES, buildTemplate } from './templates.js?v=b9ff416fb7';
+import { auditFunnel, auditStep } from './audit.js?v=b9ff416fb7';
+import { blueprintMarkdown, systemMap } from './blueprint.js?v=b9ff416fb7';
+import { setupGuidePage } from './setup-guide.js?v=b9ff416fb7';
+import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js?v=b9ff416fb7';
+import { recommend } from './recommend.js?v=b9ff416fb7';
+import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js?v=b9ff416fb7';
+import { startTour } from './tour.js?v=b9ff416fb7';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -75,11 +77,16 @@ const GLOSSARY = [
 ];
 
 // ---------- persistence & history ----------
+let storageWarned = false;
 function save() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify({ funnel: state.funnel, step: state.step }));
   } catch (e) {
-    /* storage unavailable: builder still works for this session */
+    // Usually the browser's storage is full of uploaded pictures.
+    if (!storageWarned && e && /quota/i.test(e.name + e.message)) {
+      storageWarned = true;
+      toast('Your browser is full, so the latest changes may not be saved after closing. Use smaller pictures or picture links.');
+    }
   }
 }
 function loadSaved() {
@@ -357,69 +364,182 @@ $('#addGrid').addEventListener('click', (e) => {
 });
 
 // ---------- style ----------
-const PRESETS = [
-  { name: 'Bold red', primary: '#e11d2e', accent: '#ffd400', dark: '#0b0b0f' },
-  { name: 'Bold yellow', primary: '#ffd400', accent: '#e11d2e', dark: '#0a0a0a' },
-  { name: 'Orange', primary: '#ff9900', accent: '#0b0b0f', dark: '#111827' },
-  { name: 'Purple', primary: '#6d28d9', accent: '#facc15', dark: '#140b2e' },
-  { name: 'Green', primary: '#0e7c66', accent: '#ffb703', dark: '#0f2a24' },
-  { name: 'Blue', primary: '#2563eb', accent: '#22d3ee', dark: '#0b1220' },
+const SHAPE_CONTROLS = [
+  ['buttonShape', 'Button shape', [['rounded', 'Rounded'], ['pill', 'Pill'], ['square', 'Square']]],
+  ['buttonStyle', 'Button style', [['solid', 'Solid'], ['gradient', 'Gradient'], ['outline', 'Outline'], ['glow', 'Glow']]],
+  ['cardStyle', 'Cards and boxes', [['shadow', 'Shadow'], ['border', 'Outline'], ['flat', 'Flat'], ['glass', 'Glass']]],
+  ['spacing', 'Spacing', [['compact', 'Tight'], ['normal', 'Normal'], ['airy', 'Airy']]],
+  ['headingCase', 'Headlines', [['normal', 'Normal'], ['upper', 'UPPERCASE']]],
+  ['effect', 'Dark section background', [['none', 'Plain'], ['mesh', 'Glow'], ['grid', 'Grid'], ['dots', 'Dots'], ['noise', 'Grain']]],
 ];
+let fontTarget = 'headingFont';
+let fontGroup = 'All';
+function lookPreview(th) {
+  const r = { pill: '999px', square: '0', rounded: Math.min(th.radius, 12) + 'px' }[th.buttonShape];
+  const btnBg = th.buttonStyle === 'gradient' ? `linear-gradient(120deg,${th.primary},${th.accent})` : th.buttonStyle === 'outline' ? 'transparent' : th.primary;
+  const btnBorder = th.buttonStyle === 'outline' ? `box-shadow:inset 0 0 0 2px #fff;` : th.buttonStyle === 'glow' ? `box-shadow:0 4px 14px -2px ${th.primary};` : '';
+  return `<div class="lp" style="background:${th.dark};${th.effect === 'mesh' ? `background-image:radial-gradient(80% 90% at 0% 0%,${th.primary}66,transparent 60%),radial-gradient(70% 80% at 100% 0%,${th.accent}55,transparent 60%);` : ''}">
+    <span class="lp-h" style="font-family:'${th.headingFont}',sans-serif;${th.headingCase === 'upper' ? 'text-transform:uppercase;' : ''}">Aa</span>
+    <span class="lp-b" style="background:${btnBg};border-radius:${r};${btnBorder}"></span></div>`;
+}
 function renderTheme() {
   const t = { ...DEFAULT_THEME, ...state.funnel.theme };
+  $('#looks').innerHTML = LOOKS.map(
+    (l, i) =>
+      `<button type="button" data-look="${i}" class="look ${l.theme.primary === t.primary && l.theme.headingFont === t.headingFont ? 'on' : ''}" title="${esc(l.desc)}">${lookPreview(l.theme)}<b>${esc(l.name)}</b><small>${esc(l.desc)}</small></button>`
+  ).join('');
+  $('#palettes').innerHTML = PALETTES.map(
+    (p, i) =>
+      `<button type="button" data-pal="${i}" class="${p.primary === t.primary && p.dark === t.dark ? 'on' : ''}" title="${esc(p.name)}"><span class="sw"><i style="background:${p.primary}"></i><i style="background:${p.accent}"></i><i style="background:${p.dark}"></i></span><span class="pn">${esc(p.name)}</span></button>`
+  ).join('');
+  $('#seedColor').value = /^#[0-9a-f]{6}$/i.test(t.primary) ? t.primary : '#6d5dfc';
   $('#fontPairs').innerHTML = FONT_PAIRS.map(
     (fp, i) =>
       `<button data-fp="${i}" class="${fp.heading === t.headingFont && fp.body === t.bodyFont ? 'on' : ''}"><span class="fp-h" style="font-family:'${fp.heading}',sans-serif">${esc(fp.name)}</span><span class="fp-b" style="font-family:'${fp.body}',sans-serif">${esc(fp.heading)} + ${esc(fp.body)}</span></button>`
   ).join('');
-  $('#presets').innerHTML = PRESETS.map(
-    (p, i) =>
-      `<button data-p="${i}" class="${p.primary === t.primary && p.dark === t.dark ? 'on' : ''}"><div class="sw"><i style="background:${p.primary}"></i><i style="background:${p.accent}"></i><i style="background:${p.dark}"></i></div>${p.name}</button>`
-  ).join('');
+  renderFontList();
+  $('#shapeForm').innerHTML = SHAPE_CONTROLS.map(
+    ([k, label, opts]) =>
+      `<div class="sc"><span>${label}</span><div class="seg2" data-shape-k="${k}">${opts.map(([v, l]) => `<button type="button" data-v="${v}" class="${t[k] === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>`
+  ).join('') + `<label class="sc"><span>Rounded corners: <b id="radiusVal">${t.radius}px</b></span><input type="range" min="0" max="28" id="radiusRange" value="${t.radius}"></label>`;
   const color = (k, l) =>
     `<label><span>${l}</span><div class="color"><input type="color" data-k="${k}" value="${esc(t[k])}" aria-label="${l}"><input type="text" data-k="${k}" value="${esc(t[k])}" aria-label="${l} code"></div></label>`;
-  const font = (k, l) =>
-    `<label><span>${l}</span><select data-k="${k}">${Object.keys(FONTS)
-      .map((f) => `<option ${f === t[k] ? 'selected' : ''}>${f}</option>`)
-      .join('')}</select></label>`;
   $('#themeForm').innerHTML =
-    color('primary', 'Main color (buttons)') +
-    color('accent', 'Second color (highlights)') +
-    color('dark', 'Dark sections') +
-    color('text', 'Text') +
-    font('headingFont', 'Headline font') +
-    font('bodyFont', 'Text font') +
-    `<label><span>Rounded corners: ${t.radius}px</span><input type="range" min="0" max="28" data-k="radius" value="${t.radius}"></label>`;
+    color('primary', 'Main color (buttons)') + color('accent', 'Second color (highlights)') + color('dark', 'Dark sections') + color('alt', 'Light sections') + color('bg', 'Page background') + color('text', 'Text');
+}
+function renderFontList() {
+  const t = { ...DEFAULT_THEME, ...state.funnel.theme };
+  const q = ($('#fontSearch')?.value || '').toLowerCase();
+  $('#fontGroups').innerHTML = ['All', ...FONT_GROUPS].map((g) => `<button type="button" data-fg="${g}" class="${g === fontGroup ? 'on' : ''}">${g}</button>`).join('');
+  $$('.font-target button').forEach((b) => b.classList.toggle('on', b.dataset.ft === fontTarget));
+  $('#fontList').innerHTML = Object.entries(FONT_META)
+    .filter(([name, [, g]]) => (fontGroup === 'All' || g === fontGroup) && name.toLowerCase().includes(q))
+    .map(([name, [, g]]) => `<button type="button" data-font="${esc(name)}" class="${t[fontTarget] === name ? 'on' : ''}"><span style="font-family:'${esc(name)}',sans-serif">${esc(name)}</span><small>${g}</small></button>`)
+    .join('') || '<p class="muted small">No fonts match.</p>';
+}
+function applyTheme(patch, msg) {
+  commit(() => (state.funnel.theme = { ...state.funnel.theme, ...patch }));
+  if (msg) toast(msg);
 }
 let themeSnap = false;
 $('#themeForm').addEventListener('focusin', () => (themeSnap = false));
 $('#themeForm').addEventListener('input', (e) => {
   const k = e.target.dataset.k;
   if (!k) return;
-  let v = e.target.value;
-  if (k === 'radius') v = Number(v);
+  const v = e.target.value;
   if (e.target.type === 'text' && !/^#[0-9a-f]{6}$/i.test(v)) return;
   if (!themeSnap) pushHistory(), (themeSnap = true);
   state.funnel.theme = { ...state.funnel.theme, [k]: v };
   $$(`[data-k="${k}"]`, $('#themeForm')).forEach((el) => el !== e.target && (el.value = v));
-  if (k === 'radius') e.target.previousElementSibling.textContent = `Rounded corners: ${v}px`;
   save();
   renderFrame();
 });
-// Load every pairing's fonts once so the previews render in their own faces.
-document.head.insertAdjacentHTML('beforeend', fontLink({ headingFont: 'Sora', bodyFont: 'Outfit' }) + FONT_PAIRS.map((fp) => fontLink({ headingFont: fp.heading, bodyFont: fp.body }).replace(/<link rel="preconnect"[^>]*>/g, '')).join(''));
+$('#looks').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-look]');
+  if (b) applyTheme(LOOKS[+b.dataset.look].theme, `${LOOKS[+b.dataset.look].name} look applied. Undo to go back.`);
+});
+$('#palettes').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-pal]');
+  if (!b) return;
+  const { name, ...colors } = PALETTES[+b.dataset.pal];
+  applyTheme(colors, `${name} colors applied`);
+});
+$('#seedColor').addEventListener('change', (e) => applyTheme(paletteFromColor(e.target.value), 'Built a full palette from your color'));
+$('#logoColors').addEventListener('click', () => $('#logoFile').click());
+$('#logoFile').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  try {
+    const src = await readFile(file);
+    const pal = paletteFromPixels(await samplePixels(src));
+    if (!pal) return toast('Couldn\'t find strong colors in that picture. Try your logo on a plain background.');
+    applyTheme(pal, 'Colors matched to your logo');
+  } catch (err) {
+    toast(err.message);
+  }
+});
+let fontsLoaded = false;
+function loadAllFonts() {
+  if (fontsLoaded) return;
+  fontsLoaded = true;
+  const fams = Object.values(FONTS).map((f) => 'family=' + f).join('&');
+  document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fams}&display=swap">`);
+}
+$('#fontBrowser').addEventListener('toggle', (e) => e.target.open && loadAllFonts());
+$('#fontBrowser').addEventListener('click', (e) => {
+  const ft = e.target.closest('[data-ft]')?.dataset.ft;
+  if (ft) return (fontTarget = ft), renderFontList();
+  const fg = e.target.closest('[data-fg]')?.dataset.fg;
+  if (fg) return (fontGroup = fg), renderFontList();
+  const font = e.target.closest('[data-font]')?.dataset.font;
+  if (font) applyTheme({ [fontTarget]: font }, `${fontTarget === 'headingFont' ? 'Headlines' : 'Text'} now use ${font}`);
+});
+$('#fontSearch').addEventListener('input', renderFontList);
+$('#shapeForm').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-shape-k] button');
+  if (b) applyTheme({ [b.parentElement.dataset.shapeK]: b.dataset.v });
+});
+let radiusSnap = false;
+$('#shapeForm').addEventListener('input', (e) => {
+  if (e.target.id !== 'radiusRange') return;
+  if (!radiusSnap) pushHistory(), (radiusSnap = true);
+  state.funnel.theme = { ...state.funnel.theme, radius: Number(e.target.value) };
+  $('#radiusVal').textContent = e.target.value + 'px';
+  save();
+  renderFrame();
+});
+$('#shapeForm').addEventListener('change', () => (radiusSnap = false));
+// Load pairing + look fonts once (one request) so previews render in their own faces.
+{
+  const fams = new Set();
+  FONT_PAIRS.forEach((fp) => fams.add(fp.heading).add(fp.body));
+  LOOKS.forEach((l) => fams.add(l.theme.headingFont).add(l.theme.bodyFont));
+  const q = [...fams].map((f) => FONTS[f]).filter(Boolean).map((f) => 'family=' + f).join('&');
+  document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?${q}&display=swap">`);
+}
 $('#fontPairs').addEventListener('click', (e) => {
   const b = e.target.closest('button[data-fp]');
   if (!b) return;
   const fp = FONT_PAIRS[+b.dataset.fp];
-  commit(() => (state.funnel.theme = { ...state.funnel.theme, headingFont: fp.heading, bodyFont: fp.body }));
-  toast(`${fp.name} fonts applied`);
+  applyTheme({ headingFont: fp.heading, bodyFont: fp.body }, `${fp.name} fonts applied`);
 });
-$('#presets').addEventListener('click', (e) => {
-  const b = e.target.closest('button');
-  if (!b) return;
-  const { name, ...p } = PRESETS[+b.dataset.p];
-  commit(() => (state.funnel.theme = { ...state.funnel.theme, ...p }));
-  toast(`${name} look applied`);
+
+// ✨ Pick a look: AI when available, otherwise matched from the business type.
+$('#aiLook').addEventListener('click', async () => {
+  const brief = state.funnel.brief || {};
+  if (!brief.business && !brief.sells) {
+    toast('Tell us about your business first, then press ✨ Pick a look again.');
+    return openBrief();
+  }
+  const btn = $('#aiLook');
+  btn.disabled = true;
+  const label = btn.textContent;
+  btn.textContent = 'Picking a look…';
+  try {
+    await aiState.ready;
+    let look = suggestLook(brief);
+    let extra = {};
+    let why = 'matched to your type of business';
+    if (aiState.claude) {
+      const answer = await aiState.claude.json(
+        `Pick a website design for this business.\nBusiness: ${brief.business}\nSells: ${brief.sells}\nAudience: ${brief.audience || '-'}\nTone: ${brief.tone || '-'}\n\nChoose one look id from: ${LOOKS.map((l) => `${l.id} (${l.desc})`).join('; ')}.\nOptionally a primary brand color as a hex that fits the business, and fonts from this list only: ${Object.keys(FONTS).join(', ')}.\nReply with only JSON: {"look":"id","primary":"#rrggbb","headingFont":"name","bodyFont":"name","why":"one short sentence"}`,
+        { modelTier: 'quick', cache: false }
+      );
+      look = LOOKS.find((l) => l.id === answer?.look) || look;
+      if (/^#[0-9a-f]{6}$/i.test(answer?.primary || '')) extra = { ...paletteFromColor(answer.primary), primary: answer.primary };
+      if (FONTS[answer?.headingFont]) extra.headingFont = answer.headingFont;
+      if (FONTS[answer?.bodyFont]) extra.bodyFont = answer.bodyFont;
+      if (answer?.why) why = String(answer.why).slice(0, 120);
+    }
+    applyTheme({ ...look.theme, ...extra }, `${look.name}: ${why}. Undo to go back.`);
+  } catch (err) {
+    const look = suggestLook(brief);
+    applyTheme(look.theme, `${look.name} look applied (matched to your type of business).`);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+  }
 });
 
 // ---------- right: inspector ----------
@@ -450,8 +570,31 @@ function serializeList(listEl) {
     .filter(Boolean)
     .join('\n');
 }
+const IMG_HELP = 'Tip: for the fastest pages, upload big photos to GoHighLevel → Media and paste the link instead.';
+function imageFieldHTML(k, f, v) {
+  const has = Boolean(String(v).trim());
+  const isData = /^data:image/.test(v);
+  return `<div class="imgf" data-img="${k}" data-aspect="${esc(f.aspect || 'original')}">
+    <div class="imgf-prev">${has ? `<img src="${esc(v)}" alt="">` : '<span>No picture yet</span>'}</div>
+    <div class="imgf-btns"><button type="button" class="btn sm" data-img-act="upload">${has ? 'Replace' : '⬆ Upload'}</button>${
+      has ? `<button type="button" class="btn sec sm" data-img-act="crop">✂ Crop & adjust</button><button type="button" class="btn sec sm" data-img-act="remove">Remove</button>` : ''
+    }</div>
+    <input type="text" class="imgf-url" data-img-url="${k}" value="${isData ? '' : esc(v)}" placeholder="or paste a picture link (https://…)">
+    <input type="file" accept="image/*" data-img-file="${k}" hidden>
+  </div>`;
+}
+function galleryFieldHTML(k, v) {
+  const pics = lines(v);
+  return `<div class="galf" data-gal="${k}">
+    <div class="galf-grid">${pics.map((src, i) => `<div class="galf-item"><img src="${esc(src)}" alt=""><div class="galf-tools"><button type="button" data-gal-act="crop" data-i="${i}" title="Crop">✂</button><button type="button" data-gal-act="left" data-i="${i}" title="Move left">←</button><button type="button" data-gal-act="del" data-i="${i}" title="Remove">✕</button></div></div>`).join('')}
+      <button type="button" class="galf-add" data-gal-act="add">+ Add pictures</button></div>
+    <input type="file" accept="image/*" multiple data-gal-file="${k}" hidden>
+  </div>`;
+}
 function fieldHTML(k, f, v) {
   const help = f.help ? `<div class="help">${esc(f.help)}</div>` : '';
+  if (f.type === 'image') return `<div class="field"><span class="flabel">${esc(f.label)}</span>${imageFieldHTML(k, f, v)}</div>`;
+  if (f.type === 'gallery') return `<div class="field"><span class="flabel">${esc(f.label)}</span>${galleryFieldHTML(k, v)}<div class="help">${IMG_HELP}</div></div>`;
   if (f.type === 'list') return `<label><span>${esc(f.label)}</span>${listHTML(k, f, v)}${help}</label>`;
   if (f.type === 'select' && k === 'bg') {
     const t = { ...DEFAULT_THEME, ...state.funnel.theme };
@@ -500,8 +643,9 @@ function renderInspector() {
   }
   const def = SECTIONS[sec.type];
   const entries = Object.entries(def.fields);
-  const content = entries.filter(([k]) => k !== 'bg' && !LINKISH.test(k));
-  const links = entries.filter(([k]) => k !== 'bg' && LINKISH.test(k));
+  const isPic = (f) => f.type === 'image' || f.type === 'gallery';
+  const content = entries.filter(([k, f]) => k !== 'bg' && (isPic(f) || !LINKISH.test(k)));
+  const links = entries.filter(([k, f]) => k !== 'bg' && !isPic(f) && LINKISH.test(k));
   const look = entries.filter(([k]) => k === 'bg');
   box.innerHTML = `<div class="insp-head"><h3>${def.icon} ${esc(def.name)}</h3><div class="insp-actions">
       <button data-a="up" title="Move up">↑</button><button data-a="down" title="Move down">↓</button><button data-a="dup" title="Duplicate">⧉</button><button data-a="del" class="danger" title="Delete">🗑</button><button data-a="close" title="Done">✓</button></div></div>
@@ -515,6 +659,87 @@ function renderInspector() {
 }
 let inspSnap = false;
 const insp = $('#inspector');
+
+// ---- pictures in the settings panel ----
+function setPic(k, v) {
+  inspSnap = false;
+  setProp(k, v);
+  renderInspector();
+}
+insp.addEventListener('click', async (e) => {
+  const imgBox = e.target.closest('[data-img]');
+  const act = e.target.closest('[data-img-act]')?.dataset.imgAct;
+  if (imgBox && act) {
+    e.preventDefault();
+    const k = imgBox.dataset.img;
+    if (act === 'upload') return $(`[data-img-file="${k}"]`, imgBox).click();
+    if (act === 'remove') return setPic(k, '');
+    if (act === 'crop') {
+      const cur = curStep().sections[state.sel].props[k];
+      try {
+        const out = await openCropper(cur, { shape: imgBox.dataset.aspect });
+        if (out) setPic(k, out);
+      } catch (err) {
+        toast(/^https?:/.test(cur) ? 'Pictures from links can\'t be cropped here. Upload the file instead.' : err.message);
+      }
+    }
+    return;
+  }
+  const gal = e.target.closest('[data-gal]');
+  const gact = e.target.closest('[data-gal-act]')?.dataset.galAct;
+  if (gal && gact) {
+    e.preventDefault();
+    const k = gal.dataset.gal;
+    const pics = lines(curStep().sections[state.sel].props[k]);
+    const i = +e.target.closest('[data-gal-act]').dataset.i;
+    if (gact === 'add') return $(`[data-gal-file="${k}"]`, gal).click();
+    if (gact === 'del') pics.splice(i, 1);
+    if (gact === 'left' && i > 0) [pics[i - 1], pics[i]] = [pics[i], pics[i - 1]];
+    if (gact === 'crop') {
+      try {
+        const out = await openCropper(pics[i], { shape: '1:1' });
+        if (!out) return;
+        pics[i] = out;
+      } catch (err) {
+        return toast(err.message);
+      }
+    }
+    setPic(k, pics.join('\n'));
+  }
+});
+insp.addEventListener('change', async (e) => {
+  const k = e.target.dataset.imgFile;
+  if (k) {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const src = await readFile(file);
+      const box = e.target.closest('[data-img]');
+      const out = await openCropper(src, { shape: box?.dataset.aspect || 'original' });
+      if (out) setPic(k, out), toast('Picture added');
+    } catch (err) {
+      toast(err.message);
+    }
+    return;
+  }
+  const g = e.target.dataset.galFile;
+  if (g) {
+    const files = [...e.target.files];
+    e.target.value = '';
+    if (!files.length) return;
+    toast(`Adding ${files.length} picture${files.length > 1 ? 's' : ''}…`);
+    const pics = lines(curStep().sections[state.sel].props[g]);
+    for (const f of files) {
+      try {
+        pics.push(await compressImage(await readFile(f)));
+      } catch (err) {
+        toast(err.message);
+      }
+    }
+    setPic(g, pics.join('\n'));
+  }
+});
 insp.addEventListener('focusin', () => (inspSnap = false));
 function setProp(k, v, { refreshList = true } = {}) {
   if (!inspSnap) pushHistory(), (inspSnap = true);
@@ -527,6 +752,12 @@ function setProp(k, v, { refreshList = true } = {}) {
 }
 insp.addEventListener('input', (e) => {
   const el = e.target;
+  if (el.dataset.imgUrl !== undefined) {
+    const v = el.value.trim();
+    if (!v || /^https?:\/\//i.test(v)) setProp(el.dataset.imgUrl, v);
+    return;
+  }
+  if (el.dataset.imgFile !== undefined || el.dataset.galFile !== undefined) return;
   if (el.dataset.f && state.sel >= 0) return setProp(el.dataset.f, el.value);
   const list = el.closest('[data-list]');
   if (list) return setProp(list.dataset.list, serializeList(list), { refreshList: false });

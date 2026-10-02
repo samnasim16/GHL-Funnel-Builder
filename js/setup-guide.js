@@ -1,8 +1,8 @@
 // Interactive GoHighLevel setup guide: a standalone page with a tick box on
 // every task, a copy button on every value, and saved progress. Used by the
 // builder's "Setup guide" tab and written next to each example funnel.
-import { esc } from './sections.js?v=56fc796f51';
-import { systemMap, blueprintMarkdown } from './blueprint.js?v=56fc796f51';
+import { esc } from './sections.js?v=b9ff416fb7';
+import { systemMap, blueprintMarkdown } from './blueprint.js?v=b9ff416fb7';
 
 const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const copyBtn = (text, label = 'Copy') => `<button class="cp" type="button" data-copy="${esc(text)}">${label}</button>`;

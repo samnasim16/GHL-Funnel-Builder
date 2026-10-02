@@ -26,7 +26,7 @@
       },
       "sections": [
         {
-          "id": "smuqiupk118o1b4",
+          "id": "smuqjjw9z18f5is",
           "type": "announcement",
           "props": {
             "text": "LIVE training starts in",
@@ -34,7 +34,7 @@
           }
         },
         {
-          "id": "smuqiupk1199m9d",
+          "id": "smuqjjw9z19tw3a",
           "type": "hero",
           "props": {
             "eyebrow": "Free live masterclass",
@@ -46,11 +46,13 @@
             "ctaLink": "#form",
             "note": "Seats are limited to 500 live attendees.",
             "image": "",
+            "bgImage": "",
+            "overlay": "medium",
             "bg": "dark"
           }
         },
         {
-          "id": "smuqiupk11a0zub",
+          "id": "smuqjjw9z1a6b8e",
           "type": "form",
           "props": {
             "headline": "Reserve Your Seat",
@@ -65,7 +67,7 @@
           }
         },
         {
-          "id": "smuqiupk11b9rei",
+          "id": "smuqjjw9z1b9np1",
           "type": "text",
           "props": {
             "headline": "Who Is [Creator Name]?",
@@ -74,7 +76,7 @@
           }
         },
         {
-          "id": "smuqiupk11c0s16",
+          "id": "smuqjjw9z1c5xsl",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -89,7 +91,7 @@
       "path": "/masterclass-confirmed",
       "sections": [
         {
-          "id": "smuqiupk11dzs2b",
+          "id": "smuqjjw9z1d5lpi",
           "type": "thankyou",
           "props": {
             "headline": "You're Registered! 🎉",
@@ -99,7 +101,7 @@
           }
         },
         {
-          "id": "smuqiupk11ep889",
+          "id": "smuqjjw9z1exaos",
           "type": "video",
           "props": {
             "headline": "Watch This Quick Message From [Creator Name]",
@@ -111,7 +113,7 @@
           }
         },
         {
-          "id": "smuqiupk11ftr7i",
+          "id": "smuqjjw9z1fkt8b",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -126,7 +128,7 @@
       "path": "/masterclass-replay",
       "sections": [
         {
-          "id": "smuqiupk11gj9k5",
+          "id": "smuqjjw9z1gdsqw",
           "type": "announcement",
           "props": {
             "text": "Replay comes down in",
@@ -134,7 +136,7 @@
           }
         },
         {
-          "id": "smuqiupk11hxod8",
+          "id": "smuqjjw9z1h6sjz",
           "type": "video",
           "props": {
             "headline": "Masterclass Replay",
@@ -146,7 +148,7 @@
           }
         },
         {
-          "id": "smuqiupk11ix887",
+          "id": "smuqjjw9z1i2pop",
           "type": "offer",
           "props": {
             "headline": "Join The 90-Day Accelerator",
@@ -159,7 +161,7 @@
           }
         },
         {
-          "id": "smuqiupk11jxijw",
+          "id": "smuqjjw9z1jpvb0",
           "type": "checkout",
           "props": {
             "headline": "Join The 90-Day Accelerator",
@@ -174,7 +176,7 @@
           }
         },
         {
-          "id": "smuqiupk11kl1nj",
+          "id": "smuqjjw9z1km73b",
           "type": "guarantee",
           "props": {
             "headline": "30-Day Action Guarantee",
@@ -183,7 +185,7 @@
           }
         },
         {
-          "id": "smuqiupk11l6hht",
+          "id": "smuqjjw9z1ltzye",
           "type": "faq",
           "props": {
             "headline": "Frequently Asked Questions",
@@ -192,7 +194,7 @@
           }
         },
         {
-          "id": "smuqiupk11ma6io",
+          "id": "smuqjjw9z1m27mr",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",
@@ -210,7 +212,7 @@
       },
       "sections": [
         {
-          "id": "smuqiupk11n5xcn",
+          "id": "smuqjjw9z1nu7dl",
           "type": "thankyou",
           "props": {
             "headline": "You're In! Welcome To The Accelerator 🎉",
@@ -220,7 +222,7 @@
           }
         },
         {
-          "id": "smuqiupk11oh1en",
+          "id": "smuqjjw9z1oczwo",
           "type": "footer",
           "props": {
             "text": "© 2026 Client Brand. All rights reserved.",

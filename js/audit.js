@@ -1,6 +1,6 @@
 // Conversion audit: scores each step against the checklist a senior funnel
 // builder runs before launch. Pure function so it can be unit-tested.
-import { lines } from './sections.js?v=56fc796f51';
+import { lines } from './sections.js?v=b9ff416fb7';
 
 const has = (step, type) => step.sections.some((s) => s.type === type);
 const first = (step, type) => step.sections.find((s) => s.type === type);

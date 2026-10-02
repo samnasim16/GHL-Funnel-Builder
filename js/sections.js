@@ -28,14 +28,21 @@ const safeUrl = (u = '') => {
   return '';
 };
 
+// Images: web links, or pictures uploaded in the builder (stored as data URLs).
+export const safeImg = (u = '') => {
+  const v = String(u).trim();
+  if (/^data:image\/(png|jpe?g|webp|gif);base64,[a-z0-9+/=]+$/i.test(v)) return v;
+  return /^https?:\/\//i.test(v) ? v : '';
+};
+
 // Marks an element as editable in place. Emits nothing outside the editor.
 const F = (ctx, key) => (ctx && ctx.editor ? ` data-f="${key}"` : '');
 
 const btn = (label, href, cls = '', attr = '') =>
   `<a class="fb-btn ${cls}" href="${esc(safeUrl(href) || '#')}"${attr}>${esc(label)}</a>`;
 
-const sectionWrap = (type, inner, { bg = '', id = '' } = {}) =>
-  `<section class="fb-s fb-${type}${bg ? ' fb-bg-' + bg : ''}"${id ? ` id="${esc(id)}"` : ''}><div class="fb-wrap">${inner}</div></section>`;
+const sectionWrap = (type, inner, { bg = '', id = '', style = '', cls = '' } = {}) =>
+  `<section class="fb-s fb-${type}${bg ? ' fb-bg-' + bg : ''}${cls ? ' ' + cls : ''}"${id ? ` id="${esc(id)}"` : ''}${style ? ` style="${esc(style)}"` : ''}><div class="fb-wrap">${inner}</div></section>`;
 
 const BG = { type: 'select', label: 'Background', options: ['default', 'alt', 'dark', 'primary'], optionLabels: ['White', 'Light grey', 'Dark', 'Brand color'] };
 
@@ -74,15 +81,15 @@ export const SECTIONS = {
     desc: 'Your logo and one button at the top of the page.',
     fields: {
       logo: { type: 'text', label: 'Logo text' },
-      logoUrl: { type: 'text', label: 'Logo image URL (optional)' },
+      logoUrl: { type: 'image', label: 'Logo image (optional)', aspect: 'original' },
       cta: { type: 'text', label: 'Button label' },
       ctaLink: { type: 'text', label: 'Button goes to' },
     },
     defaults: { logo: 'YOUR BRAND', logoUrl: '', cta: 'Book a Call', ctaLink: '#form' },
     render: (p, ctx = {}) =>
       `<header class="fb-s fb-header"><div class="fb-wrap fb-row">${
-        safeUrl(p.logoUrl)
-          ? `<img class="fb-logo-img" src="${esc(safeUrl(p.logoUrl))}" alt="${esc(p.logo)}">`
+        safeImg(p.logoUrl)
+          ? `<img class="fb-logo-img" src="${esc(safeImg(p.logoUrl))}" alt="${esc(p.logo)}">`
           : `<div class="fb-logo"${F(ctx, 'logo')}>${esc(p.logo)}</div>`
       }${p.cta ? btn(p.cta, p.ctaLink, 'fb-btn-sm', F(ctx, 'cta')) : ''}</div></header>`,
   },
@@ -100,7 +107,9 @@ export const SECTIONS = {
       cta: { type: 'text', label: 'Button label' },
       ctaLink: { type: 'text', label: 'Button goes to' },
       note: { type: 'text', label: 'Small text under the button' },
-      image: { type: 'text', label: 'Side image URL (optional)' },
+      image: { type: 'image', label: 'Picture beside the text (optional)', aspect: '4:3' },
+      bgImage: { type: 'image', label: 'Background picture (optional)', aspect: '16:9' },
+      overlay: { type: 'select', label: 'Background darkness', options: ['light', 'medium', 'strong'], optionLabels: ['Light', 'Medium', 'Strong'] },
       bg: BG,
     },
     defaults: {
@@ -113,6 +122,8 @@ export const SECTIONS = {
       ctaLink: '#form',
       note: 'Free 30-minute strategy session. No obligation.',
       image: '',
+      bgImage: '',
+      overlay: 'medium',
       bg: 'dark',
     },
     render: (p, ctx = {}) => {
@@ -121,7 +132,9 @@ export const SECTIONS = {
         h = h.replace(esc(p.highlight), `<span class="fb-hl">${esc(p.highlight)}</span>`);
       }
       const bl = lines(p.bullets);
-      const img = safeUrl(p.image);
+      const img = safeImg(p.image);
+      const bgImg = safeImg(p.bgImage);
+      const shade = { light: 0.35, medium: 0.55, strong: 0.75 }[p.overlay] ?? 0.55;
       const copy = `${p.eyebrow ? `<div class="fb-eyebrow"${F(ctx, 'eyebrow')}>${esc(p.eyebrow)}</div>` : ''}
         <h1${F(ctx, 'headline')}>${h.replace(/\n/g, '<br>')}</h1>
         ${p.sub ? `<p class="fb-lead"${F(ctx, 'sub')}>${esc(p.sub)}</p>` : ''}
@@ -133,7 +146,9 @@ export const SECTIONS = {
         img
           ? `<div class="fb-split"><div>${copy}</div><div><img class="fb-hero-img" src="${esc(img)}" alt=""></div></div>`
           : `<div class="fb-center">${copy}</div>`,
-        { bg: p.bg }
+        bgImg
+          ? { bg: p.bg, cls: 'fb-has-bgimg', style: `background-image:linear-gradient(rgba(8,8,12,${shade}),rgba(8,8,12,${shade + 0.1})),url('${bgImg}')` }
+          : { bg: p.bg }
       );
     },
   },
@@ -199,6 +214,94 @@ export const SECTIONS = {
           .join('')}</div>`,
         { bg: p.bg }
       ),
+  },
+
+  image: {
+    name: 'Picture',
+    icon: '🖼',
+    desc: 'One big picture, like a product shot or a team photo, with an optional caption.',
+    fields: {
+      image: { type: 'image', label: 'Picture', aspect: 'original' },
+      alt: { type: 'text', label: 'Describe the picture (for screen readers and Google)' },
+      caption: { type: 'text', label: 'Caption (optional)' },
+      width: { type: 'select', label: 'Width', options: ['normal', 'wide', 'full'], optionLabels: ['Normal', 'Wide', 'Edge to edge'] },
+      bg: BG,
+    },
+    defaults: { image: '', alt: '', caption: '', width: 'wide', bg: 'default' },
+    render: (p, ctx = {}) => {
+      const src = safeImg(p.image);
+      return sectionWrap(
+        'image',
+        `<figure class="fb-figure fb-w-${esc(p.width || 'wide')}">${
+          src ? `<img src="${esc(src)}" alt="${esc(p.alt || '')}" loading="lazy">` : `<div class="fb-placeholder">🖼 Upload a picture in the settings on the right</div>`
+        }${p.caption ? `<figcaption${F(ctx, 'caption')}>${esc(p.caption)}</figcaption>` : ''}</figure>`,
+        { bg: p.bg }
+      );
+    },
+  },
+
+  imageText: {
+    name: 'Picture + text',
+    icon: '◧',
+    desc: 'A picture next to a headline, a few points and a button. Great for showing what you do.',
+    fields: {
+      image: { type: 'image', label: 'Picture', aspect: '4:3' },
+      side: { type: 'select', label: 'Picture on the', options: ['left', 'right'], optionLabels: ['Left', 'Right'] },
+      eyebrow: { type: 'text', label: 'Small text above the headline' },
+      headline: { type: 'textarea', label: 'Headline' },
+      body: { type: 'textarea', label: 'Text' },
+      bullets: { type: 'list', label: 'Bullet points', cols: ['Bullet'] },
+      cta: { type: 'text', label: 'Button label (optional)' },
+      ctaLink: { type: 'text', label: 'Button goes to' },
+      bg: BG,
+    },
+    defaults: {
+      image: '',
+      side: 'left',
+      eyebrow: 'Why it works',
+      headline: 'Built By People Who Actually Run The Ads',
+      body: 'Every account gets a senior strategist, a creative team and a weekly plan you can read in two minutes.',
+      bullets: 'One point of contact\nWeekly creative testing\nReporting on real profit, not vanity numbers',
+      cta: '',
+      ctaLink: '#form',
+      bg: 'default',
+    },
+    render: (p, ctx = {}) => {
+      const src = safeImg(p.image);
+      const pic = src ? `<img class="fb-it-img" src="${esc(src)}" alt="" loading="lazy">` : `<div class="fb-placeholder fb-it-img">🖼 Upload a picture</div>`;
+      const bl = lines(p.bullets);
+      const copy = `<div>${p.eyebrow ? `<div class="fb-eyebrow"${F(ctx, 'eyebrow')}>${esc(p.eyebrow)}</div>` : ''}<h2${F(ctx, 'headline')}>${esc(p.headline)}</h2>${
+        p.body ? `<p class="fb-lead fb-left"${F(ctx, 'body')}>${esc(p.body)}</p>` : ''
+      }${bl.length ? `<ul class="fb-checks fb-left">${bl.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>` : ''}${
+        p.cta ? `<div class="fb-cta-row">${btn(p.cta, p.ctaLink, '', F(ctx, 'cta'))}</div>` : ''
+      }</div>`;
+      return sectionWrap('imageText', `<div class="fb-split fb-it ${p.side === 'right' ? 'fb-it-right' : ''}">${p.side === 'right' ? copy + `<div>${pic}</div>` : `<div>${pic}</div>` + copy}</div>`, { bg: p.bg });
+    },
+  },
+
+  gallery: {
+    name: 'Picture gallery',
+    icon: '▦',
+    desc: 'A grid of pictures: results, products, events or happy clients.',
+    fields: {
+      headline: { type: 'text', label: 'Headline (optional)' },
+      images: { type: 'gallery', label: 'Pictures' },
+      columns: { type: 'select', label: 'Pictures per row', options: ['2', '3', '4'], optionLabels: ['2', '3', '4'] },
+      bg: BG,
+    },
+    defaults: { headline: 'See It For Yourself', images: '', columns: '3', bg: 'alt' },
+    render: (p, ctx = {}) => {
+      const pics = lines(p.images).map(safeImg).filter(Boolean);
+      return sectionWrap(
+        'gallery',
+        `${p.headline ? `<h2 class="fb-center"${F(ctx, 'headline')}>${esc(p.headline)}</h2>` : ''}${
+          pics.length
+            ? `<div class="fb-gallery fb-cols-${esc(p.columns || '3')}">${pics.map((src) => `<img src="${esc(src)}" alt="" loading="lazy">`).join('')}</div>`
+            : `<div class="fb-placeholder">🖼 Add pictures in the settings on the right</div>`
+        }`,
+        { bg: p.bg }
+      );
+    },
   },
 
   stats: {
