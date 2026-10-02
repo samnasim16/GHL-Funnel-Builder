@@ -11,69 +11,64 @@
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span class="brand-mark">F</span> FunnelForge <small>for GoHighLevel</small></div>
-  <input id="funnelName" class="funnel-name" aria-label="Funnel name">
-  <nav class="views" role="tablist">
-    <button data-view="pages" class="on">Pages</button>
-    <button data-view="blueprint">GHL Blueprint</button>
-    <button data-view="audit">Launch Audit <span id="scoreBadge" class="badge">–</span></button>
+  <div class="brand"><span class="brand-mark">F</span><span>FunnelForge</span></div>
+  <input id="funnelName" class="funnel-name" aria-label="Funnel name" title="Rename your funnel">
+  <nav class="views" aria-label="Views">
+    <button data-view="pages" class="on">✏️ Edit pages</button>
+    <button data-view="blueprint">⚡ Your system</button>
+    <button data-view="audit">✅ Checklist <span id="scoreBadge" class="badge">–</span></button>
   </nav>
   <div class="top-actions">
-    <button id="undoBtn" title="Undo (Ctrl+Z)">↶</button>
-    <button id="redoBtn" title="Redo (Ctrl+Shift+Z)">↷</button>
-    <button id="templatesBtn">Templates</button>
-    <div class="menu">
-      <button id="exportBtn" class="primary">Export ▾</button>
-      <div class="menu-list" id="exportMenu" hidden>
-        <button data-export="snippet">Copy GHL Custom Code (this step)</button>
-        <button data-export="html">Download HTML (this step)</button>
-        <button data-export="allhtml">Download HTML (all steps)</button>
-        <button data-export="preview">Open live preview tab</button>
-        <hr>
-        <button data-export="sop">Download GHL Build Sheet (.md)</button>
-        <button data-export="json">Download funnel (.json)</button>
-        <button data-export="import">Import funnel (.json)</button>
-      </div>
-    </div>
-    <input type="file" id="importFile" accept=".json,application/json" hidden>
+    <button id="helpBtn" class="icon" title="What do these words mean?">?</button>
+    <button id="undoBtn" class="icon" title="Undo (Ctrl+Z)">↶</button>
+    <button id="redoBtn" class="icon" title="Redo (Ctrl+Shift+Z)">↷</button>
+    <button id="newBtn" class="ghost-btn">New funnel</button>
+    <button id="previewBtn" class="ghost-btn">Preview</button>
+    <button id="publishBtn" class="primary">Put in GoHighLevel →</button>
   </div>
 </header>
+
+<div class="guide" id="guide">
+  <div class="g-step done"><span class="g-n">1</span><div><b>Pick a goal</b><small id="goalName">Done</small></div><button id="changeGoal" class="link">Change</button></div>
+  <div class="g-line"></div>
+  <div class="g-step now"><span class="g-n">2</span><div><b>Edit your pages</b><small>Click any text on the page and type</small></div></div>
+  <div class="g-line"></div>
+  <div class="g-step"><span class="g-n">3</span><div><b>Put it in GoHighLevel</b><small>We walk you through it</small></div><button id="goPublish" class="link">Start</button></div>
+</div>
 
 <main class="app" id="pagesView">
   <aside class="left">
     <div class="tabs" role="tablist">
-      <button data-tab="steps" class="on">Steps</button>
+      <button data-tab="steps" class="on">Pages</button>
       <button data-tab="add">Add</button>
-      <button data-tab="theme">Theme</button>
-      <button data-tab="settings">Settings</button>
+      <button data-tab="theme">Style</button>
     </div>
     <div class="tab" id="tab-steps">
-      <div class="label">Funnel steps</div>
+      <p class="explain">Your funnel is a few pages in a row. Visitors go from one page to the next.</p>
       <ol id="stepList" class="step-list"></ol>
-      <button id="addStep" class="ghost full">+ Add step</button>
-      <div class="label">Sections on this step <span class="hint">drag to reorder</span></div>
+      <button id="addStep" class="ghost full">+ Add a page</button>
+      <div class="label">On this page <span class="hint">drag to reorder</span></div>
       <ol id="sectionList" class="section-list"></ol>
     </div>
     <div class="tab" id="tab-add" hidden>
-      <div class="label">Click to add after the selected section</div>
+      <p class="explain">Click a block to add it to the page. Tip: you can also hover between sections on the page and click <b>+</b>.</p>
       <div id="library" class="library"></div>
     </div>
     <div class="tab" id="tab-theme" hidden>
-      <div id="themeForm" class="form"></div>
-      <div class="label">Presets</div>
+      <div class="label">Pick a look</div>
       <div id="presets" class="presets"></div>
-    </div>
-    <div class="tab" id="tab-settings" hidden>
-      <div id="settingsForm" class="form"></div>
+      <details class="more">
+        <summary>Customize colors and fonts</summary>
+        <div id="themeForm" class="form"></div>
+      </details>
     </div>
   </aside>
 
   <section class="canvas">
     <div class="canvas-bar">
-      <div class="devices" role="group" aria-label="Device preview">
-        <button data-device="desktop" class="on" title="Desktop">🖥</button>
-        <button data-device="tablet" title="Tablet">▭</button>
-        <button data-device="mobile" title="Mobile">📱</button>
+      <div class="devices" role="group" aria-label="Preview size">
+        <button data-device="desktop" class="on" title="Computer">🖥 Computer</button>
+        <button data-device="mobile" title="Phone">📱 Phone</button>
       </div>
       <div class="url" id="urlBar"></div>
     </div>
@@ -88,12 +83,22 @@
 <main class="doc-view" id="blueprintView" hidden></main>
 <main class="doc-view" id="auditView" hidden></main>
 
-<dialog id="templateDialog">
-  <form method="dialog" class="dlg-head"><h2>Start from a proven funnel</h2><button aria-label="Close">✕</button></form>
-  <p class="muted">Every template ships the pages <b>and</b> the GHL back end: pipeline, tags, custom fields, calendars and workflows.</p>
+<dialog id="templateDialog" class="wide">
+  <div class="dlg-head"><div><div class="kicker">Step 1 of 3</div><h2>What should your funnel do?</h2></div><button class="x" data-close aria-label="Close">✕</button></div>
+  <p class="muted">Pick the closest goal. We'll set up the pages and the automatic follow-ups for you. You can change every word later.</p>
   <div id="templateGrid" class="template-grid"></div>
+  <p class="muted small">Have a funnel file already? <button class="link" id="importLink">Open it</button></p>
 </dialog>
 
+<dialog id="addDialog" class="wide">
+  <div class="dlg-head"><h2>Add a section</h2><button class="x" data-close aria-label="Close">✕</button></div>
+  <div id="addGrid" class="library big"></div>
+</dialog>
+
+<dialog id="publishDialog" class="wide"><div id="publishBody"></div></dialog>
+<dialog id="helpDialog" class="wide"><div id="helpBody"></div></dialog>
+
+<input type="file" id="importFile" accept=".json,application/json" hidden>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script type="module" src="js/app.js"></script>
 </body>

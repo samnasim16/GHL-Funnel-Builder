@@ -92,6 +92,8 @@ p{margin:0 0 1em}
 .fb-form .fb-invalid{border-color:#d92d20;background:#fff5f5}
 .fb-form-msg{margin-top:10px;font-weight:600;text-align:center}
 .fb-consent{font-size:.72rem;opacity:.6;margin-top:12px;line-height:1.4}
+.fb-co-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;font-size:1.1rem}.fb-co-row strong{font-family:var(--hf);font-size:1.8rem;color:var(--p)}
+.fb-checkout .fb-checks{margin:16px 0}
 .fb-cal{max-width:900px;margin:24px auto 0;background:var(--bg);border-radius:var(--r);overflow:hidden}
 .fb-cal iframe{width:100%;min-height:720px;border:0;display:block}
 .fb-guarantee{display:flex;gap:24px;align-items:center;max-width:760px;margin:0 auto;padding:28px;border-radius:var(--r);background:var(--alt);color:var(--tx)}
@@ -121,7 +123,7 @@ p{margin:0 0 1em}
         </div></div></section>
 <section class="fb-s fb-form fb-bg-default" id="form"><div class="fb-wrap"><div class="fb-form-box"><h2 class="fb-center">Tell Us About Your Project</h2><p class="fb-center fb-muted">Takes 60 seconds. We review every application personally.</p><form class="fb-form" data-webhook="" data-redirect="./free-quote-thanks.html" data-step="Offer" novalidate>
             <label><span>Name</span><input type="text" name="first_name" required></label><label><span>Phone</span><input type="tel" name="phone" required autocomplete="tel"></label><label><span>Email</span><input type="email" name="email" required autocomplete="email"></label><label><span>Zip code</span><input type="text" name="postal_code" required></label><label><span>Service needed</span><select name="service" required><option value="">Select…</option><option>[Service A]</option><option>[Service B]</option><option>[Service C]</option><option>Not sure</option></select></label>
-            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit">Get My Quote →</button>
+            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit"><span>Get My Quote →</span></button>
             <div class="fb-form-msg" role="status"></div>
             <p class="fb-consent">By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
           </form></div></div></section>

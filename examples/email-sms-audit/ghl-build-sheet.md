@@ -2,6 +2,20 @@
 
 Domain: `go.badmarketing.com`
 
+## 0. GoHighLevel tools this funnel uses
+
+| Tool | Where in GHL | Used | Replaces |
+|---|---|---|---|
+| Funnel pages | Sites → Funnels | Yes | ClickFunnels, Leadpages |
+| Contacts (CRM) | Contacts | Yes | HubSpot, spreadsheets |
+| Booking calendar | Calendars | Yes | Calendly, Acuity |
+| Pipeline | Opportunities | Yes | Pipedrive, Trello |
+| Texts and emails | Conversations | Yes | Mailchimp, Twilio |
+| Automations | Automation → Workflows | Yes | Zapier, ActiveCampaign |
+| Payments | Payments | Not yet | ThriveCart, SamCart |
+| Courses and memberships | Memberships | Not yet | Kajabi, Teachable |
+| Reviews | Reputation | Not yet | Birdeye, Podium |
+
 ## 1. Funnel steps (Sites → Funnels → New Funnel)
 
 | # | Step | Path | Sections |

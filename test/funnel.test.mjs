@@ -4,7 +4,7 @@ import { SECTIONS, makeSection, videoEmbedUrl, esc } from '../js/sections.js';
 import { renderStepPage, renderGhlSnippet, RUNTIME_JS, contrastText } from '../js/renderer.js';
 import { TEMPLATES, buildTemplate } from '../js/templates.js';
 import { auditFunnel, auditStep } from '../js/audit.js';
-import { blueprintMarkdown } from '../js/blueprint.js';
+import { blueprintMarkdown, systemMap } from '../js/blueprint.js';
 
 test('every section renders with defaults and no "undefined"', () => {
   for (const [type, def] of Object.entries(SECTIONS)) {
@@ -92,4 +92,26 @@ test('build sheet covers every blueprint area', () => {
 test('contrastText picks readable colours', () => {
   assert.equal(contrastText('#ffd400'), '#111111');
   assert.equal(contrastText('#0b0b0f'), '#ffffff');
+});
+
+test('system map reflects which GoHighLevel tools a funnel uses', () => {
+  const used = (id) => Object.fromEntries(systemMap(buildTemplate(id)).map((t) => [t.id, t.used]));
+  const web = used('webinar');
+  assert.equal(web.payments, true);
+  assert.equal(web.courses, true);
+  const audit = used('email-sms-audit');
+  assert.equal(audit.calendar, true);
+  assert.equal(audit.payments, false);
+  assert.equal(used('local-quote').reviews, true);
+});
+
+test('editor-only markup never leaks into exports', () => {
+  for (const t of TEMPLATES) {
+    const f = buildTemplate(t.id);
+    f.steps.forEach((_, i) => {
+      const page = renderStepPage(f, i);
+      assert.ok(!/data-f=|fb-tools|fb-add/.test(page), `${t.id} step ${i}`);
+      assert.ok(renderStepPage(f, i, { editor: true }).includes('fb-tools'));
+    });
+  }
 });

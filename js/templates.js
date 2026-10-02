@@ -468,7 +468,7 @@ export const TEMPLATES = [
     name: 'Info-Product Webinar',
     category: 'Client funnel',
     description:
-      'The funnel BAD would build FOR an info-product client (coaches, creators): registration → confirmation → replay with offer. Shows client-side delivery, not just agency lead gen.',
+      'The funnel BAD would build FOR an info-product client (coaches, creators): registration → confirmation → replay with offer → checkout → course access. Uses GHL Payments and Memberships end to end.',
     build: () => ({
       name: 'Client | Free Masterclass Funnel',
       theme: { ...BAD_THEME, primary: '#6d28d9', accent: '#facc15', dark: '#140b2e', headingFont: 'Archivo Black', bodyFont: 'DM Sans' },
@@ -529,10 +529,24 @@ export const TEMPLATES = [
               items: '12-week core program | $2,997\nWeekly live coaching calls | $1,997\nDone-for-you funnel templates | $997\nPrivate community | $497',
               price: '$997',
               cta: 'Enroll Now',
-              ctaLink: '#',
+              ctaLink: '#checkout',
             }),
+            S('checkout', { headline: 'Join The 90-Day Accelerator', product: '90-Day Accelerator', price: '$997' }),
             S('guarantee', { headline: '30-Day Action Guarantee', body: 'Do the work for 30 days. If you don\'t have a sellable offer, we\'ll refund every penny.' }),
             S('faq', {}),
+            FOOTER('Client Brand'),
+          ],
+        },
+        {
+          name: 'Welcome',
+          path: '/accelerator-welcome',
+          seo: { title: 'Welcome To The Accelerator' },
+          sections: [
+            S('thankyou', {
+              headline: 'You\'re In! Welcome To The Accelerator 🎉',
+              sub: 'Your login to the course portal is on its way to your inbox.',
+              items: 'Open the email titled "Your course login"\nLog in and watch Module 1 (20 minutes)\nBook your onboarding call from inside the portal\nJoin the private community',
+            }),
             FOOTER('Client Brand'),
           ],
         },
@@ -541,6 +555,7 @@ export const TEMPLATES = [
         pipeline: { name: 'Masterclass | Launch', stages: ['Registered', 'Attended Live', 'Watched Replay', 'Clicked Offer', 'Purchased', 'Booked Call', 'Not Interested'] },
         tags: ['webinar-registered', 'webinar-attended', 'webinar-noshow', 'offer-clicked', 'customer-accelerator'],
         customFields: [...BASE_FIELDS.filter((f) => f.key !== 'monthly_revenue' && f.key !== 'website'), { name: 'Webinar Date', key: 'webinar_date', type: 'Date' }],
+        products: [{ name: '90-Day Accelerator', price: '$997', delivers: 'Course portal (Memberships)' }],
         customValues: [
           { name: 'Webinar Link', key: 'webinar_link', value: 'https://zoom.us/j/...' },
           { name: 'Replay Link', key: 'replay_link', value: 'https://join.clientbrand.com/masterclass-replay' },
@@ -570,6 +585,19 @@ export const TEMPLATES = [
               { delay: '+48h', type: 'Send Email', detail: 'Case study + FAQ objection handling.' },
               { delay: '+70h', type: 'Send SMS + Email', detail: '2 hours left before the replay and bonuses disappear.' },
               { delay: 'On purchase', type: 'Remove From Workflow', detail: 'Tag customer-accelerator, start onboarding workflow.' },
+            ],
+          },
+          {
+            name: '03 | Purchase → Course Access',
+            trigger: 'Order Submitted / Payment Received (GoHighLevel Payments): 90-Day Accelerator',
+            goal: 'Buyers get their course login within a minute, no manual work.',
+            actions: [
+              { delay: '0m', type: 'Grant Offer Access', detail: 'Memberships → offer "90-Day Accelerator" (course portal).' },
+              { delay: '0m', type: 'Add Tag', detail: 'customer-accelerator' },
+              { delay: '0m', type: 'Update Opportunity', detail: 'Masterclass | Launch → "Purchased" (value = order total)' },
+              { delay: '0m', type: 'Send Email', detail: 'Subject: "Your course login". Portal link + login details + first step.' },
+              { delay: '1d', type: 'Send SMS', detail: 'Hey {{contact.first_name}}, did you get into Module 1? Reply here if you need help logging in.' },
+              { delay: '7d', type: 'If/Else', detail: 'No course login yet → create task for coach to call.' },
             ],
           },
         ],

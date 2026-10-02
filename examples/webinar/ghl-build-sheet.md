@@ -2,13 +2,34 @@
 
 Domain: `join.clientbrand.com`
 
+## 0. GoHighLevel tools this funnel uses
+
+| Tool | Where in GHL | Used | Replaces |
+|---|---|---|---|
+| Funnel pages | Sites → Funnels | Yes | ClickFunnels, Leadpages |
+| Contacts (CRM) | Contacts | Yes | HubSpot, spreadsheets |
+| Booking calendar | Calendars | Not yet | Calendly, Acuity |
+| Pipeline | Opportunities | Yes | Pipedrive, Trello |
+| Texts and emails | Conversations | Yes | Mailchimp, Twilio |
+| Automations | Automation → Workflows | Yes | Zapier, ActiveCampaign |
+| Payments | Payments | Yes | ThriveCart, SamCart |
+| Courses and memberships | Memberships | Yes | Kajabi, Teachable |
+| Reviews | Reputation | Not yet | Birdeye, Podium |
+
+### Products (Payments → Products)
+
+| Product | Price | Delivers |
+|---|---|---|
+| 90-Day Accelerator | $997 | Course portal (Memberships) |
+
 ## 1. Funnel steps (Sites → Funnels → New Funnel)
 
 | # | Step | Path | Sections |
 |---|---|---|---|
 | 1 | Registration | `/masterclass` | announcement → hero → form → text → footer |
 | 2 | Confirmation | `/masterclass-confirmed` | thankyou → video → footer |
-| 3 | Replay + Offer | `/masterclass-replay` | announcement → video → offer → guarantee → faq → footer |
+| 3 | Replay + Offer | `/masterclass-replay` | announcement → video → offer → checkout → guarantee → faq → footer |
+| 4 | Welcome | `/accelerator-welcome` | thankyou → footer |
 
 For each step: add a full-width section → Custom Code element → paste the step's "GHL snippet" export. Set SEO title + favicon under step settings.
 
@@ -71,6 +92,20 @@ For each step: add a full-width section → Custom Code element → paste the st
 | +48h | Send Email | Case study + FAQ objection handling. |
 | +70h | Send SMS + Email | 2 hours left before the replay and bonuses disappear. |
 | On purchase | Remove From Workflow | Tag customer-accelerator, start onboarding workflow. |
+
+### 03 | Purchase → Course Access
+
+**Trigger:** Order Submitted / Payment Received (GoHighLevel Payments): 90-Day Accelerator  
+**Goal:** Buyers get their course login within a minute, no manual work.
+
+| When | Action | Details |
+|---|---|---|
+| 0m | Grant Offer Access | Memberships → offer "90-Day Accelerator" (course portal). |
+| 0m | Add Tag | customer-accelerator |
+| 0m | Update Opportunity | Masterclass \| Launch → "Purchased" (value = order total) |
+| 0m | Send Email | Subject: "Your course login". Portal link + login details + first step. |
+| 1d | Send SMS | Hey {{contact.first_name}}, did you get into Module 1? Reply here if you need help logging in. |
+| 7d | If/Else | No course login yet → create task for coach to call. |
 
 ## 8. KPIs to report weekly
 

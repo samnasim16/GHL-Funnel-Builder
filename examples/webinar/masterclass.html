@@ -92,6 +92,8 @@ p{margin:0 0 1em}
 .fb-form .fb-invalid{border-color:#d92d20;background:#fff5f5}
 .fb-form-msg{margin-top:10px;font-weight:600;text-align:center}
 .fb-consent{font-size:.72rem;opacity:.6;margin-top:12px;line-height:1.4}
+.fb-co-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;font-size:1.1rem}.fb-co-row strong{font-family:var(--hf);font-size:1.8rem;color:var(--p)}
+.fb-checkout .fb-checks{margin:16px 0}
 .fb-cal{max-width:900px;margin:24px auto 0;background:var(--bg);border-radius:var(--r);overflow:hidden}
 .fb-cal iframe{width:100%;min-height:720px;border:0;display:block}
 .fb-guarantee{display:flex;gap:24px;align-items:center;max-width:760px;margin:0 auto;padding:28px;border-radius:var(--r);background:var(--alt);color:var(--tx)}
@@ -112,7 +114,7 @@ p{margin:0 0 1em}
 </head>
 <body>
 <div style="position:sticky;top:0;z-index:99;display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;align-items:center;padding:7px 16px;background:#111;color:#ddd;font:600 12px/1.4 system-ui,sans-serif;text-align:center">Concept demo by Sam Nasim for BAD Marketing. Not a live BAD Marketing page; the forms send nothing.<a href="../index.html" style="color:#ffd400">All example funnels</a></div>
-<div class="fb-s fb-announcement"><div class="fb-wrap">LIVE training starts in <span class="fb-countdown" data-deadline="2026-10-15 19:00">--:--:--</span></div></div>
+<div class="fb-s fb-announcement"><div class="fb-wrap"><span>LIVE training starts in</span> <span class="fb-countdown" data-deadline="2026-10-15 19:00">--:--:--</span></div></div>
 <section class="fb-s fb-hero fb-bg-dark"><div class="fb-wrap"><div class="fb-center"><div class="fb-eyebrow">Free live masterclass</div>
         <h1>How To Build A <span class="fb-hl">6-Figure</span> Coaching Offer In 90 Days (Without A Big Audience)</h1>
         <p class="fb-lead">Join [Creator Name] live and steal the exact 3-step framework behind [X] client launches.</p>
@@ -121,7 +123,7 @@ p{margin:0 0 1em}
         <div class="fb-note">Seats are limited to 500 live attendees.</div></div></div></section>
 <section class="fb-s fb-form fb-bg-alt" id="form"><div class="fb-wrap"><div class="fb-form-box"><h2 class="fb-center">Reserve Your Seat</h2><form class="fb-form" data-webhook="" data-redirect="./masterclass-confirmed.html" data-step="Registration" novalidate>
             <label><span>First name</span><input type="text" name="first_name" required></label><label><span>Email</span><input type="email" name="email" required autocomplete="email"></label><label><span>Phone (for a text reminder)</span><input type="tel" name="phone" required autocomplete="tel"></label>
-            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit">Register Now →</button>
+            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit"><span>Register Now →</span></button>
             <div class="fb-form-msg" role="status"></div>
             <p class="fb-consent">By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
           </form></div></div></section>

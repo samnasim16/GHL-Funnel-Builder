@@ -14,11 +14,19 @@ node scripts/build-examples.mjs   # regenerate examples/
 
 There are no dependencies and no build step: it's plain ES modules. Open `http://localhost:5173/` for the builder and `http://localhost:5173/examples/` to browse finished funnels.
 
+## Built for first-timers
+
+- **Pick a goal, not a template.** Start by answering "What should your funnel do?" in plain words.
+- **Type on the page.** Click any headline or button and type. Hover between sections and click **+** to add one.
+- **No jargon.** Every section and page says what it's for, list fields are simple rows, and the **?** button explains every term.
+- **A 3-step guide** (Pick a goal → Edit your pages → Put it in GoHighLevel) is always visible, and the last step walks through GoHighLevel click by click with a copy button per page.
+- **Your system tab** shows the all-in-one picture: which GoHighLevel tools the funnel uses (pages, CRM, calendar, pipeline, texts and emails, automations, payments, courses, reviews), what each replaces, and every automation in one plain sentence.
+
 ## What it does
 
 | Area | What you get |
 |---|---|
-| **Visual editor** | 20 conversion sections (hero, VSL, opt-in/application form, GHL calendar, offer stack, case studies, stats, FAQ, urgency countdown…). Click any section on the page to edit it, drag to reorder, undo/redo, desktop/tablet/mobile preview. Your work saves automatically in the browser. |
+| **Visual editor** | 21 conversion sections (including a GoHighLevel checkout) (hero, VSL, opt-in/application form, GHL calendar, offer stack, case studies, stats, FAQ, urgency countdown…). Click any section on the page to edit it, drag to reorder, undo/redo, desktop/tablet/mobile preview. Your work saves automatically in the browser. |
 | **Multi-step funnels** | Steps with paths. Each form redirects to the next step and carries `first_name/email/phone` forward so the GHL calendar is prefilled. |
 | **GHL wiring** | Forms POST to a **GHL Inbound Webhook** workflow trigger (or paste a native GHL form embed). They capture UTMs plus `fbclid/gclid/ttclid` and fire Meta Pixel `Lead`. Booking uses the GHL calendar widget. SMS consent text is A2P 10DLC-ready. |
 | **GHL Blueprint** | For each funnel: pipeline stages, tags, custom fields (`{{contact.x}}`), custom values, calendars and full workflows (trigger → timed actions, with copy for the SMS/email messages), plus KPI targets. You can edit it as JSON. |
@@ -33,7 +41,7 @@ There are no dependencies and no build step: it's plain ES modules. Open `http:/
 | Free Email & SMS Audit | Opt-in → Book → Confirmed | Speed-to-lead, qualification router, abandoned application, show-up reminders, no-show recovery |
 | Paid Ads Application (VSL) | VSL + application → Book → Confirmed | All of the above + proposal follow-up |
 | Amazon Growth Call | Landing → Book → Confirmed | Speed-to-lead, reminders, no-show |
-| Info-Product Webinar *(client funnel)* | Register → Confirmed → Replay + offer | Indoctrination + replay/cart-close |
+| Info-Product Webinar *(client funnel)* | Register → Confirmed → Replay + checkout → Course access | Indoctrination, replay/cart-close, purchase → course access (GHL Payments + Memberships) |
 | Local Business Quote *(client funnel)* | Offer → Thank you | Speed-to-lead, missed-call text-back, review request |
 
 ## Using an export in GoHighLevel

@@ -122,6 +122,8 @@ p{margin:0 0 1em}
 .fb-form .fb-invalid{border-color:#d92d20;background:#fff5f5}
 .fb-form-msg{margin-top:10px;font-weight:600;text-align:center}
 .fb-consent{font-size:.72rem;opacity:.6;margin-top:12px;line-height:1.4}
+.fb-co-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;font-size:1.1rem}.fb-co-row strong{font-family:var(--hf);font-size:1.8rem;color:var(--p)}
+.fb-checkout .fb-checks{margin:16px 0}
 .fb-cal{max-width:900px;margin:24px auto 0;background:var(--bg);border-radius:var(--r);overflow:hidden}
 .fb-cal iframe{width:100%;min-height:720px;border:0;display:block}
 .fb-guarantee{display:flex;gap:24px;align-items:center;max-width:760px;margin:0 auto;padding:28px;border-radius:var(--r);background:var(--alt);color:var(--tx)}
@@ -192,6 +194,33 @@ export const RUNTIME_JS = `
 })();
 `;
 
+// Runs inside the editor canvas only: in-place text editing, section toolbar,
+// "add section" buttons and selection. Talks to the builder via postMessage.
+const EDITOR_JS = `
+(function(){
+  var post=function(m){parent.postMessage(Object.assign({fb:1},m),'*');};
+  var idxOf=function(el){var s=el.closest('.fb-edit');return s?+s.dataset.idx:-1;};
+  document.querySelectorAll('[data-f]').forEach(function(el){
+    try{el.contentEditable='plaintext-only';}catch(e){}
+    if(el.contentEditable!=='plaintext-only')el.contentEditable='true';
+    el.spellcheck=true;
+  });
+  document.addEventListener('focusin',function(e){var f=e.target.closest('[data-f]');if(f)post({type:'editstart',idx:idxOf(f)});});
+  document.addEventListener('input',function(e){var f=e.target.closest('[data-f]');if(!f)return;post({type:'text',idx:idxOf(f),key:f.dataset.f,value:f.innerText.replace(/\\n+$/,'')});});
+  document.addEventListener('keydown',function(e){var f=e.target.closest('[data-f]');if(f&&e.key==='Enter'&&!e.shiftKey){e.preventDefault();f.blur();}if(f&&e.key==='Escape')f.blur();});
+  document.addEventListener('paste',function(e){var f=e.target.closest('[data-f]');if(!f)return;e.preventDefault();document.execCommand('insertText',false,(e.clipboardData||window.clipboardData).getData('text/plain'));});
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('.fb-tools button');if(t){e.preventDefault();post({type:'tool',idx:idxOf(t),action:t.dataset.t});return;}
+    var a=e.target.closest('.fb-add');if(a){e.preventDefault();post({type:'add',after:+a.dataset.after});return;}
+    if(e.target.closest('summary'))return;
+    e.preventDefault();
+    var s=e.target.closest('.fb-edit');if(s)post({type:'select',idx:+s.dataset.idx});
+  },true);
+  document.addEventListener('submit',function(e){e.preventDefault();},true);
+  window.addEventListener('message',function(e){var d=e.data||{};if(d.fb==='highlight'){document.querySelectorAll('.fb-edit').forEach(function(el){var on=+el.dataset.idx===d.idx;el.classList.toggle('fb-sel',on);if(on&&d.scroll)el.scrollIntoView({behavior:'smooth',block:'center'});});}});
+})();
+`;
+
 export function fontLink(theme = DEFAULT_THEME) {
   const fams = [...new Set([theme.headingFont, theme.bodyFont])].map((f) => FONTS[f]).filter(Boolean);
   if (!fams.length) return '';
@@ -206,7 +235,8 @@ export function renderSections(step, ctx = {}) {
       const def = SECTIONS[s.type];
       if (!def) return '';
       const html = def.render(s.props, ctx);
-      return ctx.editor ? `<div class="fb-edit" data-idx="${i}" data-id="${s.id}">${html}</div>` : html;
+      if (!ctx.editor) return html;
+      return `<div class="fb-edit" data-idx="${i}" data-id="${s.id}"><div class="fb-tools" contenteditable="false"><span class="fb-tools-name">${esc(def.name)}</span><button data-t="up" title="Move up">↑</button><button data-t="down" title="Move down">↓</button><button data-t="dup" title="Duplicate">⧉</button><button data-t="del" title="Delete">🗑</button></div>${html}</div><div class="fb-add" data-after="${i}"><button>+ Add a section here</button></div>`;
     })
     .join('\n');
 }
@@ -223,11 +253,17 @@ export function renderStepPage(funnel, stepIndex, ctx = {}) {
     ? `<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${String(tracking.metaPixel).trim()}');fbq('track','PageView');</script>`
     : '';
   const editorCSS = ctx.editor
-    ? `.fb-edit{position:relative;cursor:pointer}.fb-edit:hover{outline:2px dashed #6d5dfc;outline-offset:-2px}.fb-edit.fb-sel{outline:3px solid #6d5dfc;outline-offset:-3px}.fb-edit a,.fb-edit button,.fb-edit iframe{pointer-events:none}`
+    ? `.fb-edit{position:relative}.fb-edit:hover{outline:2px dashed #7c6cff;outline-offset:-2px}.fb-edit.fb-sel{outline:3px solid #6d5dfc;outline-offset:-3px}
+.fb-edit a:not([data-f]),.fb-edit button:not([data-t]),.fb-edit iframe{pointer-events:none}
+[data-f]{cursor:text;border-radius:4px;transition:box-shadow .12s}[data-f]:hover{box-shadow:0 0 0 2px rgba(109,93,252,.45)}[data-f]:focus{outline:none;box-shadow:0 0 0 3px #6d5dfc;background:rgba(109,93,252,.06)}
+.fb-tools{position:absolute;top:8px;right:8px;z-index:30;display:none;gap:2px;align-items:center;background:#15151d;color:#fff;border-radius:10px;padding:4px;box-shadow:0 8px 24px -8px rgba(0,0,0,.5);font:600 12px/1 Inter,system-ui,sans-serif}
+.fb-edit:hover .fb-tools,.fb-edit.fb-sel .fb-tools{display:flex}
+.fb-tools-name{padding:0 8px;opacity:.75}.fb-tools button{all:unset;cursor:pointer;padding:6px 8px;border-radius:7px}.fb-tools button:hover{background:#2c2c38}
+.fb-add{position:relative;height:0;z-index:25;display:flex;justify-content:center}
+.fb-add button{all:unset;cursor:pointer;transform:translateY(-50%);opacity:0;transition:opacity .15s;background:#6d5dfc;color:#fff;font:700 12px/1 Inter,system-ui,sans-serif;padding:8px 14px;border-radius:999px;box-shadow:0 6px 18px -6px rgba(109,93,252,.8)}
+.fb-add:hover button,.fb-edit:hover+.fb-add button{opacity:1}`
     : '';
-  const editorJS = ctx.editor
-    ? `<script>document.addEventListener('click',function(e){var s=e.target.closest('.fb-edit');if(e.target.closest('summary'))return;e.preventDefault();if(s)parent.postMessage({fb:'select',idx:+s.dataset.idx},'*');},true);window.addEventListener('message',function(e){if(e.data&&e.data.fb==='highlight'){document.querySelectorAll('.fb-edit').forEach(function(el){el.classList.toggle('fb-sel',+el.dataset.idx===e.data.idx);if(+el.dataset.idx===e.data.idx&&e.data.scroll)el.scrollIntoView({behavior:'smooth',block:'center'});});}});</script>`
-    : '';
+  const editorJS = ctx.editor ? `<script>${EDITOR_JS}</script>` : '';
   return `<!doctype html>
 <html lang="en">
 <head>

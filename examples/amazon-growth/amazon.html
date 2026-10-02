@@ -92,6 +92,8 @@ p{margin:0 0 1em}
 .fb-form .fb-invalid{border-color:#d92d20;background:#fff5f5}
 .fb-form-msg{margin-top:10px;font-weight:600;text-align:center}
 .fb-consent{font-size:.72rem;opacity:.6;margin-top:12px;line-height:1.4}
+.fb-co-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(0,0,0,.08);font-weight:700;font-size:1.1rem}.fb-co-row strong{font-family:var(--hf);font-size:1.8rem;color:var(--p)}
+.fb-checkout .fb-checks{margin:16px 0}
 .fb-cal{max-width:900px;margin:24px auto 0;background:var(--bg);border-radius:var(--r);overflow:hidden}
 .fb-cal iframe{width:100%;min-height:720px;border:0;display:block}
 .fb-guarantee{display:flex;gap:24px;align-items:center;max-width:760px;margin:0 auto;padding:28px;border-radius:var(--r);background:var(--alt);color:var(--tx)}
@@ -123,7 +125,7 @@ p{margin:0 0 1em}
 <section class="fb-s fb-offer fb-bg-alt"><div class="fb-wrap"><div class="fb-offer-box"><h2 class="fb-center">Partner This Month And Get</h2><ul class="fb-stack"><li><span>✔ Full PPC &amp; listing audit</span><span class="fb-val">$2,000</span></li><li><span>✔ Campaign restructure</span><span class="fb-val">$3,000</span></li><li><span>✔ Monthly compliance management</span><span class="fb-val">$1,500/mo</span></li><li><span>✔ Dedicated account manager</span><span class="fb-val">Included</span></li></ul><div class="fb-total"><span>Total value</span><s>$6,500</s></div><div class="fb-price">Book A Call To See If You Qualify</div><div class="fb-cta-row"><a class="fb-btn fb-btn-lg" href="#form">Book My Free Call</a></div></div></div></section>
 <section class="fb-s fb-form fb-bg-dark" id="form"><div class="fb-wrap"><div class="fb-form-box"><h2 class="fb-center">Get Your Free Amazon Audit</h2><p class="fb-center fb-muted">Takes 60 seconds. We review every application personally.</p><form class="fb-form" data-webhook="" data-redirect="./amazon-book.html" data-step="Landing" novalidate>
             <label><span>First name</span><input type="text" name="first_name" required></label><label><span>Email</span><input type="email" name="email" required autocomplete="email"></label><label><span>Phone</span><input type="tel" name="phone" required autocomplete="tel"></label><label><span>Amazon store URL</span><input type="text" name="website" required></label><label><span>Monthly Amazon revenue</span><select name="monthly_revenue" required><option value="">Select…</option><option>Under $50k</option><option>$50k–$250k</option><option>$250k–$1M</option><option>$1M+</option></select></label>
-            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit">Book My Call →</button>
+            <button class="fb-btn fb-btn-lg fb-btn-block" type="submit"><span>Book My Call →</span></button>
             <div class="fb-form-msg" role="status"></div>
             <p class="fb-consent">By submitting, you agree to receive calls and texts (including automated) from us at the number provided. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
           </form></div></div></section>
