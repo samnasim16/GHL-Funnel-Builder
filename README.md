@@ -6,8 +6,8 @@ It was built as a working demo for **BAD Marketing**. The templates are the funn
 
 ## Live site
 
-Every push to `main` publishes the builder, pitch page and examples to GitHub Pages:
-**https://samnasim16.github.io/GHL-Funnel-Builder/** (one-time setup: repo **Settings → Pages → Source: GitHub Actions**).
+GitHub Pages serves the repo root of `main` (builder, pitch page and examples), so every merge to `main` goes live:
+**https://samnasim16.github.io/GHL-Funnel-Builder/** (setup: repo **Settings → Pages → Deploy from a branch → main / root**).
 
 ## Quick start
 
