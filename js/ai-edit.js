@@ -1,9 +1,9 @@
 // "Ask AI to edit": chat-driven edits to any part of the funnel. The AI (or the
 // built-in command parser when no AI is available) returns a list of edit
 // operations; applyOps validates every one before changing anything.
-import { SECTIONS, makeSection } from './sections.js?v=bef4208695';
-import { LOOKS, PALETTES, paletteFromColor } from './styles.js?v=bef4208695';
-import { FONTS } from './renderer.js?v=bef4208695';
+import { SECTIONS, makeSection } from './sections.js?v=f5a5c58fd9';
+import { LOOKS, PALETTES, paletteFromColor } from './styles.js?v=f5a5c58fd9';
+import { FONTS } from './renderer.js?v=f5a5c58fd9';
 
 const TEXT_SKIP = /link|url|webhook|redirect|embed|deadline|image|payLink|^bg$|^fields$|images/i;
 const THEME_KEYS = {
@@ -151,6 +151,24 @@ const findType = (text) => SECTION_WORDS.find(([re]) => re.test(text))?.[1];
  * "use blue colors", "add testimonials after the top", "remove the faq",
  * "make it luxury", "dark background", "uppercase headlines".
  */
+// No-AI headline tightening: first clause, filler words out, at most 8 words.
+const FILLER = /\b(just|really|very|simply|actually|basically|literally|that will|in order to)\b\s*/gi;
+export function punchier(text) {
+  let t = String(text || '').replace(/<[^>]*>/g, '').trim();
+  if (!t) return '';
+  t = t.replace(/\([^)]*\)/g, '').split(/\s[—–-]\s|[:;,.!?](?=\s|$)/)[0].replace(FILLER, '').replace(/\s+/g, ' ').trim();
+  let words = t.split(' ');
+  if (words.length > 7) {
+    // Cut before the last connector word that leaves 3-8 words.
+    let cut = -1;
+    words.forEach((w, i) => i >= 3 && i <= 8 && /^(without|in|with|by|so|while|that|because|when|even|from)$/i.test(w) && (cut = i));
+    if (cut > 0) words = words.slice(0, cut);
+  }
+  t = words.slice(0, 8).join(' ');
+  t = t.replace(/\b(and|or|to|for|with|the|a|an|of|in|your|our)$/i, '').trim();
+  return t ? t.charAt(0).toUpperCase() + t.slice(1) + '.' : '';
+}
+
 export function localIntent(message, funnel, stepIdx, selIdx = -1) {
   const m = String(message).trim();
   const low = m.toLowerCase();
@@ -164,6 +182,21 @@ export function localIntent(message, funnel, stepIdx, selIdx = -1) {
     const sec = step.sections[target];
     const field = /button/.test(what) ? (sec.type === 'form' ? 'button' : 'cta') : /sub/.test(what) ? 'sub' : 'headline';
     if (SECTIONS[sec.type].fields[field]) return { reply: `Changed the ${what}.`, ops: [{ op: 'setText', step: stepIdx, idx: target, field, value: mm[2] }] };
+  }
+  if (/(punch|short|tight|snapp|simpl|catch)/.test(low) && /(headline|title|heading)/.test(low) && target >= 0) {
+    const sec = step.sections[target];
+    const value = punchier(sec.props?.headline);
+    const bare = (x) => String(x || '').replace(/[.!?\s]+$/, '').toLowerCase();
+    if (SECTIONS[sec.type].fields.headline && value && bare(value) === bare(sec.props.headline))
+      return { reply: 'That headline is already short and punchy. For new wording, connect full AI or type "change the headline to …".', ops: [] };
+    if (SECTIONS[sec.type].fields.headline && value)
+      return { reply: `Tightened the headline to "${value}". Want different words? Try "change the headline to …".`, ops: [{ op: 'setText', step: stepIdx, idx: target, field: 'headline', value }] };
+  }
+  mm = low.match(/(?:font|typeface)\s+(?:to\s+)?([a-z][a-z ]+)$|(?:use|try|switch to)\s+([a-z][a-z ]+?)\s+(?:font|for)/);
+  if (mm) {
+    const want = (mm[1] || mm[2]).trim();
+    const font = Object.keys(FONTS).find((f) => f.toLowerCase() === want);
+    if (font) return { reply: `Headlines now use ${font}.`, ops: [{ op: 'setTheme', patch: { headingFont: font } }] };
   }
   mm = low.match(/^(?:remove|delete)\s+(?:the\s+)?(.+)$/);
   if (mm) {
@@ -194,6 +227,7 @@ export function localIntent(message, funnel, stepIdx, selIdx = -1) {
   if (color && /(color|colour|theme|palette|brand)/.test(low)) {
     const named = PALETTES.find((p) => p.name.toLowerCase().includes(color));
     const { name: _n, ...pal } = named || { name: '', ...paletteFromColor(COLOR_WORDS[color]) };
+    if (!named) pal.accent = pal.primary; // "use blue" should look blue, not blue + a contrast color
     return { reply: `Changed the colors to ${color}.`, ops: [{ op: 'setTheme', patch: pal }] };
   }
   for (const [re, patch, say] of [
@@ -207,6 +241,6 @@ export function localIntent(message, funnel, stepIdx, selIdx = -1) {
     [/less space|tighter|compact/, { spacing: 'compact' }, 'Tightened the spacing.'],
     [/glass card/, { cardStyle: 'glass' }, 'Cards are now frosted glass.'],
   ]) if (re.test(low)) return { reply: say, ops: [{ op: 'setTheme', patch }] };
-  if (/dark (background|section)/.test(low) && target >= 0) return { reply: 'Made that section dark.', ops: [{ op: 'setBackground', step: stepIdx, idx: target, value: 'dark' }] };
+  if (/dark (background|section)|make (this|it) dark|darker/.test(low) && target >= 0) return { reply: 'Made that section dark.', ops: [{ op: 'setBackground', step: stepIdx, idx: target, value: 'dark' }] };
   return null;
 }

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildEditPrompt, applyOps, localIntent, pageSnapshot } from '../js/ai-edit.js';
+import { buildEditPrompt, applyOps, localIntent, pageSnapshot, punchier } from '../js/ai-edit.js';
 import { buildTemplate } from '../js/templates.js';
 
 test('prompt carries the page, design options and the request', () => {
@@ -50,4 +50,16 @@ test('built-in commands understand common requests without AI', () => {
   assert.equal(ops('use blue colors').op, 'setTheme');
   assert.equal(ops('pill-shaped buttons please').patch.buttonShape, 'pill');
   assert.equal(localIntent('what is the meaning of life', f, 0), null);
+});
+
+test('no-AI: punchier headline and font switch', () => {
+  assert.equal(punchier('We help busy coaches get more clients, without ads or cold calls'), 'We help busy coaches get more clients.');
+  assert.equal(punchier('Grow your business really fast with our simple proven system that works'), 'Grow your business fast.');
+  const f = buildTemplate('email-sms-audit');
+  const hero = f.steps[0].sections.findIndex((s) => s.type === 'hero');
+  const op = localIntent('Make the headline punchier', f, 0)?.ops?.[0];
+  assert.equal(op.op, 'setText');
+  assert.equal(op.idx, hero);
+  assert.ok(op.value.split(' ').length <= 8);
+  assert.equal(localIntent('change the font to Playfair Display', f, 0).ops[0].patch.headingFont, 'Playfair Display');
 });

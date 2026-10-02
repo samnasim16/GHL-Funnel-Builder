@@ -1,16 +1,16 @@
-import { SECTIONS, makeSection, uid, esc, lines } from './sections.js?v=bef4208695';
-import { renderStepPage, renderGhlSnippet, FONTS, FONT_META, FONT_GROUPS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js?v=bef4208695';
-import { LOOKS, PALETTES, paletteFromColor, paletteFromPixels, suggestLook } from './styles.js?v=bef4208695';
-import { openCropper, compressImage, readFile, samplePixels } from './images.js?v=bef4208695';
-import { TEMPLATES, buildTemplate } from './templates.js?v=bef4208695';
-import { auditFunnel, auditStep } from './audit.js?v=bef4208695';
-import { blueprintMarkdown, systemMap } from './blueprint.js?v=bef4208695';
-import { setupGuidePage } from './setup-guide.js?v=bef4208695';
-import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js?v=bef4208695';
-import { recommend } from './recommend.js?v=bef4208695';
-import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js?v=bef4208695';
-import { startTour } from './tour.js?v=bef4208695';
-import { buildEditPrompt, applyOps, localIntent } from './ai-edit.js?v=bef4208695';
+import { SECTIONS, makeSection, uid, esc, lines } from './sections.js?v=f5a5c58fd9';
+import { renderStepPage, renderGhlSnippet, FONTS, FONT_META, FONT_GROUPS, FONT_PAIRS, DEFAULT_THEME, fontLink } from './renderer.js?v=f5a5c58fd9';
+import { LOOKS, PALETTES, paletteFromColor, paletteFromPixels, suggestLook } from './styles.js?v=f5a5c58fd9';
+import { openCropper, compressImage, readFile, samplePixels } from './images.js?v=f5a5c58fd9';
+import { TEMPLATES, buildTemplate } from './templates.js?v=f5a5c58fd9';
+import { auditFunnel, auditStep } from './audit.js?v=f5a5c58fd9';
+import { blueprintMarkdown, systemMap } from './blueprint.js?v=f5a5c58fd9';
+import { setupGuidePage } from './setup-guide.js?v=f5a5c58fd9';
+import { planPush, runPush, REQUIRED_SCOPES } from './ghl-push.js?v=f5a5c58fd9';
+import { recommend } from './recommend.js?v=f5a5c58fd9';
+import { collectFillable, buildPrompt, applyFill, quickFill, BRIEF_FIELDS, TONES } from './ai-fill.js?v=f5a5c58fd9';
+import { startTour } from './tour.js?v=f5a5c58fd9';
+import { buildEditPrompt, applyOps, localIntent } from './ai-edit.js?v=f5a5c58fd9';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -1236,19 +1236,23 @@ function chatAdd(role, html, { undo = false } = {}) {
   $('#chatLog').scrollTop = $('#chatLog').scrollHeight;
   return el;
 }
+function showChips() {
+  $('#chatChips').innerHTML = CHAT_CHIPS.map((c) => `<button type="button" data-chip="${esc(c)}">${esc(c)}</button>`).join('');
+}
 async function openChat() {
   $('#chatPanel').hidden = false;
   $('#chatFab').hidden = true;
   chatScope();
   if (!$('#chatLog').children.length) {
     chatAdd('ai', 'Hi! Tell me what to change on this page, like <i>"make the headline shorter"</i>, <i>"add client results after the top"</i> or <i>"make it feel more luxury"</i>. Click a section first to edit just that part.');
-    $('#chatChips').innerHTML = CHAT_CHIPS.map((c) => `<button type="button" data-chip="${esc(c)}">${esc(c)}</button>`).join('');
+    showChips();
   }
   await aiState.ready;
   $('#chatKey').hidden = Boolean(aiState.claude || aiState.key);
   $('#chatText').focus();
 }
 $('#chatFab').addEventListener('click', openChat);
+$('#chatIdeas').addEventListener('click', () => ($('#chatChips').innerHTML ? ($('#chatChips').innerHTML = '') : showChips()));
 $('#chatClose').addEventListener('click', () => {
   $('#chatPanel').hidden = true;
   $('#chatFab').hidden = false;
@@ -1264,6 +1268,10 @@ $('#chatText').addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) e.preventDefault(), sendChat();
 });
 $('#chatForm').addEventListener('submit', (e) => (e.preventDefault(), sendChat()));
+$('#chatKeyToggle').addEventListener('click', () => {
+  $('#chatKeyBox').hidden = !$('#chatKeyBox').hidden;
+  if (!$('#chatKeyBox').hidden) $('#chatKeyInput').focus();
+});
 $('#chatKeyInput').addEventListener('change', (e) => (aiState.key = e.target.value.trim()));
 async function askJSON(prompt, signal) {
   if (aiState.claude) return aiState.claude.json(prompt, { modelTier: 'default', signal, cache: false });
@@ -1275,6 +1283,7 @@ async function sendChat() {
   if (!text || chat.busy) return;
   $('#chatText').value = '';
   chatAdd('user', esc(text));
+  $('#chatChips').innerHTML = '';
   chat.history.push({ role: 'user', text });
   await aiState.ready;
   if (!aiState.claude && $('#chatKeyInput').value.trim()) aiState.key = $('#chatKeyInput').value.trim();
@@ -1303,7 +1312,7 @@ async function sendChat() {
     if (!result)
       return chatAdd(
         'ai',
-        'Without AI connected I understand simple requests like <i>"change the headline to …"</i>, <i>"add testimonials after the top"</i>, <i>"remove the FAQ"</i>, <i>"use blue colors"</i>, <i>"pill-shaped buttons"</i> or <i>"make it feel luxury"</i>. For anything else, add an API key below, or use the claude.ai version where AI is built in.'
+        'Without AI connected I understand simple requests like <i>"change the headline to …"</i>, <i>"add testimonials after the top"</i>, <i>"remove the FAQ"</i>, <i>"use blue colors"</i>, <i>"pill-shaped buttons"</i> or <i>"make it feel luxury"</i>. For anything else, click <b>🔑 Connect full AI</b> below, or use the claude.ai version where AI is built in.'
       );
   }
   const ops = Array.isArray(result?.ops) ? result.ops : [];
